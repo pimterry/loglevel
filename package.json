@@ -1,0 +1,40 @@
+{
+  "name": "loglevel",
+  "description": "Extremely minimal lightweight logging framework for JavaScript, adding log level controls to any found console.log methods",
+  "version": "0.1.0",
+  "homepage": "https://github.com/pimterry/loglevel",
+  "author": {
+    "name": "Tim Perry",
+    "email": "pimterry@gmail.com",
+    "url": "http://tim-perry.co.uk"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pimterry/loglevel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pimterry/loglevel/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/pimterry/loglevel/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "lib/loglevel",
+  "engines": {
+    "node": ">= 0.6.0"
+  },
+  "scripts": {
+    "test": "grunt jasmine"
+  },
+  "devDependencies": {
+    "grunt-contrib-concat": "~0.1.2",
+    "grunt-contrib-uglify": "~0.1.1",
+    "grunt-contrib-jshint": "~0.1.1",
+    "grunt-contrib-nodeunit": "~0.1.2",
+    "grunt-contrib-watch": "~0.2.0",
+    "grunt": "~0.4.1"
+  },
+  "keywords": []
+}
