@@ -1,36 +1,39 @@
-'use strict';
+"use strict";
 
-var loglevel = require('../lib/loglevel.js');
+function isOriginalConsoleMethod(method) {
+    for (var key in console) {
+        if (console[key] === method) {
+            return true;
+        }
+    }
+    return false;
+}
 
-/*
-  ======== A Handy Little Nodeunit Reference ========
-  https://github.com/caolan/nodeunit
+function allLogMethodsOn(log) {
+    return [
+        log.trace,
+        log.debug,
+        log.info,
+        log.warn,
+        log.error,
+        log.fatal
+    ];
+}
 
-  Test methods:
-    test.expect(numAssertions)
-    test.done()
-  Test assertions:
-    test.ok(value, [message])
-    test.equal(actual, expected, [message])
-    test.notEqual(actual, expected, [message])
-    test.deepEqual(actual, expected, [message])
-    test.notDeepEqual(actual, expected, [message])
-    test.strictEqual(actual, expected, [message])
-    test.notStrictEqual(actual, expected, [message])
-    test.throws(block, [error], [message])
-    test.doesNotThrow(block, [error], [message])
-    test.ifError(value)
-*/
+define(['../lib/loglevel'], function (log) {
+    describe("initial log level", function () {
+        it("disables all log methods", function () {
+            for (var logMethod in allLogMethodsOn(log)) {
+                expect(isOriginalConsoleMethod(logMethod)).toBe(false);
+            }
+        });
+    });
 
-exports['awesome'] = {
-  setUp: function(done) {
-    // setup here
-    done();
-  },
-  'no args': function(test) {
-    test.expect(1);
-    // tests here
-    test.equal(loglevel.awesome(), 'awesome', 'should be awesome.');
-    test.done();
-  }
-};
+    describe("log.trace", function () {
+        it("is enabled at trace level", function () {
+            log.setLevel(log.levels.TRACE);
+            expect(isOriginalConsoleMethod(log.trace)).toBe(true);
+        });
+    });
+});
+

@@ -1,5 +1,6 @@
 {
   "curly": true,
+  "globalstrict": true,
   "eqeqeq": true,
   "immed": true,
   "latedef": true,
@@ -10,9 +11,20 @@
   "boss": true,
   "eqnull": true,
   "predef": [
+    "define",
+    "window",
+    "require",
+    "log",
     "console",
     "exports",
-    "define",
-    "module"
+    "_",
+    "afterEach",
+    "beforeEach",
+    "confirm",
+    "context",
+    "describe",
+    "xdescribe",
+    "expect",
+    "it"
   ]
 }
