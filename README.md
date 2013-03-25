@@ -1,4 +1,4 @@
-# loglevel [![Build Status](https://travis-ci.org/pimterry/concomitant.png)](https://travis-ci.org/pimterry/concomitant)
+# loglevel [![Build Status](https://travis-ci.org/pimterry/loglevel.png)](https://travis-ci.org/pimterry/loglevel)
 ==========
 
 Extremely minimal lightweight logging framework for JavaScript, adding log level controls to any available console.log methods
