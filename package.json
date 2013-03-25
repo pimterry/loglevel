@@ -28,6 +28,10 @@
     "scripts": {
         "test": "grunt test"
     },
+    "dependencies": {
+        "grunt": "~0.4.1",
+        "grunt-cli": "~0.1.6"
+    },
     "devDependencies": {
         "grunt-contrib-concat": "~0.1.2",
         "grunt-contrib-uglify": "~0.1.1",
