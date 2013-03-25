@@ -15,16 +15,16 @@ function allLogMethodsOn(log) {
         log.debug,
         log.info,
         log.warn,
-        log.error,
-        log.fatal
+        log.error
     ];
 }
 
 define(['../lib/loglevel'], function(log) {
     describe("initial log level", function() {
         it("disables all log methods", function() {
-            for (var logMethod in allLogMethodsOn(log)) {
-                expect(isOriginalConsoleMethod(logMethod)).toBe(false);
+            var logMethods = allLogMethodsOn(log);
+            for (var method in logMethods) {
+                expect(isOriginalConsoleMethod(logMethods[method])).toBe(false);
             }
         });
     });
@@ -33,8 +33,9 @@ define(['../lib/loglevel'], function(log) {
         it("disables all log methods", function() {
             log.setLevel(log.levels.SILENT);
 
-            for (var logMethod in allLogMethodsOn(log)) {
-                expect(isOriginalConsoleMethod(logMethod)).toBe(false);
+            var logMethods = allLogMethodsOn(log);
+            for (var method in logMethods) {
+                expect(isOriginalConsoleMethod(logMethods[method])).toBe(false);
             }
         });
     });
