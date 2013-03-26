@@ -30,7 +30,7 @@ define(['../lib/loglevel'], function(log) {
                     var method = logMethods[ii];
                     log[method]("a log message");
 
-                    expect(window.console[method]).not.toHaveBeenCalled();
+                    expect(console[method]).not.toHaveBeenCalled();
                 }
             });
         });
@@ -43,9 +43,59 @@ define(['../lib/loglevel'], function(log) {
                     var method = logMethods[ii];
                     log[method]("a log message");
 
-                    expect(window.console[method]).toHaveBeenCalled();
+                    expect(console[method]).toHaveBeenCalled();
                 }
             });
+        });
+
+        describe("invalid setLevel inputs", function() {
+            it("error thrown if no level is given", function() {
+                expect(function() {
+                    log.setLevel();
+                }).toThrow();
+            });
+
+            it("error thrown if null level is given", function() {
+                expect(function() {
+                    log.setLevel(null);
+                }).toThrow();
+            });
+
+            it("error thrown if undefined level is given", function() {
+                expect(function() {
+                    log.setLevel(undefined);
+                }).toThrow();
+            });
+
+            it("error thrown if invalid level number is given", function() {
+                expect(function() {
+                    log.setLevel(-1);
+                }).toThrow();
+            });
+
+            it("error thrown if invalid level name is given", function() {
+                expect(function() {
+                    log.setLevel("InvalidLevelName");
+                }).toThrow();
+            });
+        });
+
+        describe("setting log level by name", function() {
+            function itCanSetLogLevelTo(level) {
+                it("can set log level to " + level, function() {
+                    log.disableAll();
+                    log.setLevel(level);
+
+                    log[level]("log message");
+                    expect(console[level]).toHaveBeenCalled();
+                });
+            }
+
+            itCanSetLogLevelTo("trace");
+            itCanSetLogLevelTo("debug");
+            itCanSetLogLevelTo("info");
+            itCanSetLogLevelTo("warn");
+            itCanSetLogLevelTo("error");
         });
 
         describe("log level settings", function() {
