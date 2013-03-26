@@ -25,6 +25,7 @@
     "describe",
     "xdescribe",
     "expect",
-    "it"
+    "it",
+    "jasmine"
   ]
 }
