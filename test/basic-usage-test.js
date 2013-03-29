@@ -2,9 +2,15 @@
 
 define(['../lib/loglevel'], function(log) {
     describe("Integration smoke tests", function() {
-        describe("log methods", function() {
+        var describeIfConsoleAvailable =
+            typeof console !== "undefined" ? describe : xdescribe;
+
+        describeIfConsoleAvailable("log methods", function() {
             it("can all be called", function() {
-                log.setLevel(log.levels.TRACE);
+                if (typeof console !== "undefined") {
+                    log.setLevel(log.levels.TRACE);
+                }
+
                 log.trace("trace");
                 log.debug("debug");
                 log.info("info");
@@ -24,7 +30,7 @@ define(['../lib/loglevel'], function(log) {
             });
         });
 
-        describe("log levels", function() {
+        describeIfConsoleAvailable("log levels", function() {
             it("are all settable", function() {
                 log.setLevel(log.levels.TRACE);
                 log.setLevel(log.levels.DEBUG);
