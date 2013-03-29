@@ -34,8 +34,49 @@ module.exports = function (grunt) {
         jasmine: {
             src: 'src/**/*.js',
             options: {
-                specs: 'test/**/*-test.js',
+                specs: 'test/*-test.js',
+                vendor: 'test/vendor/*.js',
                 template: require('grunt-template-jasmine-requirejs')
+            }
+        },
+        open: {
+            jasmine: {
+                path: 'http://127.0.0.1:8000/_SpecRunner.html'
+            }
+        },
+        connect: {
+            test: {
+                port: 8000,
+                keepalive: true
+            }
+        },
+        'saucelabs-jasmine': {
+            all: {
+                username: 'pimterry',
+                key: 'KEY',
+                urls: ['http://localhost:8000/_SpecRunner.html'],
+                browsers: [
+                    {"browserName": "iehta", "platform": "Windows 2008", "version": "9"},
+                    // {"browserName": "firefox", "platform": "Windows 2003", "version": "3.0"},
+                    // {"browserName": "firefox", "platform": "Windows 2003", "version": "3.5"},
+                    {"browserName": "firefox", "platform": "Windows 2003", "version": "3.6"},
+                    {"browserName": "firefox", "platform": "Windows 2003", "version": "4"},
+                    {"browserName": "firefox", "platform": "Windows 2003", "version": "19"},
+                    {"browserName": "safari", "platform": "Mac 10.6", "version": "5"},
+                    {"browserName": "safari", "platform": "Mac 10.8", "version": "6"},
+                    {"browserName": "googlechrome", "platform": "Windows 2003"},
+                    {"browserName": "opera", "platform": "Windows 2003", "version": "12"},
+                    {"browserName": "iehta", "platform": "Windows 2003", "version": "6"},
+                    {"browserName": "iehta", "platform": "Windows 2003", "version": "7"},
+                    {"browserName": "iehta", "platform": "Windows 2008", "version": "8"},
+                ],
+                concurrency: 3,
+                detailedError: true,
+                testTimeout:10000,
+                testInterval:1000,
+                testReadyTimeout:2000,
+                testname: 'loglevel jasmine test',
+                tags: [process.env.TRAVIS_REPO_SLUG || "local", process.env.TRAVIS_COMMIT || "manual"]
             }
         },
         jshint: {
@@ -55,7 +96,7 @@ module.exports = function (grunt) {
                 options: {
                     jshintrc: 'test/.jshintrc'
                 },
-                src: ['test/**/*.js']
+                src: ['test/*.js']
             },
         },
         watch: {
@@ -81,10 +122,20 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-open');
+    grunt.loadNpmTasks('grunt-saucelabs');
+
     // Default task.
     grunt.registerTask('default', ['jshint', 'jasmine', 'concat', 'uglify']);
 
     // Just tests
     grunt.registerTask('test', ['jshint', 'jasmine']);
+
+    // Test with a live server and an actual browser
+    grunt.registerTask('integration-test', ['jasmine:src:build', 'connect:test:keepalive', 'open:jasmine']);
+
+    // Test with lots of browsers on saucelabs
+    grunt.registerTask('saucelabs', ['jasmine:src:build', 'connect:test', 'saucelabs-jasmine']);
 
 };
