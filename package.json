@@ -43,5 +43,5 @@
     "grunt-contrib-connect": "~0.2.0",
     "grunt-saucelabs": "~3.0.7"
   },
-  "keywords": []
+  "keywords": ["log", "logger", "logging", "browser"]
 }
