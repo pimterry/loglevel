@@ -65,28 +65,28 @@ log.error("too easy");
 The loglevel API is extremely minimal. All methods are available on the root loglevel object, which it's suggested you name 'log' (this is the default if you import it in globally, and is what's set up in the above examples). The API consists of:
 
 * 5 actual logging methods, ordered and available as:
-  * log.trace(msg)
-  * log.debug(msg)
-  * log.info(msg)
-  * log.warn(msg)
-  * log.error(msg)
+  * `log.trace(msg)`
+  * `log.debug(msg)`
+  * `log.info(msg)`
+  * `log.warn(msg)`
+  * `log.error(msg)`
 
   Exact output formatting of these will depend on the console available in the current context of your application. Notably, many environments will include a full stack trace with all trace() calls, and icons or similar to highlight other calls.
 
   These methods should never fail in any environment, even if no console object is currently available, and should always fall back to an available log method even if the specific method called (e.g. warn) isn't available.
 
-* A log.setLevel(level) method.
+* A `log.setLevel(level)` method.
 
   This disables all logging below the given level, so that after a log.setLevel("warn) call log.warn("something") or log.error("something") will output messages, but log.info("something") will not.
-
-  **`log.setLevel` will throw an error if you attempt to set the level to a non-silent level and there is no console available.** If you do want to explicitly change the default log level from warn in your codebase you should do so in a try/catch. Failing setLevel calls due to a missing console are equivalent to log.setLevel("silent"), which never fails.
 
   This can take either a log level name or 'silent' (which disables everything) in one of a few forms:
   * As a string, like 'error' (case-insensitive)
   * As a log level from the internal levels list, e.g. log.levels.SILENT
   * As a numeric index from 0 (trace) to 5 (silent).
+   
+  **log.setLevel() will throw an error if you attempt to set the level to a non-silent level and there is no console available.** If you do want to explicitly change the default log level from warn in your codebase you should do so in a try/catch. Failing setLevel calls due to a missing console are equivalent to log.setLevel("silent"), which never fails.
 
-* log.enableAll() and log.disableAll() methods.
+* `log.enableAll()` and `log.disableAll()` methods.
 
   These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
 
@@ -97,6 +97,7 @@ _Also, please don't edit files in the "dist" subdirectory as they are generated 
 
 ## Release History
 v0.1.0 - First working release with apparent compatibility with everything tested
+
 v0.2.0 - Updated release with various tweaks and polish and real proper documentation attached
 
 ## License
