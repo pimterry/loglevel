@@ -24,17 +24,6 @@ define(['../lib/loglevel'], function(log) {
             window.console = originalConsole;
         });
 
-        describe("initial log level", function() {
-            it("disables all log methods", function() {
-                for (var ii = 0; ii < logMethods.length; ii++) {
-                    var method = logMethods[ii];
-                    log[method]("a log message");
-
-                    expect(console[method]).not.toHaveBeenCalled();
-                }
-            });
-        });
-
         describe("log.enableAll()", function() {
             it("enables all log methods", function() {
                 log.enableAll();
@@ -44,6 +33,19 @@ define(['../lib/loglevel'], function(log) {
                     log[method]("a log message");
 
                     expect(console[method]).toHaveBeenCalled();
+                }
+            });
+        });
+
+        describe("log.disableAll()", function() {
+            it("disables all log methods", function() {
+                log.disableAll();
+
+                for (var ii = 0; ii < logMethods.length; ii++) {
+                    var method = logMethods[ii];
+                    log[method]("a log message");
+
+                    expect(console[method]).not.toHaveBeenCalled();
                 }
             });
         });
