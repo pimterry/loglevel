@@ -103,3 +103,5 @@ v0.2.0 - Updated release with various tweaks and polish and real proper document
 ## License
 Copyright (c) 2013 Tim Perry  
 Licensed under the MIT license.
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/3393271900ddc6808ae1901f3760a59e "githalytics.com")](http://githalytics.com/pimterry/loglevel)
