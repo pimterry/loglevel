@@ -29,13 +29,14 @@ module.exports = function (grunt) {
             dist: {
                 src: '<%= concat.dist.dest %>',
                 dest: 'dist/<%= pkg.name %>.min.js'
-            },
+            }
         },
         jasmine: {
             src: 'src/**/*.js',
             options: {
                 specs: 'test/*-test.js',
                 vendor: 'test/vendor/*.js',
+                helpers: 'test/*-helper.js',
                 template: require('grunt-template-jasmine-requirejs')
             }
         },

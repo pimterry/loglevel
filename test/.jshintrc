@@ -26,6 +26,10 @@
     "xdescribe",
     "expect",
     "it",
-    "jasmine"
+    "jasmine",
+    "waitsFor",
+    "runs",
+    "itWithFreshLog",
+    "toBeAtLevel"
   ]
 }

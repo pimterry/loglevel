@@ -38,6 +38,26 @@ define(['../lib/loglevel'], function(log) {
                 log.setLevel(log.levels.WARN);
                 log.setLevel(log.levels.ERROR);
             });
+
+            it("are saved in cookies", function() {
+                log.setLevel(log.levels.TRACE);
+                expect(window.document.cookie).toContain("loglevel=TRACE");
+
+                log.setLevel(log.levels.DEBUG);
+                expect(window.document.cookie).toContain("loglevel=DEBUG");
+
+                log.setLevel(log.levels.INFO);
+                expect(window.document.cookie).toContain("loglevel=INFO");
+
+                log.setLevel(log.levels.WARN);
+                expect(window.document.cookie).toContain("loglevel=WARN");
+
+                log.setLevel(log.levels.ERROR);
+                expect(window.document.cookie).toContain("loglevel=ERROR");
+
+                log.setLevel(log.levels.SILENT);
+                expect(window.document.cookie).toContain("loglevel=SILENT");
+            });
         });
     });
 });

@@ -13,6 +13,7 @@
     "console",
     "exports",
     "define",
-    "module"
+    "module",
+    "window"
   ]
 }
