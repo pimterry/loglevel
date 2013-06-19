@@ -43,5 +43,9 @@
     "grunt-contrib-connect": "~0.2.0",
     "grunt-saucelabs": "~3.0.7"
   },
+  "jam": {
+    "dependencies": {},
+    "main": "lib/loglevel.js"
+  },
   "keywords": ["log", "logger", "logging", "browser"]
 }
