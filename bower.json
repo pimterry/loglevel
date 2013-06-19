@@ -1,0 +1,11 @@
+{
+  "name": "loglevel",
+  "version": "0.2.1",
+  "main": "lib/loglevel.js",
+  "dependencies": {},
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}
