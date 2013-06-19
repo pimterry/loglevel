@@ -1,4 +1,4 @@
-/*! loglevel - v0.1.0 - 2013-04-02
+/*! loglevel - v0.2.0 - 2013-06-19
 * https://github.com/pimterry/loglevel
 * Copyright (c) 2013 Tim Perry; Licensed MIT */
 (function (name, definition) {
@@ -7,20 +7,17 @@
     } else if (typeof define === 'function' && typeof define.amd === 'object') {
         define(definition);
     } else {
-        this.name = definition();
+        this[name] = definition();
     }
 }('log', function () {
-    var self = {},
-        noop = function() { };
-
-    self.levels = { "TRACE": 0, "DEBUG": 1, "INFO": 2, "WARN": 3,
-        "ERROR": 4, "SILENT": 5};
+    var self = {};
+    var noop = function() {};
 
     function realMethod(methodName) {
         if (typeof console === "undefined") {
             return noop;
         } else if (typeof console[methodName] === "undefined") {
-            return console.log || noop;
+            return boundToConsole(console, 'log') || noop;
         } else {
             return boundToConsole(console, methodName);
         }
@@ -55,8 +52,57 @@
         }
     }
 
+    function cookiesAvailable() {
+        return (typeof window !== "undefined" &&
+                typeof window.document !== "undefined" &&
+                typeof window.document.cookie !== "undefined");
+    }
+
+    function setLevelInCookie(levelNum) {
+        if (!cookiesAvailable()) {
+            return;
+        }
+
+        var levelName;
+
+        for (var key in self.levels) {
+            if (self.levels.hasOwnProperty(key) && self.levels[key] === levelNum) {
+                levelName = key;
+                break;
+            }
+        }
+
+        if (levelName !== undefined) {
+            window.document.cookie = "loglevel=" + levelName + ";";
+        }
+    }
+
+    var cookieRegex = /loglevel=([^;]+)/;
+
+    function loadLevelFromCookie() {
+        var cookieLevel;
+
+        if (cookiesAvailable()) {
+            var cookieMatch = cookieRegex.exec(window.document.cookie) || [];
+            cookieLevel = cookieMatch[1];
+        }
+
+        self.setLevel(self.levels[cookieLevel] || self.levels.WARN);
+    }
+
+    /*
+     *
+     * Public API
+     *
+     */
+
+    self.levels = { "TRACE": 0, "DEBUG": 1, "INFO": 2, "WARN": 3,
+        "ERROR": 4, "SILENT": 5};
+
     self.setLevel = function (level) {
         if (typeof level === "number" && level >= 0 && level <= self.levels.SILENT) {
+            setLevelInCookie(level);
+
             if (level === self.levels.SILENT) {
                 clearMethods();
                 return;
@@ -77,7 +123,7 @@
         } else if (typeof level === "string") {
             self.setLevel(self.levels[level.toUpperCase()]);
         } else {
-            throw "log.setLevel called with invalid level: " + level;
+            throw "log.setLevel() called with invalid level: " + level;
         }
     };
 
@@ -90,7 +136,7 @@
     };
 
     try {
-        self.setLevel(self.levels.WARN);
+        loadLevelFromCookie();
     } catch (e) {
         self.setLevel(self.levels.SILENT);
     }
