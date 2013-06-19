@@ -25,7 +25,7 @@ This is a barebones reliable everyday logging library. It does not do fancy thin
 
 ## Downloading loglevel
 
-If you're using node, you can run `npm install loglevel`.
+If you're using node, you can run `npm install loglevel`. loglevel is also available via [Bower](https://github.com/bower/bower) (run `bower install loglevel`) or [JamJS](http://jamjs.org/packages/#/details/loglevel) (run `jam install loglevel`)
 
 Alternatively if you want to grab the file directly, you can download either the [production version][min] or the [development version][max] directly.
 
@@ -80,11 +80,13 @@ The loglevel API is extremely minimal. All methods are available on the root log
   This disables all logging below the given level, so that after a log.setLevel("warn) call log.warn("something") or log.error("something") will output messages, but log.info("something") will not.
 
   This can take either a log level name or 'silent' (which disables everything) in one of a few forms:
-  * As a string, like 'error' (case-insensitive)
-  * As a log level from the internal levels list, e.g. log.levels.SILENT
-  * As a numeric index from 0 (trace) to 5 (silent).
+  * As a log level from the internal levels list, e.g. log.levels.SILENT <- for type safety
+  * As a string, like 'error' (case-insensitive) <- for a reasonable practical balance
+  * As a numeric index from 0 (trace) to 5 (silent) <- deliciously terse, and more easily programmable (...although, why?)
+
+  Where possible the loglevel will be persisted as a session cookie on the current domain. If cookies are not available in the current environment (i.e. in Node) this step will be skipped.
    
-  **log.setLevel() will throw an error if you attempt to set the level to a non-silent level and there is no console available.** If you do want to explicitly change the default log level from warn in your codebase you should do so in a try/catch. Failing setLevel calls due to a missing console are equivalent to log.setLevel("silent"), which never fails.
+  It is expected that log.setLevel() will be manually called during debugging and similar, and as such you should note that **log.setLevel() will throw an error if you attempt to set the level to a non-silent level and there is no console available.** If you do want to explicitly change the default log level from warn in your codebase you should do so in a try/catch. Failing setLevel calls due to a missing console are equivalent to log.setLevel("silent"), which never fails.
 
 * `log.enableAll()` and `log.disableAll()` methods.
 
@@ -99,6 +101,8 @@ _Also, please don't edit files in the "dist" subdirectory as they are generated 
 v0.1.0 - First working release with apparent compatibility with everything tested
 
 v0.2.0 - Updated release with various tweaks and polish and real proper documentation attached
+
+v0.3.0 - Some bugfixes (#12, #14), cookie-based log level persistence, doc tweaks, support for Bower and JamJS
 
 ## License
 Copyright (c) 2013 Tim Perry  
