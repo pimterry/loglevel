@@ -25,9 +25,11 @@ This is a barebones reliable everyday logging library. It does not do fancy thin
 
 ## Downloading loglevel
 
-If you're using node, you can run `npm install loglevel`. loglevel is also available via [Bower](https://github.com/bower/bower) (run `bower install loglevel`) or [JamJS](http://jamjs.org/packages/#/details/loglevel) (run `jam install loglevel`)
+If you're using node, you can run `npm install loglevel`.
 
-Alternatively if you want to grab the file directly, you can download either the [production version][min] or the [development version][max] directly.
+loglevel is also available via [Bower](https://github.com/bower/bower) (`bower install loglevel`) or [JamJS](http://jamjs.org/packages/#/details/loglevel) (`jam install loglevel`)
+
+Alternatively if you just want to grab the file yourself, you can download either the current stable [production version][min] or the [development version][max] directly.
 
 [min]: https://raw.github.com/pimterry/loglevel/master/dist/loglevel.min.js
 [max]: https://raw.github.com/pimterry/loglevel/master/dist/loglevel.js
