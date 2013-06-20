@@ -110,4 +110,4 @@ v0.3.0 - Some bugfixes (#12, #14), cookie-based log level persistence, doc tweak
 Copyright (c) 2013 Tim Perry  
 Licensed under the MIT license.
 
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/3393271900ddc6808ae1901f3760a59e "githalytics.com")](http://githalytics.com/pimterry/loglevel)
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/3393271900ddc6808ae1901f3760a59e)](http://githalytics.com/pimterry/loglevel)
