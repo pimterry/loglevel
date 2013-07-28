@@ -11,7 +11,7 @@ var logMethods = [
 define(['../lib/loglevel'], function(log) {
     var originalConsole = window.console;
 
-    describe("Log levels", function() {
+    describe("Basic log levels changing tests:", function() {
         beforeEach(function() {
             window.console = {};
 
@@ -50,32 +50,32 @@ define(['../lib/loglevel'], function(log) {
             });
         });
 
-        describe("invalid setLevel inputs", function() {
-            it("error thrown if no level is given", function() {
+        describe("log.setLevel() throws errors if given", function() {
+            it("no level argument", function() {
                 expect(function() {
                     log.setLevel();
                 }).toThrow();
             });
 
-            it("error thrown if null level is given", function() {
+            it("a null level argument", function() {
                 expect(function() {
                     log.setLevel(null);
                 }).toThrow();
             });
 
-            it("error thrown if undefined level is given", function() {
+            it("an undefined level argument", function() {
                 expect(function() {
                     log.setLevel(undefined);
                 }).toThrow();
             });
 
-            it("error thrown if invalid level number is given", function() {
+            it("an invalid log level index", function() {
                 expect(function() {
                     log.setLevel(-1);
                 }).toThrow();
             });
 
-            it("error thrown if invalid level name is given", function() {
+            it("an invalid log level name", function() {
                 expect(function() {
                     log.setLevel("InvalidLevelName");
                 }).toThrow();

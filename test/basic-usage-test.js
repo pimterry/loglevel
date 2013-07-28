@@ -1,11 +1,22 @@
 "use strict";
 
-define(['../lib/loglevel'], function(log) {
-    describe("Integration smoke tests", function() {
-        var describeIfConsoleAvailable =
-            typeof console !== "undefined" ? describe : xdescribe;
+define(['../lib/loglevel', 'test/test-helpers'], function(log, testHelpers) {
+    var describeIf = testHelpers.describeIf;
+    var itIf = testHelpers.itIf;
 
-        describeIfConsoleAvailable("log methods", function() {
+    describe("Integration smoke tests:", function() {
+        describe("log methods", function() {
+            it("can all be disabled", function() {
+                log.setLevel(log.levels.SILENT);
+                log.trace("trace");
+                log.debug("debug");
+                log.info("info");
+                log.warn("warn");
+                log.error("error");
+            });
+        });
+
+        describeIf(typeof console !== "undefined", "log methods", function() {
             it("can all be called", function() {
                 if (typeof console !== "undefined") {
                     log.setLevel(log.levels.TRACE);
@@ -19,18 +30,13 @@ define(['../lib/loglevel'], function(log) {
             });
         });
 
-        describe("log methods", function() {
-            it("can all be disabled", function() {
-                log.setLevel(log.levels.SILENT);
-                log.trace("trace");
-                log.debug("debug");
-                log.info("info");
-                log.warn("warn");
-                log.error("error");
+        describeIf(typeof console !== "undefined", "log levels", function() {
+            beforeEach(function() {
+                this.addMatchers({
+                    "toBeTheStoredLevel" : testHelpers.toBeTheStoredLevel
+                });
             });
-        });
 
-        describeIfConsoleAvailable("log levels", function() {
             it("are all settable", function() {
                 log.setLevel(log.levels.TRACE);
                 log.setLevel(log.levels.DEBUG);
@@ -39,24 +45,24 @@ define(['../lib/loglevel'], function(log) {
                 log.setLevel(log.levels.ERROR);
             });
 
-            it("are saved in cookies", function() {
+            itIf(testHelpers.isAnyLevelStoragePossible(), "are persisted", function() {
                 log.setLevel(log.levels.TRACE);
-                expect(window.document.cookie).toContain("loglevel=TRACE");
+                expect('trace').toBeTheStoredLevel();
 
                 log.setLevel(log.levels.DEBUG);
-                expect(window.document.cookie).toContain("loglevel=DEBUG");
+                expect('debug').toBeTheStoredLevel();
 
                 log.setLevel(log.levels.INFO);
-                expect(window.document.cookie).toContain("loglevel=INFO");
+                expect('info').toBeTheStoredLevel();
 
                 log.setLevel(log.levels.WARN);
-                expect(window.document.cookie).toContain("loglevel=WARN");
+                expect('warn').toBeTheStoredLevel();
 
                 log.setLevel(log.levels.ERROR);
-                expect(window.document.cookie).toContain("loglevel=ERROR");
+                expect('error').toBeTheStoredLevel();
 
                 log.setLevel(log.levels.SILENT);
-                expect(window.document.cookie).toContain("loglevel=SILENT");
+                expect('silent').toBeTheStoredLevel();
             });
         });
     });

@@ -11,7 +11,7 @@ function consoleLogIsCalledBy(log, methodName) {
 define(['../lib/loglevel'], function(log) {
     var originalConsole = window.console;
 
-    describe("LogLevel fallback functionality", function() {
+    describe("Fallback functionality:", function() {
         describe("with no console present", function() {
             beforeEach(function() {
                 window.console = undefined;

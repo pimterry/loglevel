@@ -28,8 +28,6 @@
     "it",
     "jasmine",
     "waitsFor",
-    "runs",
-    "itWithFreshLog",
-    "toBeAtLevel"
+    "runs"
   ]
 }

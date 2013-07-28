@@ -1,35 +1,37 @@
 "use strict";
 
-var originalConsole = window.console;
-var originalDocument = window.document;
-var originalCookie = window.document.cookie;
+define(['test/test-helpers'], function(testHelpers) {
+    var describeIf = testHelpers.describeIf;
+    var it = testHelpers.itWithFreshLog;
 
-function deleteLoglevelCookie() {
-    window.document.cookie = "loglevel=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-}
+    var originalConsole = window.console;
+    var originalDocument = window.document;
 
-define(['../lib/loglevel'], function(log) {
-    var it = itWithFreshLog;
-
-    describe("Cookie tests", function() {
+    describeIf(testHelpers.isCookieStorageAvailable(), "Cookie persistence tests:", function() {
 
         beforeEach(function() {
             window.console = {"log" : jasmine.createSpy("console.log")};
-            this.addMatchers({ "toBeAtLevel" : toBeAtLevel });
+            this.addMatchers({
+                "toBeAtLevel" : testHelpers.toBeAtLevel,
+                "toBeTheStoredLevel" : testHelpers.toBeTheLevelStoredByCookie
+            });
         });
 
         afterEach(function() {
             window.console = originalConsole;
-            window.document.cookie = originalCookie;
         });
 
-        describe("If cookie not set", function() {
+        describe("If no level is saved", function() {
             beforeEach(function() {
-                window.document.cookie = "loglevel=;";
+                testHelpers.clearStoredLevels();
             });
 
             it("log level is set to warn by default", function(log) {
                 expect(log).toBeAtLevel("warn");
+            });
+
+            it("warn is persisted as the current level", function(log) {
+                expect("warn").toBeTheStoredLevel();
             });
 
             it("log can be set to info level", function(log) {
@@ -37,15 +39,15 @@ define(['../lib/loglevel'], function(log) {
                 expect(log).toBeAtLevel("info");
             });
 
-            it("log.setLevel sets a cookie with the given level", function(log) {
+            it("log.setLevel() sets a cookie with the given level", function(log) {
                 log.setLevel("debug");
-                expect(window.document.cookie).toContain("loglevel=DEBUG");
+                expect("debug").toBeTheStoredLevel();
             });
         });
 
-        describe("If cookie is set to info level", function() {
+        describe("If info level is saved", function() {
             beforeEach(function() {
-                window.document.cookie = "loglevel=INFO";
+                testHelpers.setStoredLevel("info");
             });
 
             it("info is the default log level", function(log) {
@@ -57,18 +59,23 @@ define(['../lib/loglevel'], function(log) {
                 expect(log).toBeAtLevel("warn");
             });
 
-            it("changing the log level overwrites the cookie", function(log) {
+            it("log.setLevel() overwrites the saved level", function(log) {
                 log.setLevel("error");
-                expect(window.document.cookie).toContain("loglevel=ERROR");
-                expect(window.document.cookie).not.toContain("loglevel=INFO");
+
+                expect("error").toBeTheStoredLevel();
+                expect("info").not.toBeTheStoredLevel();
             });
         });
 
-        describe("If cookie is set to error level with other cookies", function() {
+        describe("If the level is saved with other data", function() {
             beforeEach(function() {
-                window.document.cookie = "qwe=asd";
-                window.document.cookie = "loglevel=ERROR";
-                window.document.cookie = "msg=hello world";
+                if (window) {
+                    if (window.document && window.document.cookie) {
+                        window.document.cookie = "qwe=asd";
+                        window.document.cookie = "loglevel=ERROR";
+                        window.document.cookie = "msg=hello world";
+                    }
+                }
             });
 
             it("error is the default log level", function(log) {
@@ -80,20 +87,25 @@ define(['../lib/loglevel'], function(log) {
                 expect(log).toBeAtLevel("silent");
             });
 
-            it("log.setLevel() overrides the loglevel cookie only with the new level", function(log) {
+            it("log.setLevel() overrides the saved level only", function(log) {
                 log.setLevel("debug");
-                expect(window.document.cookie).toContain("loglevel=DEBUG");
-                expect(window.document.cookie).toContain("hello world");
+
+                expect('debug').toBeTheStoredLevel();
+                expect(window.document.cookie).toContain("msg=hello world");
             });
         });
 
-        describe("If cookie is set incorrectly", function() {
+        describe("If the level cookie is set incorrectly", function() {
             beforeEach(function() {
-                window.document.cookie = "loglevel=GIBBERISH";
+                testHelpers.setCookieStoredLevel('gibberish');
             });
 
             it("warn is the default log level", function(log) {
                 expect(log).toBeAtLevel("warn");
+            });
+
+            it("warn is persisted as the current level, overriding the invalid cookie", function(log) {
+                expect("warn").toBeTheStoredLevel();
             });
 
             it("log can be changed to info level", function(log) {
@@ -101,20 +113,28 @@ define(['../lib/loglevel'], function(log) {
                 expect(log).toBeAtLevel("info");
             });
 
-            it("log.setLevel() overrides the cookie with the new level", function(log) {
+            it("log.setLevel() overrides the saved level with the new level", function(log) {
+                expect('debug').not.toBeTheStoredLevel();
+
                 log.setLevel("debug");
-                expect(window.document.cookie).toContain("loglevel=DEBUG");
+
+                expect('debug').toBeTheStoredLevel();
             });
         });
 
-        describe("If document.cookie doesn't exist", function() {
+        var originalCookie = window.document.cookie;
+
+        function isCookieUndefinable() {
             window.document.cookie = undefined;
             if (typeof window.document.cookie !== "undefined") {
-                return;
+                return false;
             } else {
                 window.document.cookie = originalCookie;
+                return true;
             }
+        }
 
+        describeIf(isCookieUndefinable(), "If document.cookie doesn't exist", function() {
             beforeEach(function() {
                 window.document.cookie = undefined;
             });
@@ -134,7 +154,7 @@ define(['../lib/loglevel'], function(log) {
             });
         });
 
-        describe("If window.document doesn't exist", function() {
+        function isWindowUndefinable() {
             try {
                 window.document = undefined;
                 if (window.document !== undefined) {
@@ -144,9 +164,15 @@ define(['../lib/loglevel'], function(log) {
                 return; // Can't change window.document in current env, so skip these tests
             }
             window.document = originalDocument;
+        }
 
+        describeIf(isWindowUndefinable(), "If window.document doesn't exist", function() {
             beforeEach(function() {
                 window.document = undefined;
+            });
+
+            afterEach(function () {
+                window.document = originalDocument;
             });
 
             it("warn is the default log level", function(log) {
