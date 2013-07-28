@@ -38,7 +38,6 @@ define(function () {
 
             var result = window.document.cookie.indexOf('test=hi') !== -1;
             window.document.cookie = "test=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-            window.document.cookie = ""; // No-op for real cookie impl, but clears cookies if they're just mocked
 
             return result;
         } else {
@@ -122,24 +121,29 @@ define(function () {
         }
     };
 
-    // Wraps the Jasmine it(name, test) call with some require magic to reload the loglevel
-    // dependency for the given test
+    // Forcibly reloads loglevel, and asynchronously hands the resulting log back to the given callback
+    // via Jasmine async magic
+    self.withFreshLog = function withFreshLog(toRun) {
+        require.undef("lib/loglevel");
+
+        var freshLog;
+
+        waitsFor(function() {
+            require(['lib/loglevel'], function(log) {
+                freshLog = log;
+            });
+            return typeof freshLog !== "undefined";
+        });
+
+        runs(function() {
+            toRun(freshLog);
+        });
+    };
+
+    // Wraps Jasmine's it(name, test) call to reload the loglevel dependency for the given test
     self.itWithFreshLog = function itWithFreshLog(name, test) {
         jasmine.getEnv().it(name, function() {
-            require.undef("lib/loglevel");
-
-            var freshLog;
-
-            waitsFor(function() {
-                require(['lib/loglevel'], function(log) {
-                    freshLog = log;
-                });
-                return typeof freshLog !== "undefined";
-            });
-
-            runs(function() {
-                test(freshLog);
-            });
+            self.withFreshLog(test);
         });
     };
 
