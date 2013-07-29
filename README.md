@@ -94,10 +94,24 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
 
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Builds can be run with grunt, just run 'grunt' in the root directory of the project. 
+## Contributing & Developing
+In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality.
 
-_Also, please don't edit files in the "dist" subdirectory as they are generated via Grunt. You'll find source code in the "lib" subdirectory!_
+Builds can be run with grunt, run `grunt` to build a distributable version of the project (in /dist), or `grunt test` to just run the tests and linting. During development you can run `grunt watch` and it will monitor source files, and rerun the tests and linting as appropriate when they're changed.
+
+_Also, please don't manually edit files in the "dist" subdirectory as they are generated via Grunt. You'll find source code in the "lib" subdirectory!_
+
+#### Release process
+
+To do a release of loglevel:
+
+* Update the version number in package.json and bower.json
+* Run `grunt` to build a distributable version in dist/
+* Update the release history in this file (below)
+* Commit the built code, tagging it with the version number and a brief message about the release
+* Push to Github
+* Run `npm publish .` to publish to NPM
+* Run `jam publish` to publish to JamJS
 
 ## Release History
 v0.1.0 - First working release with apparent compatibility with everything tested
