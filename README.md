@@ -1,4 +1,4 @@
-# loglevel [![Build Status](https://travis-ci.org/pimterry/loglevel.png)](https://travis-ci.org/pimterry/loglevel) ![Dependency status](https://david-dm.org/pimterry/loglevel/dev-status.png)
+# loglevel [![Build Status](https://travis-ci.org/pimterry/loglevel.png)](https://travis-ci.org/pimterry/loglevel) [![Dependency status](https://david-dm.org/pimterry/loglevel/dev-status.png)](https://david-dm.org/pimterry/loglevel#info=devDependencies&view=table)
 
 Minimal lightweight simple logging for JavaScript. loglevel replaces console.log() and friends with level-based logging and filtering, with none of console's downsides.
 
