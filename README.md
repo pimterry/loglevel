@@ -106,6 +106,8 @@ v0.2.0 - Updated release with various tweaks and polish and real proper document
 
 v0.3.0 - Some bugfixes (#12, #14), cookie-based log level persistence, doc tweaks, support for Bower and JamJS
 
+v0.3.1 - Fixed incorrect text in release build banner, various other minor tweaks
+
 ## License
 Copyright (c) 2013 Tim Perry  
 Licensed under the MIT license.
