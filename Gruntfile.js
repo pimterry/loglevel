@@ -126,8 +126,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-open');
     grunt.loadNpmTasks('grunt-saucelabs');
 
-    // Default task.
-    grunt.registerTask('default', ['jshint', 'jasmine', 'concat', 'uglify']);
+    // Build a distributable release
+    grunt.registerTask('dist', ['jshint', 'jasmine', 'concat', 'uglify']);
 
     // Just tests
     grunt.registerTask('test', ['jshint', 'jasmine']);
@@ -137,5 +137,8 @@ module.exports = function (grunt) {
 
     // Test with lots of browsers on saucelabs
     grunt.registerTask('saucelabs', ['jasmine:src:build', 'connect:test', 'saucelabs-jasmine']);
+
+    // Default task.
+    grunt.registerTask('default', 'dist');
 
 };
