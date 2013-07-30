@@ -9,11 +9,11 @@
   "undef": true,
   "boss": true,
   "eqnull": true,
-  "predef": [
-    "console",
-    "exports",
-    "define",
-    "module",
-    "window"
-  ]
+  "globals": {
+    "console": false,
+    "exports": false,
+    "define": false,
+    "module": false,
+    "window": false
+  }
 }
