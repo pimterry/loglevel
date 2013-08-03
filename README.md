@@ -31,6 +31,8 @@ loglevel is also available via [Bower](https://github.com/bower/bower) (`bower i
 
 Alternatively if you just want to grab the file yourself, you can download either the current stable [production version][min] or the [development version][max] directly.
 
+Finally, if you want to tweak loglevel to your own needs or you immediately need the cutting-edge version, clone this repo and see [Developing & Contributing](#developing--contributing) below for build instructions.
+
 [min]: https://raw.github.com/pimterry/loglevel/master/dist/loglevel.min.js
 [max]: https://raw.github.com/pimterry/loglevel/master/dist/loglevel.js
 
@@ -94,10 +96,10 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
 
-## Contributing & Developing
+## Developing & Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality.
 
-Builds can be run with grunt, run `grunt` to build a distributable version of the project (in /dist), or `grunt test` to just run the tests and linting. During development you can run `grunt watch` and it will monitor source files, and rerun the tests and linting as appropriate when they're changed.
+Builds can be run with grunt: run `grunt dist` to build a distributable version of the project (in /dist), or `grunt test` to just run the tests and linting. During development you can run `grunt watch` and it will monitor source files, and rerun the tests and linting as appropriate when they're changed.
 
 _Also, please don't manually edit files in the "dist" subdirectory as they are generated via Grunt. You'll find source code in the "lib" subdirectory!_
 
@@ -106,7 +108,7 @@ _Also, please don't manually edit files in the "dist" subdirectory as they are g
 To do a release of loglevel:
 
 * Update the version number in package.json and bower.json
-* Run `grunt` to build a distributable version in dist/
+* Run `grunt dist` to build a distributable version in dist/
 * Update the release history in this file (below)
 * Commit the built code, tagging it with the version number and a brief message about the release
 * Push to Github
