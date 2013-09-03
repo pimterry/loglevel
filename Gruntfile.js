@@ -19,7 +19,7 @@ module.exports = function (grunt) {
             dist: {
                 src: ['lib/<%= pkg.name %>.js'],
                 dest: 'dist/<%= pkg.name %>.js'
-            },
+            }
         },
         uglify: {
             options: {
@@ -68,7 +68,7 @@ module.exports = function (grunt) {
                     {"browserName": "opera", "platform": "Windows 2003", "version": "12"},
                     {"browserName": "iehta", "platform": "Windows 2003", "version": "6"},
                     {"browserName": "iehta", "platform": "Windows 2003", "version": "7"},
-                    {"browserName": "iehta", "platform": "Windows 2008", "version": "8"},
+                    {"browserName": "iehta", "platform": "Windows 2008", "version": "8"}
                 ],
                 concurrency: 3,
                 detailedError: true,
@@ -97,7 +97,7 @@ module.exports = function (grunt) {
                     jshintrc: 'test/.jshintrc'
                 },
                 src: ['test/*.js']
-            },
+            }
         },
         watch: {
             gruntfile: {
@@ -111,8 +111,8 @@ module.exports = function (grunt) {
             test: {
                 files: '<%= jshint.test.src %>',
                 tasks: ['jshint:test', 'jasmine']
-            },
-        },
+            }
+        }
     });
 
     // These plugins provide necessary tasks.
