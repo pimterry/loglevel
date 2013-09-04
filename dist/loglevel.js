@@ -24,21 +24,28 @@
             }
         }
 
+  
         function boundToConsole(console, methodName) {
             var method = console[methodName];
-            if (method.bind === undefined) {
-                if (Function.prototype.bind === undefined) {
-                    return function() {
-                        method.apply(console, arguments);
-                    };
+            
+            // solve ie8 problem with noop function
+            if (typeof console[methodName] === 'object' && console[methodName].apply) {
+                if (method.bind === undefined) {
+                    if (Function.prototype.bind === undefined) {
+                        return function() {
+                            method.apply(console, arguments);
+                        };
+                    } else {
+                        return Function.prototype.bind.call(console[methodName], console);
+                    }
                 } else {
-                    return Function.prototype.bind.call(console[methodName], console);
+                    return console[methodName].bind(console);
                 }
             } else {
-                return console[methodName].bind(console);
+                return function() {};
             }
         }
-
+        
         var logMethods = [
             "trace",
             "debug",
@@ -59,11 +66,16 @@
                     window.document.cookie !== undefined);
         }
 
-        function setLevelInCookie(levelNum) {
-            if (!cookiesAvailable()) {
-                return;
+        function localStorageAvailable() {
+            try {
+                return (typeof window !== undefinedType &&
+                        window.localStorage !== undefined);
+            } catch (e) {
+                return false;
             }
+        }
 
+        function persistLevelIfPossible(levelNum) {
             var levelName;
 
             for (var key in self.levels) {
@@ -73,22 +85,30 @@
                 }
             }
 
-            if (levelName !== undefined) {
+            if (localStorageAvailable()) {
+                window.localStorage['loglevel'] = levelName;
+            } else if (cookiesAvailable()) {
                 window.document.cookie = "loglevel=" + levelName + ";";
+            } else {
+                return;
             }
         }
 
         var cookieRegex = /loglevel=([^;]+)/;
 
-        function loadLevelFromCookie() {
-            var cookieLevel;
+        function loadPersistedLevel() {
+            var storedLevel;
 
-            if (cookiesAvailable()) {
-                var cookieMatch = cookieRegex.exec(window.document.cookie) || [];
-                cookieLevel = cookieMatch[1];
+            if (localStorageAvailable()) {
+                storedLevel = window.localStorage['loglevel'];
             }
 
-            self.setLevel(self.levels[cookieLevel] || self.levels.WARN);
+            if (!storedLevel && cookiesAvailable()) {
+                var cookieMatch = cookieRegex.exec(window.document.cookie) || [];
+                storedLevel = cookieMatch[1];
+            }
+
+            self.setLevel(self.levels[storedLevel] || self.levels.WARN);
         }
 
         /*
@@ -102,7 +122,7 @@
 
         self.setLevel = function (level) {
             if (typeof level === "number" && level >= 0 && level <= self.levels.SILENT) {
-                setLevelInCookie(level);
+                persistLevelIfPossible(level);
 
                 if (level === self.levels.SILENT) {
                     clearMethods();
@@ -137,7 +157,7 @@
         };
 
         try {
-            loadLevelFromCookie();
+            loadPersistedLevel();
         } catch (e) {
             self.setLevel(self.levels.SILENT);
         }
