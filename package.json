@@ -40,7 +40,7 @@
     "grunt-template-jasmine-requirejs": "~0.1.0",
     "grunt-open": "~0.2.0",
     "grunt-saucelabs": "~4.0.4",
-    "grunt-contrib-connect": "~0.4.1"
+    "grunt-contrib-connect": "~0.5.0"
   },
   "jam": {
     "dependencies": {},
