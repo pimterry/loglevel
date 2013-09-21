@@ -31,12 +31,21 @@ module.exports = function (grunt) {
             }
         },
         jasmine: {
-            src: 'src/**/*.js',
-            options: {
-                specs: 'test/*-test.js',
-                vendor: 'test/vendor/*.js',
-                helpers: 'test/*-helper.js',
-                template: require('grunt-template-jasmine-requirejs')
+            requirejs: {
+                src: [],
+                options: {
+                    specs: 'test/*-test.js',
+                    vendor: 'test/vendor/*.js',
+                    helpers: 'test/*-helper.js',
+                    template: require('grunt-template-jasmine-requirejs')
+                }
+            },
+            global: {
+                src: 'lib/**/*.js',
+                options: {
+                    specs: 'test/global-integration.js',
+                    vendor: 'test/vendor/*.js'
+                }
             }
         },
         open: {
@@ -130,7 +139,7 @@ module.exports = function (grunt) {
     grunt.registerTask('dist', ['jshint', 'jasmine', 'concat', 'uglify']);
 
     // Just tests
-    grunt.registerTask('test', ['jshint', 'jasmine']);
+    grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global']);
 
     // Test with a live server and an actual browser
     grunt.registerTask('integration-test', ['jasmine:src:build', 'connect:test:keepalive', 'open:jasmine']);
