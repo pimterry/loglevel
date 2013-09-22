@@ -1,4 +1,4 @@
-/*! loglevel - v0.3.1 - https://github.com/pimterry/loglevel - (c) 2013 Tim Perry - licensed MIT */
+/*! loglevel - v0.4.0 - https://github.com/pimterry/loglevel - (c) 2013 Tim Perry - licensed MIT */
 ;(function (undefined) {
     var undefinedType = "undefined";
     
@@ -18,7 +18,11 @@
             if (typeof console === undefinedType) {
                 return noop;
             } else if (console[methodName] === undefined) {
-                return boundToConsole(console, 'log') || noop;
+                if (console.log !== undefined) {
+                    return boundToConsole(console, 'log');
+                } else {
+                    return noop;
+                }
             } else {
                 return boundToConsole(console, methodName);
             }
@@ -29,7 +33,7 @@
             if (method.bind === undefined) {
                 if (Function.prototype.bind === undefined) {
                     return function() {
-                        method.apply(console, arguments);
+                        Function.prototype.apply.apply(method, [console, arguments]);
                     };
                 } else {
                     return Function.prototype.bind.call(console[methodName], console);
@@ -59,11 +63,16 @@
                     window.document.cookie !== undefined);
         }
 
-        function setLevelInCookie(levelNum) {
-            if (!cookiesAvailable()) {
-                return;
+        function localStorageAvailable() {
+            try {
+                return (typeof window !== undefinedType &&
+                        window.localStorage !== undefined);
+            } catch (e) {
+                return false;
             }
+        }
 
+        function persistLevelIfPossible(levelNum) {
             var levelName;
 
             for (var key in self.levels) {
@@ -73,22 +82,30 @@
                 }
             }
 
-            if (levelName !== undefined) {
+            if (localStorageAvailable()) {
+                window.localStorage['loglevel'] = levelName;
+            } else if (cookiesAvailable()) {
                 window.document.cookie = "loglevel=" + levelName + ";";
+            } else {
+                return;
             }
         }
 
         var cookieRegex = /loglevel=([^;]+)/;
 
-        function loadLevelFromCookie() {
-            var cookieLevel;
+        function loadPersistedLevel() {
+            var storedLevel;
 
-            if (cookiesAvailable()) {
-                var cookieMatch = cookieRegex.exec(window.document.cookie) || [];
-                cookieLevel = cookieMatch[1];
+            if (localStorageAvailable()) {
+                storedLevel = window.localStorage['loglevel'];
             }
 
-            self.setLevel(self.levels[cookieLevel] || self.levels.WARN);
+            if (!storedLevel && cookiesAvailable()) {
+                var cookieMatch = cookieRegex.exec(window.document.cookie) || [];
+                storedLevel = cookieMatch[1];
+            }
+
+            self.setLevel(self.levels[storedLevel] || self.levels.WARN);
         }
 
         /*
@@ -102,7 +119,7 @@
 
         self.setLevel = function (level) {
             if (typeof level === "number" && level >= 0 && level <= self.levels.SILENT) {
-                setLevelInCookie(level);
+                persistLevelIfPossible(level);
 
                 if (level === self.levels.SILENT) {
                     clearMethods();
@@ -121,7 +138,7 @@
                         }
                     }
                 }
-            } else if (typeof level === "string") {
+            } else if (typeof level === "string" && self.levels[level.toUpperCase()] !== undefined) {
                 self.setLevel(self.levels[level.toUpperCase()]);
             } else {
                 throw "log.setLevel() called with invalid level: " + level;
@@ -137,7 +154,7 @@
         };
 
         try {
-            loadLevelFromCookie();
+            loadPersistedLevel();
         } catch (e) {
             self.setLevel(self.levels.SILENT);
         }

@@ -143,7 +143,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-saucelabs');
 
     // Build a distributable release
-    grunt.registerTask('dist', ['jshint', 'jasmine', 'concat', 'uglify']);
+    grunt.registerTask('dist', ['test', 'uglify']);
 
     // Just tests
     grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global', 'jasmine_node']);

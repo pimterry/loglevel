@@ -88,7 +88,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
   * As a string, like 'error' (case-insensitive) <- for a reasonable practical balance
   * As a numeric index from 0 (trace) to 5 (silent) <- deliciously terse, and more easily programmable (...although, why?)
 
-  Where possible the loglevel will be persisted as a session cookie on the current domain. If cookies are not available in the current environment (i.e. in Node) this step will be skipped.
+  Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node) persistence will be skipped.
    
   It is expected that log.setLevel() will be manually called during debugging and similar, and as such you should note that **log.setLevel() will throw an error if you attempt to set the level to a non-silent level and there is no console available.** If you do want to explicitly change the default log level from warn in your codebase you should do so in a try/catch. Failing setLevel calls due to a missing console are equivalent to log.setLevel("silent"), which never fails.
 
@@ -123,6 +123,8 @@ v0.2.0 - Updated release with various tweaks and polish and real proper document
 v0.3.0 - Some bugfixes (#12, #14), cookie-based log level persistence, doc tweaks, support for Bower and JamJS
 
 v0.3.1 - Fixed incorrect text in release build banner, various other minor tweaks
+
+v0.4.0 - Use LocalStorage for level persistence if available, compatibility improvements for IE, improved error messages, multi-environment tests
 
 ## License
 Copyright (c) 2013 Tim Perry  
