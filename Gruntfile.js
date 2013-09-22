@@ -48,6 +48,12 @@ module.exports = function (grunt) {
                 }
             }
         },
+        "jasmine_node": {
+            match: "node-integration.",
+            matchall: true,
+            projectRoot: "./test",
+            useHelpers: false
+        },
         open: {
             jasmine: {
                 path: 'http://127.0.0.1:8000/_SpecRunner.html'
@@ -128,6 +134,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-jasmine-node');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
@@ -139,7 +146,7 @@ module.exports = function (grunt) {
     grunt.registerTask('dist', ['jshint', 'jasmine', 'concat', 'uglify']);
 
     // Just tests
-    grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global']);
+    grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global', 'jasmine_node']);
 
     // Test with a live server and an actual browser
     grunt.registerTask('integration-test', ['jasmine:src:build', 'connect:test:keepalive', 'open:jasmine']);
