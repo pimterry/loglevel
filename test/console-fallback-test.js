@@ -8,6 +8,10 @@ function consoleLogIsCalledBy(log, methodName) {
     });
 }
 
+function mockConsole() {
+    return {"log" : jasmine.createSpy("console.log")};
+}
+
 define(['../lib/loglevel'], function(log) {
     var originalConsole = window.console;
 
@@ -33,21 +37,42 @@ define(['../lib/loglevel'], function(log) {
                 expect(result).toEqual("No console available for logging");
             });
 
-            it("setting to silent level is fine", function() {
-                log.setLevel(log.levels.SILENT);
+            it("active method calls are allowed, once the active setLevel fails", function() {
+                log.setLevel(log.levels.TRACE);
+                log.trace("hello");
             });
 
-            it("active method calls are allowed, once the active setLevel fails", function() {
-                try {
-                    log.setLevel(log.levels.TRACE);
-                } catch (e) { }
-                log.trace("hello");
+            describe("if a console later appears", function () {
+                it("logging is re-enabled and works correctly when next used", function () {
+                    log.setLevel(log.levels.WARN);
+
+                    window.console = mockConsole();
+                    log.error("error");
+
+                    expect(window.console.log).toHaveBeenCalled();
+                });
+
+                it("logging is re-enabled but does nothing when used at a blocked level", function () {
+                    log.setLevel(log.levels.WARN);
+
+                    window.console = mockConsole();
+                    log.trace("trace");
+
+                    expect(window.console.log).not.toHaveBeenCalled();
+                });
+
+                it("changing level works correctly from that point", function () {
+                    window.console = mockConsole();
+                    var result = log.setLevel(log.levels.WARN);
+
+                    expect(result).toBeUndefined();
+                });
             });
         });
 
         describe("with a console that only supports console.log", function() {
             beforeEach(function() {
-                window.console = {"log" : jasmine.createSpy("console.log")};
+                window.console = mockConsole();
             });
 
             afterEach(function() {
