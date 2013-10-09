@@ -22,14 +22,15 @@ define(['../lib/loglevel'], function(log) {
             });
 
             it("silent method calls are allowed", function() {
-                log.setLevel(log.levels.SILENT);
+                var result = log.setLevel(log.levels.SILENT);
                 log.trace("hello");
+
+                expect(result).toBeUndefined();
             });
 
-            it("setting an active level fails", function() {
-                expect(function() {
-                    log.setLevel(log.levels.TRACE);
-                }).toThrow("No console available for logging");
+            it("setting an active level gently returns an error string", function() {
+                var result = log.setLevel(log.levels.TRACE);
+                expect(result).toEqual("No console available for logging");
             });
 
             it("setting to silent level is fine", function() {
