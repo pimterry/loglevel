@@ -84,14 +84,14 @@ The loglevel API is extremely minimal. All methods are available on the root log
   This disables all logging below the given level, so that after a log.setLevel("warn) call log.warn("something") or log.error("something") will output messages, but log.info("something") will not.
 
   This can take either a log level name or 'silent' (which disables everything) in one of a few forms:
-  * As a log level from the internal levels list, e.g. log.levels.SILENT <- for type safety
-  * As a string, like 'error' (case-insensitive) <- for a reasonable practical balance
-  * As a numeric index from 0 (trace) to 5 (silent) <- deliciously terse, and more easily programmable (...although, why?)
+  * As a log level from the internal levels list, e.g. log.levels.SILENT ← _for type safety_
+  * As a string, like 'error' (case-insensitive) ← _for a reasonable practical balance_
+  * As a numeric index from 0 (trace) to 5 (silent) ← _deliciously terse, and more easily programmable (...although, why?)_
 
   Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node) persistence will be skipped.
-   
-  It is expected that log.setLevel() will be manually called during debugging and similar, and as such you should note that **log.setLevel() will throw an error if you attempt to set the level to a non-silent level and there is no console available.** If you do want to explicitly change the default log level from warn in your codebase you should do so in a try/catch. Failing setLevel calls due to a missing console are equivalent to log.setLevel("silent"), which never fails.
-
+  
+  If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begins logging at the requested level. 
+  
 * `log.enableAll()` and `log.disableAll()` methods.
 
   These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
