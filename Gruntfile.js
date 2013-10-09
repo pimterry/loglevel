@@ -149,10 +149,10 @@ module.exports = function (grunt) {
     grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global', 'jasmine_node']);
 
     // Test with a live server and an actual browser
-    grunt.registerTask('integration-test', ['jasmine:src:build', 'connect:test:keepalive', 'open:jasmine']);
+    grunt.registerTask('integration-test', ['jasmine:requirejs:src:build', 'open:jasmine', 'connect:test:keepalive']);
 
     // Test with lots of browsers on saucelabs
-    grunt.registerTask('saucelabs', ['jasmine:src:build', 'connect:test', 'saucelabs-jasmine']);
+    grunt.registerTask('saucelabs', ['jasmine:requirejs:src:build', 'connect:test', 'saucelabs-jasmine']);
 
     // Default task.
     grunt.registerTask('default', 'dist');
