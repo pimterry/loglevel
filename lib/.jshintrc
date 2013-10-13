@@ -9,6 +9,7 @@
   "undef": true,
   "boss": true,
   "eqnull": true,
+  "es3": true,
   "globals": {
     "console": false,
     "exports": false,

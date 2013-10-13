@@ -10,6 +10,7 @@
   "undef": true,
   "boss": true,
   "eqnull": true,
+  "es3": true,
   "globals": {
     "window": true,
     "console": true,
