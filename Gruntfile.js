@@ -78,6 +78,7 @@ module.exports = function (grunt) {
                         {"browserName": "safari", "platform": "Mac 10.8", "version": "6"},
                         {"browserName": "googlechrome", "platform": "Windows 7"},
                         {"browserName": "opera", "platform": "Windows 2003", "version": "12"},
+                        // Disabled because old IE breaks the Jasmine runner; these have to be manually tested
                         // {"browserName": "iehta", "platform": "Windows XP", "version": "6"},
                         // {"browserName": "iehta", "platform": "Windows XP", "version": "7"},
                         // {"browserName": "iehta", "platform": "Windows XP", "version": "8"},
@@ -146,7 +147,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-saucelabs');
 
     // Build a distributable release
-    grunt.registerTask('dist', ['test', 'uglify']);
+    grunt.registerTask('dist', ['test', 'concat', 'uglify']);
 
     // Just tests
     grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global', 'jasmine_node']);
@@ -158,6 +159,6 @@ module.exports = function (grunt) {
     grunt.registerTask('saucelabs', ['jasmine:requirejs:src:build', 'connect:test', 'saucelabs-jasmine']);
 
     // Default task.
-    grunt.registerTask('default', 'dist');
+    grunt.registerTask('default', 'test');
 
 };
