@@ -29,7 +29,7 @@ If you're using node, you can run `npm install loglevel`.
 
 loglevel is also available via [Bower](https://github.com/bower/bower) (`bower install loglevel`) or [JamJS](http://jamjs.org/packages/#/details/loglevel) (`jam install loglevel`)
 
-Alternatively if you just want to grab the file yourself, you can download either the current stable [production version][min] or the [development version][max] directly.
+Alternatively if you just want to grab the file yourself, you can download either the current stable [production version][min] or the [development version][max] directly, or reference it remotely on CDNJS at `//cdnjs.cloudflare.com/ajax/libs/loglevel/0.4.0/loglevel.min.js`
 
 Finally, if you want to tweak loglevel to your own needs or you immediately need the cutting-edge version, clone this repo and see [Developing & Contributing](#developing--contributing) below for build instructions.
 
@@ -114,6 +114,7 @@ To do a release of loglevel:
 * Push to Github
 * Run `npm publish .` to publish to NPM
 * Run `jam publish` to publish to JamJS
+* Open a pull request to https://github.com/cdnjs/cdnjs to put the new release on the CDN
 
 ## Release History
 v0.1.0 - First working release with apparent compatibility with everything tested
