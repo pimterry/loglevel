@@ -116,6 +116,7 @@ To do a release of loglevel:
 * Push to Github
 * Run `npm publish .` to publish to NPM
 * Run `jam publish` to publish to JamJS
+* Autoupdate gh-pages docs
 * Open a pull request to https://github.com/cdnjs/cdnjs to put the new release on the CDN
 
 ## Release History
