@@ -10,18 +10,20 @@ This is a barebones reliable everyday logging library. It does not do fancy thin
 
 * Log things at a given level (trace/debug/info/warn/error) to the console object (as seen in all modern browsers & node.js)
 * Filter logging by level (all the above or 'silent'), so you can disable all but error logging in production, and then run log.setLevel("trace") in your console to turn it all back on for a furious debugging session
+* Single file, no dependencies, weighs in at <1KB minified and gzipped
  
 ### Effective
 
 * Log methods gracefully fall back to simpler console logging methods if more specific ones aren't available: so calls to log.debug() go to console.debug() if possible, or console.log() if not
 * Logging calls still succeed even if there's no console object at all, so your site doesn't break when people visit with old browsers that don't support the console object (here's looking at you IE) and similar
-* This then comes together giving a consistent reliable API that works in every JavaScript environment with a console available, and doesn't break anything anywhere else
- 
+* This then comes together giving a consistent reliable API that works in every JavaScript environment with a console available, and never breaks anything anywhere else
+
 ### Convenient
 
 * Log output keeps line numbers: most JS logging frameworks call console.log methods through wrapper functions, clobbering your stacktrace and making the extra info many browsers provide useless. We'll have none of that thanks.
 * It works with all the standard JavaScript loading systems out of the box (CommonJS, AMD, or just as a global)
 * Logging is filtered to "warn" level by default, to keep your live site clean in normal usage (or you can trivially re-enable everything with an initial log.enableAll() call)
+* Magically handles situations where console logging is not initially available (IE8/9), and automatically enables logging as soon as it does become available (when developer console is opened)
 
 ## Downloading loglevel
 
@@ -90,7 +92,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node) persistence will be skipped.
   
-  If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begins logging at the requested level. 
+  If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begin logging at the requested level.
   
 * `log.enableAll()` and `log.disableAll()` methods.
 
@@ -126,6 +128,8 @@ v0.3.0 - Some bugfixes (#12, #14), cookie-based log level persistence, doc tweak
 v0.3.1 - Fixed incorrect text in release build banner, various other minor tweaks
 
 v0.4.0 - Use LocalStorage for level persistence if available, compatibility improvements for IE, improved error messages, multi-environment tests
+
+v0.5.0 - Fix for Modernizr+IE8 issues, improved setLevel error handling, support for auto-activation of desired logging when console eventually turns up in IE8
 
 ## License
 Copyright (c) 2013 Tim Perry  
