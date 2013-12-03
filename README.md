@@ -137,3 +137,7 @@ Copyright (c) 2013 Tim Perry
 Licensed under the MIT license.
 
 [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/3393271900ddc6808ae1901f3760a59e)](http://githalytics.com/pimterry/loglevel)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/pimterry/loglevel/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
