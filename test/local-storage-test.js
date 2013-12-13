@@ -44,7 +44,27 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect("debug").toBeTheStoredLevel();
             });
         });
+        
+        describe("If trace level is saved", function () {
+            beforeEach(function () {
+                testHelpers.setStoredLevel("trace");
+            });
+            
+            it("trace is the default log level", function (log) {
+                expect(log).toBeAtLevel("trace");
+            });
+        });
 
+        describe("If debug level is saved", function () {
+            beforeEach(function () {
+                testHelpers.setStoredLevel("debug");
+            });
+
+            it("debug is the default log level", function (log) {
+                expect(log).toBeAtLevel("debug");
+            });
+        });
+        
         describe("If info level is saved", function() {
             beforeEach(function() {
                 testHelpers.setStoredLevel("info");
@@ -66,6 +86,27 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect("info").not.toBeTheStoredLevel();
             });
         });
+
+        describe("If warn level is saved", function () {
+            beforeEach(function () {
+                testHelpers.setStoredLevel("warn");
+            });
+
+            it("warn is the default log level", function (log) {
+                expect(log).toBeAtLevel("warn");
+            });
+        });
+
+        describe("If error level is saved", function () {
+            beforeEach(function () {
+                testHelpers.setStoredLevel("error");
+            });
+
+            it("error is the default log level", function (log) {
+                expect(log).toBeAtLevel("error");
+            });
+        });
+
 
         describe("If the level is saved with other data", function() {
             beforeEach(function() {
