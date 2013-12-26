@@ -5,7 +5,6 @@ define(['test/test-helpers'], function(testHelpers) {
     var it = testHelpers.itWithFreshLog;
 
     var originalConsole = window.console;
-    var originalDocument = window.document;
 
     describeIf(testHelpers.isLocalStorageAvailable(), "Local storage persistence tests:", function() {
 
@@ -44,12 +43,12 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect("debug").toBeTheStoredLevel();
             });
         });
-        
+
         describe("If trace level is saved", function () {
             beforeEach(function () {
                 testHelpers.setStoredLevel("trace");
             });
-            
+
             it("trace is the default log level", function (log) {
                 expect(log).toBeAtLevel("trace");
             });
@@ -64,7 +63,7 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(log).toBeAtLevel("debug");
             });
         });
-        
+
         describe("If info level is saved", function() {
             beforeEach(function() {
                 testHelpers.setStoredLevel("info");
@@ -184,6 +183,18 @@ define(['test/test-helpers'], function(testHelpers) {
                 log.setLevel("error");
                 expect("error").toBeTheLevelStoredByLocalStorage();
                 expect("error").not.toBeTheLevelStoredByCookie();
+            });
+        });
+
+        describe("local storage not available", function() {
+            it("If there is a local storage object but its methods are not implemented (Safari private)", function(log) {
+                log.setLevel("info");
+                spyOn(window.localStorage, 'setItem').andCallFake(function() {
+                    throw new Error("Not implemented");
+                });
+
+                log.setLevel("error");
+                expect("info").toBeTheLevelStoredByLocalStorage();
             });
         });
     });
