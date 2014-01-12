@@ -46,6 +46,41 @@ module.exports = function (grunt) {
                     specs: 'test/global-integration.js',
                     vendor: 'test/vendor/*.js'
                 }
+            },
+            withCoverage: {
+                src: 'lib/**/*.js',
+                options: {
+                    specs: 'test/*-test.js',
+                    vendor: 'test/vendor/*.js',
+                    helpers: 'test/*-helper.js',
+                    template: require('grunt-template-jasmine-istanbul'),
+                    templateOptions: {
+                        coverage: 'coverage/coverage.json',
+                        report: [
+                            {
+                                type: 'html',
+                                options: {
+                                    dir: 'coverage'
+                                }
+                            },
+                            {
+                                type: 'lcov',
+                                options: {
+                                    dir: 'coverage'
+                                }
+                            }
+                        ],
+
+                        template: require('grunt-template-jasmine-requirejs'),
+                        templateOptions: {
+                            requireConfig: {
+                                paths: {
+                                    "lib": '.grunt/grunt-contrib-jasmine/lib/'
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "jasmine_node": {
@@ -53,6 +88,9 @@ module.exports = function (grunt) {
             matchall: true,
             projectRoot: "./test",
             useHelpers: false
+        },
+        coveralls: {
+            src: 'coverage/lcov.info'
         },
         open: {
             jasmine: {
@@ -138,6 +176,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-coveralls');
     grunt.loadNpmTasks('grunt-jasmine-node');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
