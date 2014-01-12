@@ -188,8 +188,8 @@ module.exports = function (grunt) {
     // Build a distributable release
     grunt.registerTask('dist', ['test', 'concat', 'uglify']);
 
-    // Just tests
-    grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global', 'jasmine_node']);
+    // Check everything is good
+    grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global', 'jasmine_node', 'jasmine:withCoverage']);
 
     // Test with a live server and an actual browser
     grunt.registerTask('integration-test', ['jasmine:requirejs:src:build', 'open:jasmine', 'connect:test:keepalive']);
@@ -199,5 +199,6 @@ module.exports = function (grunt) {
 
     // Default task.
     grunt.registerTask('default', 'test');
+    grunt.registerTask('ci', ['test', 'coveralls']);
 
 };
