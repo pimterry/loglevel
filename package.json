@@ -41,10 +41,10 @@
     "grunt-template-jasmine-requirejs": "~0.1.6",
     "grunt-template-jasmine-istanbul": "~0.2.5",
     "grunt-open": "~0.2.2",
-    "grunt-saucelabs": "~4.1.2",
+    "grunt-saucelabs": "~5.0.0",
     "grunt-contrib-connect": "~0.6.0",
     "grunt-jasmine-node": "~0.1.0",
-    "grunt-coveralls": "~0.2.0"
+    "grunt-coveralls": "~0.3.0"
   },
   "jam": {
     "dependencies": {},
