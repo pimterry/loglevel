@@ -83,7 +83,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
 * A `log.setLevel(level)` method.
 
-  This disables all logging below the given level, so that after a log.setLevel("warn) call log.warn("something") or log.error("something") will output messages, but log.info("something") will not.
+  This disables all logging below the given level, so that after a log.setLevel("warn") call log.warn("something") or log.error("something") will output messages, but log.info("something") will not.
 
   This can take either a log level name or 'silent' (which disables everything) in one of a few forms:
   * As a log level from the internal levels list, e.g. log.levels.SILENT ← _for type safety_
