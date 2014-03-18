@@ -1,4 +1,4 @@
-/*! loglevel - v0.5.0 - https://github.com/pimterry/loglevel - (c) 2013 Tim Perry - licensed MIT */
+/*! loglevel - v0.6.0 - https://github.com/pimterry/loglevel - (c) 2014 Tim Perry - licensed MIT */
 ;(function (undefined) {
     var undefinedType = "undefined";
 
@@ -82,7 +82,8 @@
         }
 
         function persistLevelIfPossible(levelNum) {
-            var levelName;
+            var localStorageFail = false,
+                levelName;
 
             for (var key in self.levels) {
                 if (self.levels.hasOwnProperty(key) && self.levels[key] === levelNum) {
@@ -92,11 +93,22 @@
             }
 
             if (localStorageAvailable()) {
-                window.localStorage['loglevel'] = levelName;
-            } else if (cookiesAvailable()) {
-                window.document.cookie = "loglevel=" + levelName + ";";
+                /*
+                 * Setting localStorage can create a DOM 22 Exception if running in Private mode
+                 * in Safari, so even if it is available we need to catch any errors when trying
+                 * to write to it
+                 */
+                try {
+                    window.localStorage['loglevel'] = levelName;
+                } catch (e) {
+                    localStorageFail = true;
+                }
             } else {
-                return;
+                localStorageFail = true;
+            }
+
+            if (localStorageFail && cookiesAvailable()) {
+                window.document.cookie = "loglevel=" + levelName + ";";
             }
         }
 
@@ -109,12 +121,16 @@
                 storedLevel = window.localStorage['loglevel'];
             }
 
-            if (!storedLevel && cookiesAvailable()) {
+            if (storedLevel === undefined && cookiesAvailable()) {
                 var cookieMatch = cookieRegex.exec(window.document.cookie) || [];
                 storedLevel = cookieMatch[1];
             }
+            
+            if (self.levels[storedLevel] === undefined) {
+                storedLevel = "WARN";
+            }
 
-            self.setLevel(self.levels[storedLevel] || self.levels.WARN);
+            self.setLevel(self.levels[storedLevel]);
         }
 
         /*

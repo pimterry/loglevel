@@ -132,6 +132,8 @@ v0.4.0 - Use LocalStorage for level persistence if available, compatibility impr
 
 v0.5.0 - Fix for Modernizr+IE8 issues, improved setLevel error handling, support for auto-activation of desired logging when console eventually turns up in IE8
 
+v0.6.0 - Handle logging in Safari private browsing mode (#33), fix TRACE level persistence bug (#35), plus various minor tweaks
+
 ## License
 Copyright (c) 2013 Tim Perry  
 Licensed under the MIT license.
