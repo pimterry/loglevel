@@ -73,9 +73,12 @@
         }
 
         function localStorageAvailable() {
+            var test = 'test';
+
             try {
-                return (typeof window !== undefinedType &&
-                        window.localStorage !== undefined);
+                window.localStorage.setItem(test, test);
+                window.localStorage.removeItem(test);
+                return true;
             } catch (e) {
                 return false;
             }
