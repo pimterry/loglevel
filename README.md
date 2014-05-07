@@ -29,7 +29,7 @@ This is a barebones reliable everyday logging library. It does not do fancy thin
 
 If you're using node, you can run `npm install loglevel`.
 
-loglevel is also available via [Bower](https://github.com/bower/bower) (`bower install loglevel`) or [JamJS](http://jamjs.org/packages/#/details/loglevel) (`jam install loglevel`)
+loglevel is also available via [Bower](https://github.com/bower/bower) (`bower install loglevel`), [JamJS](http://jamjs.org/packages/#/details/loglevel) (`jam install loglevel`) or as a [Webjar](http://www.webjars.org/).
 
 Alternatively if you just want to grab the file yourself, you can download either the current stable [production version][min] or the [development version][max] directly, or reference it remotely on CDNJS at `//cdnjs.cloudflare.com/ajax/libs/loglevel/0.5.0/loglevel.min.js`
 
