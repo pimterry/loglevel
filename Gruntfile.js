@@ -169,6 +169,9 @@ module.exports = function (grunt) {
                 files: '<%= jshint.test.src %>',
                 tasks: ['jshint:test', 'jasmine']
             }
+        },
+        qunit: {
+            all: ['test/*-qunit.html']
         }
     });
 
@@ -180,6 +183,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-jasmine-node');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
 
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-open');
@@ -189,7 +193,7 @@ module.exports = function (grunt) {
     grunt.registerTask('dist', ['test', 'concat', 'uglify']);
 
     // Check everything is good
-    grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global', 'jasmine_node', 'jasmine:withCoverage']);
+    grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global', 'jasmine_node', 'jasmine:withCoverage', 'qunit']);
 
     // Test with a live server and an actual browser
     grunt.registerTask('integration-test', ['jasmine:requirejs:src:build', 'open:jasmine', 'connect:test:keepalive']);

@@ -44,7 +44,9 @@
     "grunt-saucelabs": "^5.0.0",
     "grunt-contrib-connect": "^0.6.0",
     "grunt-jasmine-node": "^0.1.0",
-    "grunt-coveralls": "^0.3.0"
+    "grunt-coveralls": "^0.3.0",
+    "grunt-contrib-qunit": "^0.5.0",
+    "qunitjs": "^1.13.0"
   },
   "jam": {
     "dependencies": {},
