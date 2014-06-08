@@ -66,6 +66,19 @@ log.error("too easy");
 </script>
 ```
 
+If you are using another JavaScript library that uses the 'log' variable, you can run into conflicts with loglevel.  Similar to jQuery, you can put loglevel into
+no-conflict mode immediately after it is loaded onto the page and before you attempt to use loglevel.
+
+```html
+<script src="loglevel.min.js"></script>
+<script>
+var logging = log.noConflict();
+</script>
+<script>
+logging.error("still pretty easy");
+</script>
+```
+
 ## Documentation
 
 The loglevel API is extremely minimal. All methods are available on the root loglevel object, which it's suggested you name 'log' (this is the default if you import it in globally, and is what's set up in the above examples). The API consists of:
