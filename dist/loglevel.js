@@ -1,9 +1,9 @@
-/*! loglevel - v0.6.0 - https://github.com/pimterry/loglevel - (c) 2014 Tim Perry - licensed MIT */
+/*! loglevel - v1.0.0 - https://github.com/pimterry/loglevel - (c) 2014 Tim Perry - licensed MIT */
 ;(function (undefined) {
     var undefinedType = "undefined";
 
     (function (name, definition) {
-        if (typeof module !== 'undefined') {
+        if (typeof module === 'object' && module.exports && typeof require === 'function') {
             module.exports = definition();
         } else if (typeof define === 'function' && typeof define.amd === 'object') {
             define(definition);
@@ -75,7 +75,8 @@
         function localStorageAvailable() {
             try {
                 return (typeof window !== undefinedType &&
-                        window.localStorage !== undefined);
+                        window.localStorage !== undefined &&
+                        window.localStorage !== null);
             } catch (e) {
                 return false;
             }
@@ -183,6 +184,17 @@
 
         self.disableAll = function() {
             self.setLevel(self.levels.SILENT);
+        };
+
+        // Grab the current global log variable in case of overwrite
+        var _log = (typeof window !== undefinedType) ? window.log : undefined;
+        self.noConflict = function() {
+            if (typeof window !== undefinedType &&
+                   window.log === self) {
+                window.log = _log;
+            }
+
+            return self;
         };
 
         loadPersistedLevel();

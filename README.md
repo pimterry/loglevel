@@ -149,6 +149,8 @@ v0.5.0 - Fix for Modernizr+IE8 issues, improved setLevel error handling, support
 
 v0.6.0 - Handle logging in Safari private browsing mode (#33), fix TRACE level persistence bug (#35), plus various minor tweaks
 
+v1.0.0 - Official stable release. Fixed a bug with localStorage in Android webviews, improved CommonJS detection, and added noConflict().
+
 ## License
 Copyright (c) 2013 Tim Perry  
 Licensed under the MIT license.
