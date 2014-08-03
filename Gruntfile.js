@@ -84,10 +84,12 @@ module.exports = function (grunt) {
             }
         },
         "jasmine_node": {
-            match: "node-integration.",
-            matchall: true,
-            projectRoot: "./test",
-            useHelpers: false
+            options: {
+                match: "node-integration.",
+                matchall: true,
+                projectRoot: "./test",
+                useHelpers: false
+            }
         },
         coveralls: {
             src: 'coverage/lcov.info'
