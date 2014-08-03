@@ -66,15 +66,17 @@ log.error("too easy");
 </script>
 ```
 
-If you are using another JavaScript library that uses the 'log' variable, you can run into conflicts with loglevel.  Similar to jQuery, you can put loglevel into
-no-conflict mode immediately after it is loaded onto the page and before you attempt to use loglevel.
+### With noConflict():
+
+If you're using another JavaScript library that exposes a 'log' global, you can run into conflicts with loglevel.  Similarly to jQuery, you can solve this by putting loglevel into no-conflict mode immediately after it is loaded onto the page. This resets to 'log' global to its value before loglevel was loaded (typically `undefined`), and returns the loglevel object, which you can then bind to another name yourself.
+
+For example:
 
 ```html
 <script src="loglevel.min.js"></script>
 <script>
 var logging = log.noConflict();
-</script>
-<script>
+
 logging.error("still pretty easy");
 </script>
 ```
