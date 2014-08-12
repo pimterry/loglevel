@@ -46,6 +46,8 @@
     "grunt-jasmine-node": "~0.2.1",
     "grunt-coveralls": "^1.0.0",
     "grunt-contrib-qunit": "~0.5.2",
+    "grunt-preprocess": "^4.0.0",
+    "grunt-contrib-clean": "^0.6.0",
     "qunitjs": "1.14.0"
   },
   "jam": {

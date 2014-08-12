@@ -47,6 +47,13 @@ module.exports = function (grunt) {
                     vendor: 'test/vendor/*.js'
                 }
             },
+            context: {
+                src: 'test/test-context-using-apply.test.js',
+                options: {
+                    specs: 'test/global-integration-with-new-context.js',
+                    vendor: 'test/vendor/*.js'
+                }
+            },
             withCoverage: {
                 src: 'lib/**/*.js',
                 options: {
@@ -174,6 +181,15 @@ module.exports = function (grunt) {
         },
         qunit: {
             all: ['test/*-qunit.html']
+        },
+        preprocess: {
+            "test-context-using-apply": {
+                src: 'test/test-context-using-apply.js',
+                dest: 'test/test-context-using-apply.test.js'
+            }
+        },
+        clean:{
+            test:['test/test-context-using-apply.test.js']
         }
     });
 
@@ -190,12 +206,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-open');
     grunt.loadNpmTasks('grunt-saucelabs');
+    grunt.loadNpmTasks('grunt-preprocess');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
     // Build a distributable release
     grunt.registerTask('dist', ['test', 'concat', 'uglify']);
 
     // Check everything is good
-    grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global', 'jasmine_node', 'jasmine:withCoverage', 'qunit']);
+    grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine_node', 'jasmine:withCoverage', 'qunit']);
 
     // Test with a live server and an actual browser
     grunt.registerTask('integration-test', ['jasmine:requirejs:src:build', 'open:jasmine', 'connect:test:keepalive']);
