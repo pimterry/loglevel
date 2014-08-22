@@ -149,7 +149,9 @@ v0.5.0 - Fix for Modernizr+IE8 issues, improved setLevel error handling, support
 
 v0.6.0 - Handle logging in Safari private browsing mode (#33), fix TRACE level persistence bug (#35), plus various minor tweaks
 
-v1.0.0 - Official stable release. Fixed a bug with localStorage in Android webviews, improved CommonJS detection, and added noConflict().
+v1.0.0 - Official stable release! Fixed a bug with localStorage in Android webviews, improved CommonJS detection, and added noConflict().
+
+v1.1.0 - Added support for including loglevel with preprocessing and .apply() (#50), and fixed QUnit dep version which made tests potentially unstable.
 
 ## License
 Copyright (c) 2013 Tim Perry  
