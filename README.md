@@ -116,6 +116,8 @@ The loglevel API is extremely minimal. All methods are available on the root log
 * `log.on(method, fn)` and `log.off(method, [fn])` methods.
 
   These create or remove event listeners for logging methods.
+  WARNING: Calling these methods will cause logging to happen in a wrapped fashion.  
+  This will lead to gross logs in the console, but is necessary to intercept.
   e.g. `log.on('error', function() { sendToServer(arguments) })`
 
 

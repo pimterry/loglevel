@@ -29,16 +29,49 @@
 
     function boundToConsole(console, methodName) {
         var method = console[methodName];
-        return function() {
 
-            // Trigger listeners
-            var listeners = eventListeners[methodName];
-            var length = listeners ? listeners.length : 0;
-            for (var ii = 0; ii < length; ii++) {
-                listeners[ii].apply(null, arguments);
+        // In order to add listeners, wrapping is required
+        var isWrapping = false;
+        for (var key in eventListeners) {
+          if (eventListeners.hasOwnProperty(key)) {
+            isWrapping = true;
+            break;
+          }
+        }
+
+        if (isWrapping) {
+          return function() {
+
+              // Trigger listeners
+              var listeners = eventListeners[methodName];
+              var length = listeners ? listeners.length : 0;
+              for (var ii = 0; ii < length; ii++) {
+                  listeners[ii].apply(null, arguments);
+              }
+
+              Function.prototype.apply.apply(method, [console, arguments]);
+          };
+        }
+
+        if (method.bind === undefined) {
+            if (Function.prototype.bind === undefined) {
+                return functionBindingWrapper(method, console);
+            } else {
+                try {
+                    return Function.prototype.bind.call(console[methodName], console);
+                } catch (e) {
+                    // In IE8 + Modernizr, the bind shim will reject the above, so we fall back to wrapping
+                    return functionBindingWrapper(method, console);
+                }
             }
+        } else {
+            return console[methodName].bind(console);
+        }
+    }
 
-            Function.prototype.apply.apply(method, [console, arguments]);
+    function functionBindingWrapper(f, context) {
+        return function() {
+            Function.prototype.apply.apply(f, [context, arguments]);
         };
     }
 
