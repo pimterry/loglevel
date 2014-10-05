@@ -11,6 +11,7 @@
     var self = {};
     var noop = function() {};
     var undefinedType = "undefined";
+    var eventListeners = {};
 
     function realMethod(methodName) {
         if (typeof console === undefinedType) {
@@ -28,6 +29,30 @@
 
     function boundToConsole(console, methodName) {
         var method = console[methodName];
+
+        // In order to add listeners, wrapping is required
+        var isWrapping = false;
+        for (var key in eventListeners) {
+          if (eventListeners.hasOwnProperty(key)) {
+            isWrapping = true;
+            break;
+          }
+        }
+
+        if (isWrapping) {
+          return function() {
+
+              // Trigger listeners
+              var listeners = eventListeners[methodName];
+              var length = listeners ? listeners.length : 0;
+              for (var ii = 0; ii < length; ii++) {
+                  listeners[ii].apply(null, arguments);
+              }
+
+              Function.prototype.apply.apply(method, [console, arguments]);
+          };
+        }
+
         if (method.bind === undefined) {
             if (Function.prototype.bind === undefined) {
                 return functionBindingWrapper(method, console);
@@ -124,7 +149,7 @@
             var cookieMatch = cookieRegex.exec(window.document.cookie) || [];
             storedLevel = cookieMatch[1];
         }
-        
+
         if (self.levels[storedLevel] === undefined) {
             storedLevel = "WARN";
         }
@@ -182,6 +207,24 @@
 
     self.disableAll = function() {
         self.setLevel(self.levels.SILENT);
+    };
+
+    self.on = function (method, fn) {
+        eventListeners[method] = eventListeners[method] || [];
+        eventListeners[method].push(fn);
+    };
+
+    self.off = function (method, fn) {
+        if (!fn) {
+            eventListeners[method] = [];
+            return;
+        }
+
+        var listeners = eventListeners[method];
+        var index =  listeners ? listeners.indexOf(fn) : -1;
+        if (index !== -1) {
+            eventListeners[method].splice(index, 1);
+        }
     };
 
     // Grab the current global log variable in case of overwrite

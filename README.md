@@ -5,13 +5,13 @@ Minimal lightweight simple logging for JavaScript. loglevel replaces console.log
 This is a barebones reliable everyday logging library. It does not do fancy things, it does not let you reconfigure appenders or add complex log filtering rules or boil tea (more's the pity), but it does have the all core functionality that you actually use:
 
 ## Features
- 
+
 ### Simple
 
 * Log things at a given level (trace/debug/info/warn/error) to the console object (as seen in all modern browsers & node.js)
 * Filter logging by level (all the above or 'silent'), so you can disable all but error logging in production, and then run log.setLevel("trace") in your console to turn it all back on for a furious debugging session
 * Single file, no dependencies, weighs in at <1KB minified and gzipped
- 
+
 ### Effective
 
 * Log methods gracefully fall back to simpler console logging methods if more specific ones aren't available: so calls to log.debug() go to console.debug() if possible, or console.log() if not
@@ -106,12 +106,20 @@ The loglevel API is extremely minimal. All methods are available on the root log
   * As a numeric index from 0 (trace) to 5 (silent) ← _deliciously terse, and more easily programmable (...although, why?)_
 
   Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node) persistence will be skipped.
-  
+
   If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begin logging at the requested level.
-  
+
 * `log.enableAll()` and `log.disableAll()` methods.
 
   These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
+
+* `log.on(method, fn)` and `log.off(method, [fn])` methods.
+
+  These create or remove event listeners for logging methods.
+  WARNING: Calling these methods will cause logging to happen in a wrapped fashion.  
+  This will lead to gross logs in the console, but is necessary to intercept.
+  e.g. `log.on('error', function() { sendToServer(arguments) })`
+
 
 ## Developing & Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality.
