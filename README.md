@@ -24,6 +24,7 @@ This is a barebones reliable everyday logging library. It does not do fancy thin
 * It works with all the standard JavaScript loading systems out of the box (CommonJS, AMD, or just as a global)
 * Logging is filtered to "warn" level by default, to keep your live site clean in normal usage (or you can trivially re-enable everything with an initial log.enableAll() call)
 * Magically handles situations where console logging is not initially available (IE8/9), and automatically enables logging as soon as it does become available (when developer console is opened)
+* Extensible, to add other log redirection, filtering, or formatting functionality, while keeping all the above (except you will clobber your stacktrace, see Plugins below)
 
 ## Downloading loglevel
 
@@ -112,6 +113,29 @@ The loglevel API is extremely minimal. All methods are available on the root log
 * `log.enableAll()` and `log.disableAll()` methods.
 
   These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
+
+## Plugins
+
+Loglevel provides a simple reliable minimal base for console logging that works everywhere. This means it doesn't include lots of fancy functionality that might be useful in some cases, such as log formatting and redirection (e.g. also sending log messages to a server over AJAX)
+
+Including that would increase the size and complexity of the library, but more importantly would remove stacktrace information. Currently log methods are either disabled, or enabled with directly bound versions of the console.log methods (where possible). This means your browser shows the log message as coming from your code at the call to `log.info("message!")` not from within loglevel, since it's really calls the bound console method directly, without indirection. The indirection required to dynamically format, further filter, or redirect log messages would stop this.
+
+There's clearly enough enthusiasm for this even at that cost though that loglevel now includes a plugin API. To use it, redefine log.methodFactory(methodName, logLevel) with a function of your own. This will be called for each enabled method each time the level is set (including initially), and should return a function to be used for the given log method, at the given level. If you'd like to retain all the reliability and features of loglevel, it's recommended that this wraps the initially provided value of `log.methodFactory`
+
+For example, a plugin to prefix all log messages with "Newsflash: " would look like:
+
+```javascript
+var originalFactory = log.methodFactory;
+log.methodFactory = function (methodName, logLevel) {
+    var rawMethod = originalFactory(methodName, level);
+
+    return function (message) {
+        rawMethod("Newsflash: " + message);
+    };
+};
+```
+
+If you develop and release a plugin, please get in contact! I'd be happy to reference it here for future users. Some consistency is helpful; naming your plugin 'loglevel-PLUGINNAME' (e.g. loglevel-newsflash) is preferred, as is giving it the 'loglevel-plugin' keyword in your package.json
 
 ## Developing & Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality.
