@@ -127,7 +127,7 @@ For example, a plugin to prefix all log messages with "Newsflash: " would look l
 ```javascript
 var originalFactory = log.methodFactory;
 log.methodFactory = function (methodName, logLevel) {
-    var rawMethod = originalFactory(methodName, level);
+    var rawMethod = originalFactory(methodName, logLevel);
 
     return function (message) {
         rawMethod("Newsflash: " + message);
