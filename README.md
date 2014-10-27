@@ -177,6 +177,8 @@ v1.0.0 - Official stable release! Fixed a bug with localStorage in Android webvi
 
 v1.1.0 - Added support for including loglevel with preprocessing and .apply() (#50), and fixed QUnit dep version which made tests potentially unstable.
 
+v1.2.0 - New plugin API! Plus various bits of refactoring and tidy up, nicely simplifying things and trimming the size down.
+
 ## License
 Copyright (c) 2013 Tim Perry  
 Licensed under the MIT license.
