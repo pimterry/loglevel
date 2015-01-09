@@ -6,6 +6,13 @@
 	<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
 </head>
 <body>
+	<script>
+		function customLogFunction(){
+			return undefined;
+		}
+
+		window.log = customLogFunction;
+	</script>
 	<script src="../lib/loglevel.js" loglevel-name="logging"></script>
 	<script>
 		var logging = log.noConflict();
