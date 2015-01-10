@@ -4,7 +4,7 @@ function consoleLogIsCalledBy(log, methodName) {
     it(methodName + " calls console.log", function() {
         log.setLevel(log.levels.TRACE);
         log[methodName]("Log message for call to " + methodName);
-        expect(console.log.calls.length).toEqual(1);
+        expect(console.log.calls.count()).toEqual(1);
     });
 }
 
