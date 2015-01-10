@@ -64,30 +64,44 @@ define(function () {
         return self.isCookieStorageAvailable() || self.isLocalStorageAvailable();
     };
 
-    self.toBeTheLevelStoredByCookie = function toBeTheLevelStoredByCookie() {
-        var level = this.actual.toUpperCase();
 
-        if (window.document.cookie.indexOf("loglevel="+level) !== -1) {
-            return true;
-        } else {
-            return false;
-        }
+    function isLevelStoredByCookie(value){
+        var level = value.toUpperCase();
+        return window.document.cookie.indexOf("loglevel="+level) !== -1;
+    }
+    self.toBeTheLevelStoredByCookie = function toBeTheLevelStoredByCookie() {
+        return {
+            compare: function(actual, expected){
+                return {
+                    pass: isLevelStoredByCookie(actual)
+                };
+            }
+        };
     };
 
+    function isLevelStoredByLocalStorage(value){
+        var level = value.toUpperCase();
+        return window.localStorage['loglevel'] === level;
+    }
     self.toBeTheLevelStoredByLocalStorage = function toBeTheLevelStoredByLocalStorage() {
-        var level = this.actual.toUpperCase();
-
-        if (window.localStorage['loglevel'] === level) {
-            return true;
-        }
-
-        return false;
+        return {
+            compare : function(actual, expected){
+                return {
+                    pass: isLevelStoredByLocalStorage(actual)
+                };
+            }
+        };
     };
 
     // Jasmine matcher to check whether a given string was saved by loglevel
     self.toBeTheStoredLevel = function toBeTheStoredLevel() {
-        return self.toBeTheLevelStoredByLocalStorage.call(this) ||
-               self.toBeTheLevelStoredByCookie.call(this);
+        return {
+            compare: function(actual){
+                return {
+                    pass: isLevelStoredByCookie(actual) || isLevelStoredByLocalStorage(actual)
+                };
+            }
+        };
     };
 
     self.setCookieStoredLevel = function setCookieStoredLevel(level) {
