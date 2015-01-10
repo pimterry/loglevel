@@ -16,18 +16,25 @@ define(function () {
     var self = {};
 
     // Jasmine matcher to check the log level of a log object
-    self.toBeAtLevel = function toBeAtLevel(level) {
-        var log = this.actual;
-        var expectedWorkingCalls = log.levels.SILENT - log.levels[level.toUpperCase()];
-        var realLogMethod = window.console.log;
+    self.toBeAtLevel = function toBeAtLevel() {
+        return {
+            compare: function(actual, expected){
+                var log = actual;
+                var expectedWorkingCalls = log.levels.SILENT - log.levels[expected.toUpperCase()];
+                var realLogMethod = window.console.log;
 
-        for (var ii = 0; ii < logMethods.length; ii++) {
-            var methodName = logMethods[ii];
-            log[methodName](methodName);
-        }
+                for (var ii = 0; ii < logMethods.length; ii++) {
+                    var methodName = logMethods[ii];
+                    log[methodName](methodName);
+                }
 
-        expect(realLogMethod.calls.length).toEqual(expectedWorkingCalls);
-        return true;
+                var passed = realLogMethod.calls.count() === expectedWorkingCalls;
+
+                return {
+                    pass: passed
+                };
+            }
+        };
     };
 
     self.isCookieStorageAvailable = function isCookieStorageAvailable() {
@@ -123,20 +130,10 @@ define(function () {
 
     // Forcibly reloads loglevel, and asynchronously hands the resulting log back to the given callback
     // via Jasmine async magic
-    self.withFreshLog = function withFreshLog(toRun) {
+    self.withFreshLog = function withFreshLog(callback) {
         require.undef("lib/loglevel");
-
-        var freshLog;
-
-        waitsFor(function() {
-            require(['lib/loglevel'], function(log) {
-                freshLog = log;
-            });
-            return typeof freshLog !== "undefined";
-        });
-
-        runs(function() {
-            toRun(freshLog);
+        require(['lib/loglevel'], function(log) {
+            callback(log);
         });
     };
 
