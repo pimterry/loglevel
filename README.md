@@ -32,7 +32,7 @@ If you're using NPM, you can just run `npm install loglevel`.
 
 Alternatively, loglevel is also available via [Bower](https://github.com/bower/bower) (`bower install loglevel`), [JamJS](http://jamjs.org/packages/#/details/loglevel) (`jam install loglevel`), as a [Webjar](http://www.webjars.org/), or an [Atmosphere package](https://atmospherejs.com/spacejamio/loglevel) (for Meteor)
 
-Alternatively if you just want to grab the file yourself, you can download either the current stable [production version][min] or the [development version][max] directly, or reference it remotely on CDNJS at `//cdnjs.cloudflare.com/ajax/libs/loglevel/0.6.0/loglevel.min.js`
+Alternatively if you just want to grab the file yourself, you can download either the current stable [production version][min] or the [development version][max] directly, or reference it remotely on CDNJS at `//cdnjs.cloudflare.com/ajax/libs/loglevel/1.2.0/loglevel.min.js`
 
 Finally, if you want to tweak loglevel to your own needs or you immediately need the cutting-edge version, clone this repo and see [Developing & Contributing](#developing--contributing) below for build instructions.
 
