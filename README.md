@@ -139,6 +139,7 @@ log.methodFactory = function (methodName, logLevel) {
         rawMethod("Newsflash: " + message);
     };
 };
+log.setLevel("warn"); // Be sure to call setLevel method in order to apply plugin 
 ```
 
 If you develop and release a plugin, please get in contact! I'd be happy to reference it here for future users. Some consistency is helpful; naming your plugin 'loglevel-PLUGINNAME' (e.g. loglevel-newsflash) is preferred, as is giving it the 'loglevel-plugin' keyword in your package.json
