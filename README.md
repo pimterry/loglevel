@@ -116,6 +116,12 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
 ## Plugins
 
+### Existing plugins:
+
+ServerSend - https://github.com/artemyarulin/loglevel-serverSend - Forward your log messages to a remote server
+
+### Writing plugins:
+
 Loglevel provides a simple reliable minimal base for console logging that works everywhere. This means it doesn't include lots of fancy functionality that might be useful in some cases, such as log formatting and redirection (e.g. also sending log messages to a server over AJAX)
 
 Including that would increase the size and complexity of the library, but more importantly would remove stacktrace information. Currently log methods are either disabled, or enabled with directly bound versions of the console.log methods (where possible). This means your browser shows the log message as coming from your code at the call to `log.info("message!")` not from within loglevel, since it's really calls the bound console method directly, without indirection. The indirection required to dynamically format, further filter, or redirect log messages would stop this.
