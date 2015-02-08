@@ -28,10 +28,8 @@ define(function () {
                     log[methodName](methodName);
                 }
 
-                var passed = realLogMethod.calls.count() === expectedWorkingCalls;
-
                 return {
-                    pass: passed
+                    pass: realLogMethod.calls.count() === expectedWorkingCalls
                 };
             }
         };
