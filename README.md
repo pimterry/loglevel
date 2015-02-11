@@ -14,7 +14,7 @@ This is a barebones reliable everyday logging library. It does not do fancy thin
 ### Simple
 
 * Log things at a given level (trace/debug/info/warn/error) to the console object (as seen in all modern browsers & node.js)
-* Filter logging by level (all the above or 'silent'), so you can disable all but error logging in production, and then run log.setLevel("trace") in your console to turn it all back on for a furious debugging session
+* Filter logging by level (all the above or 'silent'), so you can disable all but error logging in production, and then run log.setLevel("trace") in your console to turn it all back on for a furious debugging session. To change the actual log level on a browser supporting `localStorage`, open a console on the visted web page and enter the following command: `localStorage.loglevel='TRACE';`
 * Single file, no dependencies, weighs in at <1KB minified and gzipped
  
 ### Effective
