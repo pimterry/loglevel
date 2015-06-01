@@ -102,7 +102,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   These methods should never fail in any environment, even if no console object is currently available, and should always fall back to an available log method even if the specific method called (e.g. warn) isn't available.
 
-* A `log.setLevel(level)` method.
+* A `log.setLevel(level, [persist])` method.
 
   This disables all logging below the given level, so that after a log.setLevel("warn") call log.warn("something") or log.error("something") will output messages, but log.info("something") will not.
 
@@ -110,8 +110,8 @@ The loglevel API is extremely minimal. All methods are available on the root log
   * As a log level from the internal levels list, e.g. log.levels.SILENT ← _for type safety_
   * As a string, like 'error' (case-insensitive) ← _for a reasonable practical balance_
   * As a numeric index from 0 (trace) to 5 (silent) ← _deliciously terse, and more easily programmable (...although, why?)_
-
-  Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node) or if you pass `false` as the second argument, persistence will be skipped.
+  
+  Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node), or if you pass `false` as the optional 'persist' second argument, persistence will be skipped.
   
   If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begin logging at the requested level.
   
