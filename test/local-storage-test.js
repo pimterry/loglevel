@@ -5,7 +5,6 @@ define(['test/test-helpers'], function(testHelpers) {
     var it = testHelpers.itWithFreshLog;
 
     var originalConsole = window.console;
-    var originalDocument = window.document;
 
     describeIf(testHelpers.isLocalStorageAvailable(), "Local storage persistence tests:", function() {
 
@@ -42,6 +41,11 @@ define(['test/test-helpers'], function(testHelpers) {
             it("log.setLevel() sets a cookie with the given level", function(log) {
                 log.setLevel("debug");
                 expect("debug").toBeTheStoredLevel();
+            });
+
+            it("log.setLevel() does not set a cookie if `persist` argument is false", function(log) {
+                log.setLevel("debug", false);
+                expect("debug").not.toBeTheStoredLevel();
             });
         });
         
@@ -84,6 +88,13 @@ define(['test/test-helpers'], function(testHelpers) {
 
                 expect("error").toBeTheStoredLevel();
                 expect("info").not.toBeTheStoredLevel();
+            });
+
+            it("log.setLevel() does not overwrite the saved level if `persist` argument is false", function(log) {
+                log.setLevel("error", false);
+
+                expect("info").toBeTheStoredLevel();
+                expect("error").not.toBeTheStoredLevel();
             });
         });
 

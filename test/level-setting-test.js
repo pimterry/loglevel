@@ -26,7 +26,7 @@ define(['../lib/loglevel'], function(log) {
 
         describe("log.enableAll()", function() {
             it("enables all log methods", function() {
-                log.enableAll();
+                log.enableAll(false);
 
                 for (var ii = 0; ii < logMethods.length; ii++) {
                     var method = logMethods[ii];
@@ -39,7 +39,7 @@ define(['../lib/loglevel'], function(log) {
 
         describe("log.disableAll()", function() {
             it("disables all log methods", function() {
-                log.disableAll();
+                log.disableAll(false);
 
                 for (var ii = 0; ii < logMethods.length; ii++) {
                     var method = logMethods[ii];
@@ -85,8 +85,7 @@ define(['../lib/loglevel'], function(log) {
         describe("setting log level by name", function() {
             function itCanSetLogLevelTo(level) {
                 it("can set log level to " + level, function() {
-                    log.disableAll();
-                    log.setLevel(level);
+                    log.setLevel(level, false);
 
                     log[level]("log message");
                     expect(console[level]).toHaveBeenCalled();
