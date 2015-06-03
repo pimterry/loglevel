@@ -1,4 +1,4 @@
-/*! loglevel - v1.2.0 - https://github.com/pimterry/loglevel - (c) 2014 Tim Perry - licensed MIT */
+/*! loglevel - v1.3.0 - https://github.com/pimterry/loglevel - (c) 2015 Tim Perry - licensed MIT */
 (function (root, definition) {
     if (typeof module === 'object' && module.exports && typeof require === 'function') {
         module.exports = definition();
@@ -113,12 +113,14 @@
                enableLoggingWhenConsoleArrives(methodName, level);
     };
 
-    self.setLevel = function (level) {
+    self.setLevel = function (level, persist) {
         if (typeof level === "string" && self.levels[level.toUpperCase()] !== undefined) {
             level = self.levels[level.toUpperCase()];
         }
         if (typeof level === "number" && level >= 0 && level <= self.levels.SILENT) {
-            persistLevelIfPossible(level);
+            if (persist !== false) {  // defaults to true
+                persistLevelIfPossible(level);
+            }
             replaceLoggingMethods(level);
             if (typeof console === undefinedType && level < self.levels.SILENT) {
                 return "No console available for logging";
@@ -128,12 +130,12 @@
         }
     };
 
-    self.enableAll = function() {
-        self.setLevel(self.levels.TRACE);
+    self.enableAll = function(persist) {
+        self.setLevel(self.levels.TRACE, persist);
     };
 
-    self.disableAll = function() {
-        self.setLevel(self.levels.SILENT);
+    self.disableAll = function(persist) {
+        self.setLevel(self.levels.SILENT, persist);
     };
 
     // Grab the current global log variable in case of overwrite

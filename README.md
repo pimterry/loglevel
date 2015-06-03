@@ -191,6 +191,8 @@ v1.1.0 - Added support for including loglevel with preprocessing and .apply() (#
 
 v1.2.0 - New plugin API! Plus various bits of refactoring and tidy up, nicely simplifying things and trimming the size down.
 
+v1.3.0 - Make persistence optional in setLevel, plus lots of documentation updates and other small tweaks
+
 ## License
 Copyright (c) 2013 Tim Perry  
 Licensed under the MIT license.
