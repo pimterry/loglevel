@@ -193,6 +193,8 @@ v1.2.0 - New plugin API! Plus various bits of refactoring and tidy up, nicely si
 
 v1.3.0 - Make persistence optional in setLevel, plus lots of documentation updates and other small tweaks
 
+v1.3.1 - With the new optional persistence, stop unnecessarily persisting the initially set default level (warn)
+
 ## License
 Copyright (c) 2013 Tim Perry  
 Licensed under the MIT license.

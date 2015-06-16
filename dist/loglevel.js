@@ -1,4 +1,4 @@
-/*! loglevel - v1.3.0 - https://github.com/pimterry/loglevel - (c) 2015 Tim Perry - licensed MIT */
+/*! loglevel - v1.3.1 - https://github.com/pimterry/loglevel - (c) 2015 Tim Perry - licensed MIT */
 (function (root, definition) {
     if (typeof module === 'object' && module.exports && typeof require === 'function') {
         module.exports = definition();
@@ -96,7 +96,7 @@
             storedLevel = "WARN";
         }
 
-        self.setLevel(self.levels[storedLevel]);
+        self.setLevel(self.levels[storedLevel], false);
     }
 
     /*
