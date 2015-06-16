@@ -29,8 +29,8 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(log).toBeAtLevel("warn");
             });
 
-            it("warn is persisted as the current level", function(log) {
-                expect("warn").toBeTheStoredLevel();
+            it("warn is not persisted as the current level", function(log) {
+                expect("warn").not.toBeTheStoredLevel();
             });
 
             it("log can be set to info level", function(log) {
@@ -152,8 +152,8 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(log).toBeAtLevel("warn");
             });
 
-            it("warn is persisted as the current level, overriding the invalid stored level", function(log) {
-                expect("warn").toBeTheStoredLevel();
+            it("warn is not persisted as the current level", function(log) {
+                expect("warn").not.toBeTheStoredLevel();
             });
 
             it("log can be changed to info level", function(log) {
