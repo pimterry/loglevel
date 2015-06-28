@@ -115,11 +115,11 @@ The loglevel API is extremely minimal. All methods are available on the root log
   
   If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begin logging at the requested level.
 
-* A `log.setDefaultLevel(level, [persist])` method.
+* A `log.setDefaultLevel(level)` method.
 
   This sets the current log level only if one has not been persisted and can’t be loaded. This is useful when initializing scripts; if a developer or user has previously called `setLevel()`, this won’t alter their settings. For example, your application might set the log level to `error` in a production environment, but when debugging an issue, you might call `setLevel("trace")` on the console to see all the logs. If that `error` setting was set using `setDefaultLevel()`, it will still say as `trace` on subsequent page loads and refreshes instead of resetting to `error`.
 
-  The `level` argument takes is the same values that you might pass to `setLevel()`. However, `persist` defaults to `false` here, unlike in `setLevel()`, where it defaults to `true`.
+  The `level` argument takes is the same values that you might pass to `setLevel()`. Levels set using `setDefaultLevel()` never persist to subsequent page loads.
   
 * `log.enableAll()` and `log.disableAll()` methods.
 

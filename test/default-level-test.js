@@ -28,14 +28,9 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(log).toBeAtLevel("trace");
             });
 
-            it("level is not persisted if no `persist` argument is set", function(log) {
+            it("level is not persisted", function(log) {
                 log.setDefaultLevel("debug");
                 expect("debug").not.toBeTheStoredLevel();
-            });
-
-            it("level is persisted if `persist` argument is true", function(log) {
-                log.setDefaultLevel("debug", true);
-                expect("debug").toBeTheStoredLevel();
             });
         });
         
@@ -48,12 +43,6 @@ define(['test/test-helpers'], function(testHelpers) {
                 log.setDefaultLevel("debug");
                 expect(log).toBeAtLevel("trace");
             });
-
-            it("saved level is not modified even if `persist` argument is true", function (log) {
-                log.setDefaultLevel("debug", true);
-                expect(log).toBeAtLevel("trace");
-                expect("trace").toBeTheStoredLevel();
-            });
         });
 
         describe("If the level is stored incorrectly", function() {
@@ -65,12 +54,6 @@ define(['test/test-helpers'], function(testHelpers) {
                 log.setDefaultLevel("debug");
                 expect(log).toBeAtLevel("debug");
                 expect("debug").not.toBeTheStoredLevel();
-            });
-
-            it("new level is saved if `persist` argument is true", function(log) {
-                log.setDefaultLevel("debug", true);
-                expect(log).toBeAtLevel("debug");
-                expect("debug").toBeTheStoredLevel();
             });
         });
     });
