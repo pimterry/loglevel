@@ -30,6 +30,7 @@ test('basic test', function() {
     ok(typeof logging.warn === "function", "warn is a function");
     ok(typeof logging.error === "function", "error is a function");
     ok(typeof logging.setLevel === "function", "setLevel is a function");
+    ok(typeof logging.setDefaultLevel === "function", "setDefaultLevel is a function");
     ok(typeof logging.enableAll === "function", "enableAll is a function");
     ok(typeof logging.disableAll === "function", "disableAll is a function");
    
