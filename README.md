@@ -125,6 +125,21 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
 
+* A `log.getLevel()` method.
+
+  Returns the current logging level.
+  
+  For example, if you do string concatenation in your logging statements that
+  are in sections of code that get called a lot, Javascript does the
+  relatively-expensive string concatenation even if the current logging level
+  won't actually output the string.
+
+```javascript
+if (log.getLevel() >= log.levels.DEBUG) {
+    log.debug("Some " + "string " + "concatenation " + "called " + "a " + "lot");
+}
+```
+
 ## Plugins
 
 ### Existing plugins:
