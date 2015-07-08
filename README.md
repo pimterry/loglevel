@@ -128,17 +128,18 @@ The loglevel API is extremely minimal. All methods are available on the root log
 * A `log.getLevel()` method.
 
   Returns the current logging level.
-  
+
   For example, if you do string concatenation in your logging statements that
   are in sections of code that get called a lot, Javascript does the
   relatively-expensive string concatenation even if the current logging level
-  won't actually output the string.
+  won't actually output the string. So here is how to prevent the unnecessary
+  overhead through a condition on the current log level:
 
-```javascript
-if (log.getLevel() >= log.levels.DEBUG) {
+  ```javascript
+  if (log.getLevel() >= log.levels.DEBUG) {
     log.debug("Some " + "string " + "concatenation " + "called " + "a " + "lot");
-}
-```
+  }
+  ```
 
 ## Plugins
 
