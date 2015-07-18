@@ -26,25 +26,22 @@ define(['test/test-helpers'], function(testHelpers) {
             it("new level is always set", function(log) {
                 log.setDefaultLevel("trace");
                 expect(log).toBeAtLevel("trace");
-                expect(log.getLevel()).toBe(log.levels.TRACE);
             });
 
             it("level is not persisted", function(log) {
                 log.setDefaultLevel("debug");
                 expect("debug").not.toBeTheStoredLevel();
-                expect(log.getLevel()).toBe(log.levels.DEBUG);
             });
         });
-
+        
         describe("If a level is saved", function () {
             beforeEach(function () {
                 testHelpers.setStoredLevel("trace");
             });
-
+            
             it("saved level is not modified", function (log) {
                 log.setDefaultLevel("debug");
                 expect(log).toBeAtLevel("trace");
-                expect(log.getLevel()).toBe(log.levels.TRACE);
             });
         });
 
@@ -57,7 +54,6 @@ define(['test/test-helpers'], function(testHelpers) {
                 log.setDefaultLevel("debug");
                 expect(log).toBeAtLevel("debug");
                 expect("debug").not.toBeTheStoredLevel();
-                expect(log.getLevel()).toBe(log.levels.DEBUG);
             });
         });
     });
