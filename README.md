@@ -129,17 +129,52 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   Returns the current logging level.
 
-  For example, if you do string concatenation in your logging statements that
-  are in sections of code that get called a lot, Javascript does the
-  relatively-expensive string concatenation even if the current logging level
-  won't actually output the string. So here is how to prevent the unnecessary
-  overhead through a condition on the current log level:
+  Here is for example how to toggle traces on or off in the console from an HTML
+  page or a web app.
 
   ```javascript
+  var p = document.createElement('p');
+  document.body.appendChild(p);
+
+  var button = document.createElement('button');
+  var button_text = document.createTextNode("Toggle debug mode");
+  button.appendChild(button_text);
+  document.body.appendChild(button);
+
+  button.addEventListener('click', function() {
+      var msg;
+      if (log.getLevel() <= log.levels.DEBUG) {
+          log.disableAll();
+          msg = "Application not in debug mode.";
+      } else {
+          log.enableAll();
+          msg = "Application in debug mode, read traces in the console.";
+      }
+      p.innerHTML = '';
+      var p_text = document.createTextNode(msg);
+      p.appendChild(p_text);
+  });
+  ```
+
+  That's about it. In 99% of cases this method should not be used for
+  anything else. And so, you should never do the following, which is an
+  anti-pattern. Because when the level is higher than `log.levels.DEBUG` then
+  the method `log.debug` is a no-op, so all the args are just thrown away
+  without any unnecessary overhead:
+
+  ```javascript
+  // WARNING: WRONG USAGE, DON'T DO THIS
   if (log.getLevel() >= log.levels.DEBUG) {
-    log.debug("Some " + "string " + "concatenation " + "called " + "a " + "lot");
+      logger.debug("Lots", "and", "lots", "of", "arguments");
   }
   ```
+
+  Instead you should simply do the following:
+
+  ```javascript
+  logger.debug("Lots", "and", "lots", "of", "arguments");
+  ```
+
 
 ## Plugins
 
