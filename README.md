@@ -150,9 +150,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
           log.enableAll();
           msg = "Application in debug mode, read traces in the console.";
       }
-      p.innerHTML = '';
-      var p_text = document.createTextNode(msg);
-      p.appendChild(p_text);
+      p.innerHTML = msg;
   });
   ```
 
