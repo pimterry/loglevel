@@ -10,13 +10,13 @@ Minimal lightweight simple logging for JavaScript. loglevel replaces console.log
 This is a barebones reliable everyday logging library. It does not do fancy things, it does not let you reconfigure appenders or add complex log filtering rules or boil tea (more's the pity), but it does have the all core functionality that you actually use:
 
 ## Features
- 
+
 ### Simple
 
 * Log things at a given level (trace/debug/info/warn/error) to the console object (as seen in all modern browsers & node.js)
 * Filter logging by level (all the above or 'silent'), so you can disable all but error logging in production, and then run log.setLevel("trace") in your console to turn it all back on for a furious debugging session
 * Single file, no dependencies, weighs in at <1KB minified and gzipped
- 
+
 ### Effective
 
 * Log methods gracefully fall back to simpler console logging methods if more specific ones aren't available: so calls to log.debug() go to console.debug() if possible, or console.log() if not
@@ -110,9 +110,9 @@ The loglevel API is extremely minimal. All methods are available on the root log
   * As a log level from the internal levels list, e.g. log.levels.SILENT ← _for type safety_
   * As a string, like 'error' (case-insensitive) ← _for a reasonable practical balance_
   * As a numeric index from 0 (trace) to 5 (silent) ← _deliciously terse, and more easily programmable (...although, why?)_
-  
+
   Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node), or if you pass `false` as the optional 'persist' second argument, persistence will be skipped.
-  
+
   If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begin logging at the requested level.
 
 * A `log.setDefaultLevel(level)` method.
@@ -120,7 +120,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
   This sets the current log level only if one has not been persisted and can’t be loaded. This is useful when initializing scripts; if a developer or user has previously called `setLevel()`, this won’t alter their settings. For example, your application might set the log level to `error` in a production environment, but when debugging an issue, you might call `setLevel("trace")` on the console to see all the logs. If that `error` setting was set using `setDefaultLevel()`, it will still say as `trace` on subsequent page loads and refreshes instead of resetting to `error`.
 
   The `level` argument takes is the same values that you might pass to `setLevel()`. Levels set using `setDefaultLevel()` never persist to subsequent page loads.
-  
+
 * `log.enableAll()` and `log.disableAll()` methods.
 
   These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
@@ -130,20 +130,62 @@ The loglevel API is extremely minimal. All methods are available on the root log
   Returns the current logging level.
 
   It's very unlikely you'll need to use this for normal application logging; it's provided partly to help plugin development, and partly to let you optimize logging code as below, where debug data is only generated if the level is set such that it'll actually be logged. This probably doesn't affect you, unless you've run profiling on your code and you have hard numbers telling you that your log data generation is a real performance problem.
-  
+
   ```javascript
   if (log.getLevel() <= log.levels.DEBUG) {
     var logData = runExpensiveDataGeneration();
     log.debug(logData);
   }
   ```
-  
+
   This notably isn't the right solution to avoid the cost of string concatenation in your logging. Firstly, it's very unlikely that string concatenation in your logging is really an important performance problem. Even if you do genuinely have hard metrics showing that it is though, the better solution that wrapping your log statements in this is to use multiple arguments, as below. The underlying console API will automatically concatenate these for you if logging is enabled, and if it isn't then all log methods are no-ops, and no concatenation will be done at all.
-  
+
   ```javascript
   // Prints 'My concatenated log message'
   log.debug("My ", "concatenated ", "log message");
   ```
+
+* A `log.getLogger(loggerName)` method.
+
+  This gets you a new logger object that works exactly like the root `log` object, but can have its level and logging methods set independently. All loggers must have a name (which is a non-empty string). Calling `getLogger()` multiple times with the same name will return an identical logger object.
+
+  In large applications, it can be incredibly useful to turn logging on and off for particular modules as you are working with them. Using the `getLogger()` method lets you create a separate logger for each part of your application with its own logging level.
+
+  Likewise, for small, independent modules, using a named logger instead of the default, root logger allows developers using your module to selectively turn on deep, trace-level logging when trying to debug problems, while logging only errors or silencing logging altogether under normal circumstances.
+
+  Example usage *(using CommonJS modules, but you could do the same with any module system):*
+
+  ```javascript
+  // In module-one.js:
+  var log = require("loglevel").getLogger("module-one");
+  function doSomethingAmazing() {
+    log.debug("Amazing message from module one.");
+  }
+
+  // In module-two.js:
+  var log = require("loglevel").getLogger("module-two");
+  function doSomethingSpecial() {
+    log.debug("Special message from module two.");
+  }
+
+  // In your main application module:
+  var log = require("loglevel");
+  var moduleOne = require("module-one");
+  var moduleTwo = require("module-two");
+  log.getLogger("module-two").setLevel("TRACE");
+
+  moduleOne.doSomethingAmazing();
+  moduleTwo.doSomethingSpecial();
+  // logs "Special message from module two."
+  // (but nothing from module one.)
+  ```
+
+  Loggers returned by `getLogger()` support all the same properties and methods and default, root logger, excepting `noConflict()` and the `getLogger()` method itself.
+
+  Like the root logger, other loggers can have their logging level saved. If a logger’s level has not been saved, it will inherit the root logger’s level when it is first created. If the root logger’s level changes later, the new level will not affect other loggers that have already been created.
+
+  Likewise, loggers will inherit the root logger’s `methodFactory`. After creation, each logger can have its `methodFactory` independently set. See the *plugins* section below for more about `methodFactory`.
+
 
 ## Plugins
 
@@ -155,22 +197,22 @@ ServerSend - https://github.com/artemyarulin/loglevel-serverSend - Forward your 
 
 Loglevel provides a simple reliable minimal base for console logging that works everywhere. This means it doesn't include lots of fancy functionality that might be useful in some cases, such as log formatting and redirection (e.g. also sending log messages to a server over AJAX)
 
-Including that would increase the size and complexity of the library, but more importantly would remove stacktrace information. Currently log methods are either disabled, or enabled with directly bound versions of the console.log methods (where possible). This means your browser shows the log message as coming from your code at the call to `log.info("message!")` not from within loglevel, since it's really calls the bound console method directly, without indirection. The indirection required to dynamically format, further filter, or redirect log messages would stop this.
+Including that would increase the size and complexity of the library, but more importantly would remove stacktrace information. Currently log methods are either disabled, or enabled with directly bound versions of the console.log methods (where possible). This means your browser shows the log message as coming from your code at the call to `log.info("message!")` not from within loglevel, since it really calls the bound console method directly, without indirection. The indirection required to dynamically format, further filter, or redirect log messages would stop this.
 
-There's clearly enough enthusiasm for this even at that cost though that loglevel now includes a plugin API. To use it, redefine log.methodFactory(methodName, logLevel) with a function of your own. This will be called for each enabled method each time the level is set (including initially), and should return a function to be used for the given log method, at the given level. If you'd like to retain all the reliability and features of loglevel, it's recommended that this wraps the initially provided value of `log.methodFactory`
+There's clearly enough enthusiasm for this even at that cost though that loglevel now includes a plugin API. To use it, redefine log.methodFactory(methodName, logLevel, loggerName) with a function of your own. This will be called for each enabled method each time the level is set (including initially), and should return a function to be used for the given log method, at the given level, for a logger with the given name. If you'd like to retain all the reliability and features of loglevel, it's recommended that this wraps the initially provided value of `log.methodFactory`
 
 For example, a plugin to prefix all log messages with "Newsflash: " would look like:
 
 ```javascript
 var originalFactory = log.methodFactory;
-log.methodFactory = function (methodName, logLevel) {
+log.methodFactory = function (methodName, logLevel, loggerName) {
     var rawMethod = originalFactory(methodName, logLevel);
 
     return function (message) {
         rawMethod("Newsflash: " + message);
     };
 };
-log.setLevel("warn"); // Be sure to call setLevel method in order to apply plugin 
+log.setLevel("warn"); // Be sure to call setLevel method in order to apply plugin
 ```
 
 If you develop and release a plugin, please get in contact! I'd be happy to reference it here for future users. Some consistency is helpful; naming your plugin 'loglevel-PLUGINNAME' (e.g. loglevel-newsflash) is preferred, as is giving it the 'loglevel-plugin' keyword in your package.json
