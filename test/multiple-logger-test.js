@@ -34,8 +34,6 @@ define(['test/test-helpers'], function(testHelpers) {
                 var logger1 = log.getLogger("newLogger");
                 var logger2 = log.getLogger("newLogger");
 
-                console.log("Logger: ", logger1);
-
                 expect(logger1).toEqual(logger2);
             });
 
@@ -45,10 +43,25 @@ define(['test/test-helpers'], function(testHelpers) {
                 }).toThrow();
             });
 
-            it("should throw if called with a non-string name", function(log) {
+            it("should throw if called with empty string for name", function(log) {
                 expect(function() {
-                  log.getLogger(true);
+                  log.getLogger("");
                 }).toThrow();
+            });
+
+            it("should throw if called with a non-string name", function(log) {
+                expect(function() { log.getLogger(true); }).toThrow();
+                expect(function() { log.getLogger({}); }).toThrow();
+                expect(function() { log.getLogger([]); }).toThrow();
+                expect(function() { log.getLogger(10); }).toThrow();
+                expect(function() { log.getLogger(function(){}); }).toThrow();
+                expect(function() { log.getLogger(null); }).toThrow();
+                expect(function() { log.getLogger(undefined); }).toThrow();
+                if (window.Symbol) {
+                    // NOTE: still need to use window to create a symbol
+                    // because JSHint doesn't yet support symbols.
+                    expect(function() { log.getLogger(window.Symbol()); }).toThrow();
+                }
             });
         });
 
@@ -66,9 +79,24 @@ define(['test/test-helpers'], function(testHelpers) {
             });
 
             it("loggers are created with the same level as the default logger", function(log) {
-              log.setLevel("ERROR", false);
+              log.setLevel("ERROR");
               var newLogger = log.getLogger("newLogger");
               expect(newLogger).toBeAtLevel("error");
+            });
+
+            it("if a logger's level is persisted, it uses that level rather than the default logger's level", function(log) {
+                testHelpers.setStoredLevel("error", "newLogger");
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                expect(newLogger).toBeAtLevel("error");
+            });
+
+            it("other loggers do not change when the default logger's level is changed", function(log) {
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                log.setLevel("ERROR");
+                expect(newLogger).toBeAtLevel("TRACE");
+                expect(log.getLogger("newLogger")).toBeAtLevel("TRACE");
             });
 
             it("loggers are created with the same methodFactory as the default logger", function(log) {
@@ -78,6 +106,12 @@ define(['test/test-helpers'], function(testHelpers) {
 
                 var newLogger = log.getLogger("newLogger");
                 expect(newLogger.methodFactory).toEqual(log.methodFactory);
+            });
+
+            it("new loggers correctly inherit a logging level of `0`", function(log) {
+              log.setLevel(0);
+              var newLogger = log.getLogger("newLogger");
+              expect(newLogger).toBeAtLevel("trace");
             });
         });
     });

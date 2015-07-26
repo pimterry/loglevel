@@ -13,6 +13,14 @@ var logMethods = [
 ];
 
 define(function () {
+    function getStorageKey(loggerName) {
+        var key = "loglevel";
+        if (loggerName) {
+            key += ":" + loggerName;
+        }
+        return key;
+    }
+
     var self = {};
 
     // Jasmine matcher to check the log level of a log object
@@ -20,13 +28,14 @@ define(function () {
         var log = this.actual;
         var expectedWorkingCalls = log.levels.SILENT - log.levels[level.toUpperCase()];
         var realLogMethod = window.console.log;
+        var priorCalls = realLogMethod.calls.length;
 
         for (var ii = 0; ii < logMethods.length; ii++) {
             var methodName = logMethods[ii];
             log[methodName](methodName);
         }
 
-        expect(realLogMethod.calls.length).toEqual(expectedWorkingCalls);
+        expect(realLogMethod.calls.length - priorCalls).toEqual(expectedWorkingCalls);
         return true;
     };
 
@@ -57,20 +66,21 @@ define(function () {
         return self.isCookieStorageAvailable() || self.isLocalStorageAvailable();
     };
 
-    self.toBeTheLevelStoredByCookie = function toBeTheLevelStoredByCookie() {
+    self.toBeTheLevelStoredByCookie = function toBeTheLevelStoredByCookie(name) {
         var level = this.actual.toUpperCase();
+        var storageKey = encodeURIComponent(getStorageKey(name));
 
-        if (window.document.cookie.indexOf("loglevel="+level) !== -1) {
+        if (window.document.cookie.indexOf(storageKey + "=" + level) !== -1) {
             return true;
         } else {
             return false;
         }
     };
 
-    self.toBeTheLevelStoredByLocalStorage = function toBeTheLevelStoredByLocalStorage() {
+    self.toBeTheLevelStoredByLocalStorage = function toBeTheLevelStoredByLocalStorage(name) {
         var level = this.actual.toUpperCase();
 
-        if (window.localStorage['loglevel'] === level) {
+        if (window.localStorage[getStorageKey(name)] === level) {
             return true;
         }
 
@@ -78,25 +88,27 @@ define(function () {
     };
 
     // Jasmine matcher to check whether a given string was saved by loglevel
-    self.toBeTheStoredLevel = function toBeTheStoredLevel() {
-        return self.toBeTheLevelStoredByLocalStorage.call(this) ||
-               self.toBeTheLevelStoredByCookie.call(this);
+    self.toBeTheStoredLevel = function toBeTheStoredLevel(name) {
+        return self.toBeTheLevelStoredByLocalStorage.call(this, name) ||
+               self.toBeTheLevelStoredByCookie.call(this, name);
     };
 
-    self.setCookieStoredLevel = function setCookieStoredLevel(level) {
-        window.document.cookie = "loglevel=" + level.toUpperCase();
+    self.setCookieStoredLevel = function setCookieStoredLevel(level, name) {
+        window.document.cookie =
+            encodeURIComponent(getStorageKey(name)) + "=" +
+            level.toUpperCase() + ";";
     };
 
-    self.setLocalStorageStoredLevel = function setLocalStorageStoredLevel(level) {
-        window.localStorage['loglevel'] = level.toUpperCase();
+    self.setLocalStorageStoredLevel = function setLocalStorageStoredLevel(level, name) {
+        window.localStorage[getStorageKey(name)] = level.toUpperCase();
     };
 
-    self.setStoredLevel = function setStoredLevel(level) {
+    self.setStoredLevel = function setStoredLevel(level, name) {
         if (self.isCookieStorageAvailable()) {
-            self.setCookieStoredLevel(level);
+            self.setCookieStoredLevel(level, name);
         }
         if (self.isLocalStorageAvailable()) {
-            self.setLocalStorageStoredLevel(level);
+            self.setLocalStorageStoredLevel(level, name);
         }
     };
 
@@ -105,7 +117,12 @@ define(function () {
             window.localStorage.clear();
         }
         if (self.isCookieStorageAvailable()) {
-            window.document.cookie = "loglevel=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+            var storedKeys = window.document.cookie.match(/(?:^|;\s)(loglevel(\:\w+)?)(?=\=)/g);
+            if (storedKeys) {
+                for (var i = 0; i < storedKeys.length; i++) {
+                    window.document.cookie = storedKeys[i] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+                }
+            }
         }
     };
 
