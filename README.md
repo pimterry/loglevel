@@ -129,50 +129,21 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   Returns the current logging level.
 
-  Here is for example how to toggle traces on or off in the console from an HTML
-  page or a web app.
-
+  It's very unlikely you'll need to use this for normal application logging; it's provided partly to help plugin development, and partly to let you optimize logging code as below, where debug data is only generated if the level is set such that it'll actually be logged. This probably doesn't affect you, unless you've run profiling on your code and you have hard numbers telling you that your log data generation is a real performance problem.
+  
   ```javascript
-  var p = document.createElement('p');
-  document.body.appendChild(p);
-
-  var button = document.createElement('button');
-  var button_text = document.createTextNode("Toggle debug mode");
-  button.appendChild(button_text);
-  document.body.appendChild(button);
-
-  button.addEventListener('click', function() {
-      var msg;
-      if (log.getLevel() <= log.levels.DEBUG) {
-          log.disableAll();
-          msg = "Application not in debug mode.";
-      } else {
-          log.enableAll();
-          msg = "Application in debug mode, read traces in the console.";
-      }
-      p.innerHTML = msg;
-  });
-  ```
-
-  That's about it. In 99% of cases this method should not be used for
-  anything else. And so, you should never do the following, which is an
-  anti-pattern. Because when the level is higher than `log.levels.DEBUG` then
-  the method `log.debug` is a no-op, so all the args are just thrown away
-  without any unnecessary overhead:
-
-  ```javascript
-  // WARNING: WRONG USAGE, DON'T DO THIS
-  if (log.getLevel() >= log.levels.DEBUG) {
-      logger.debug("Lots", "and", "lots", "of", "arguments");
+  if (log.getLevel() <= log.levels.DEBUG) {
+    var logData = runExpensiveDataGeneration();
+    log.debug(logData);
   }
   ```
-
-  Instead you should simply do the following:
-
+  
+  This notably isn't the right solution to avoid the cost of string concatenation in your logging. Firstly, it's very unlikely that string concatenation in your logging is really an important performance problem. Even if you do genuinely have hard metrics showing that it is though, the better solution that wrapping your log statements in this is to use multiple arguments, as below. The underlying console API will automatically concatenate these for you if logging is enabled, and if it isn't then all log methods are no-ops, and no concatenation will be done at all.
+  
   ```javascript
-  logger.debug("Lots", "and", "lots", "of", "arguments");
+  // Prints 'My concatenated log message'
+  log.debug("My ", "concatenated ", "log message");
   ```
-
 
 ## Plugins
 
