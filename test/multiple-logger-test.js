@@ -58,9 +58,7 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(function() { log.getLogger(null); }).toThrow();
                 expect(function() { log.getLogger(undefined); }).toThrow();
                 if (window.Symbol) {
-                    // NOTE: still need to use window to create a symbol
-                    // because JSHint doesn't yet support symbols.
-                    expect(function() { log.getLogger(window.Symbol()); }).toThrow();
+                    expect(function() { log.getLogger(Symbol()); }).toThrow();
                 }
             });
         });

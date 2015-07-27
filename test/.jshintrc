@@ -28,6 +28,7 @@
     "it": false,
     "jasmine": false,
     "waitsFor": false,
-    "runs": false
+    "runs": false,
+    "Symbol": false
   }
 }
