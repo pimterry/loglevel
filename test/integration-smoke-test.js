@@ -32,7 +32,7 @@ define(['../lib/loglevel', 'test/test-helpers'], function(log, testHelpers) {
 
         describeIf(typeof console !== "undefined", "log levels", function() {
             beforeEach(function() {
-                this.addMatchers({
+                jasmine.addMatchers({
                     "toBeTheStoredLevel" : testHelpers.toBeTheStoredLevel
                 });
             });

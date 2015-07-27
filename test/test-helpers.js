@@ -16,18 +16,23 @@ define(function () {
     var self = {};
 
     // Jasmine matcher to check the log level of a log object
-    self.toBeAtLevel = function toBeAtLevel(level) {
-        var log = this.actual;
-        var expectedWorkingCalls = log.levels.SILENT - log.levels[level.toUpperCase()];
-        var realLogMethod = window.console.log;
+    self.toBeAtLevel = function toBeAtLevel() {
+        return {
+            compare: function(actual, expected){
+                var log = actual;
+                var expectedWorkingCalls = log.levels.SILENT - log.levels[expected.toUpperCase()];
+                var realLogMethod = window.console.log;
 
-        for (var ii = 0; ii < logMethods.length; ii++) {
-            var methodName = logMethods[ii];
-            log[methodName](methodName);
-        }
+                for (var ii = 0; ii < logMethods.length; ii++) {
+                    var methodName = logMethods[ii];
+                    log[methodName](methodName);
+                }
 
-        expect(realLogMethod.calls.length).toEqual(expectedWorkingCalls);
-        return true;
+                return {
+                    pass: realLogMethod.calls.count() === expectedWorkingCalls
+                };
+            }
+        };
     };
 
     self.isCookieStorageAvailable = function isCookieStorageAvailable() {
@@ -57,30 +62,44 @@ define(function () {
         return self.isCookieStorageAvailable() || self.isLocalStorageAvailable();
     };
 
-    self.toBeTheLevelStoredByCookie = function toBeTheLevelStoredByCookie() {
-        var level = this.actual.toUpperCase();
 
-        if (window.document.cookie.indexOf("loglevel="+level) !== -1) {
-            return true;
-        } else {
-            return false;
-        }
+    function isLevelStoredByCookie(value){
+        var level = value.toUpperCase();
+        return window.document.cookie.indexOf("loglevel="+level) !== -1;
+    }
+    self.toBeTheLevelStoredByCookie = function toBeTheLevelStoredByCookie() {
+        return {
+            compare: function(actual, expected){
+                return {
+                    pass: isLevelStoredByCookie(actual)
+                };
+            }
+        };
     };
 
+    function isLevelStoredByLocalStorage(value){
+        var level = value.toUpperCase();
+        return window.localStorage['loglevel'] === level;
+    }
     self.toBeTheLevelStoredByLocalStorage = function toBeTheLevelStoredByLocalStorage() {
-        var level = this.actual.toUpperCase();
-
-        if (window.localStorage['loglevel'] === level) {
-            return true;
-        }
-
-        return false;
+        return {
+            compare : function(actual, expected){
+                return {
+                    pass: isLevelStoredByLocalStorage(actual)
+                };
+            }
+        };
     };
 
     // Jasmine matcher to check whether a given string was saved by loglevel
     self.toBeTheStoredLevel = function toBeTheStoredLevel() {
-        return self.toBeTheLevelStoredByLocalStorage.call(this) ||
-               self.toBeTheLevelStoredByCookie.call(this);
+        return {
+            compare: function(actual){
+                return {
+                    pass: isLevelStoredByCookie(actual) || isLevelStoredByLocalStorage(actual)
+                };
+            }
+        };
     };
 
     self.setCookieStoredLevel = function setCookieStoredLevel(level) {
@@ -123,20 +142,10 @@ define(function () {
 
     // Forcibly reloads loglevel, and asynchronously hands the resulting log back to the given callback
     // via Jasmine async magic
-    self.withFreshLog = function withFreshLog(toRun) {
+    self.withFreshLog = function withFreshLog(callback) {
         require.undef("lib/loglevel");
-
-        var freshLog;
-
-        waitsFor(function() {
-            require(['lib/loglevel'], function(log) {
-                freshLog = log;
-            });
-            return typeof freshLog !== "undefined";
-        });
-
-        runs(function() {
-            toRun(freshLog);
+        require(['lib/loglevel'], function(log) {
+            callback(log);
         });
     };
 

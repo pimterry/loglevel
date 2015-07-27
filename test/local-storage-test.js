@@ -10,7 +10,7 @@ define(['test/test-helpers'], function(testHelpers) {
 
         beforeEach(function() {
             window.console = {"log" : jasmine.createSpy("console.log")};
-            this.addMatchers({
+            jasmine.addMatchers({
                 "toBeAtLevel" : testHelpers.toBeAtLevel,
                 "toBeTheStoredLevel" : testHelpers.toBeTheLevelStoredByLocalStorage,
                 "toBeTheLevelStoredByLocalStorage": testHelpers.toBeTheLevelStoredByLocalStorage,

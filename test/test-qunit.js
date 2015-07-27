@@ -19,7 +19,7 @@ test('basic test', function() {
 
     // Check that noConflict restored the original log
     ok(typeof log === "function", "log is a function");
-    ok(log === QUnit.log, "log is Qunit.log");
+    ok(log === window.customLogFunction, "log is customLogFunction");
 
     // Check that noConflict setup logging
     ok(typeof logging !== "undefined", "logging is defined");
