@@ -55,6 +55,6 @@ How to make your change and submit it
 3. Create a branch from master for your change
 4. Write some tests in /test for your change, as relevant
 5. Make your code changes in /lib/loglevel.js
-6. Check your code all passes (run `grunt`) - if you have any issues try running `grunt jasmine:src:build` and debugging the generated _SpecRunner.html in a browser
+6. Check your code all passes (run `grunt`) - if you have any issues try running `grunt jasmine:requirejs:src:build` (or a different test build instead of 'requirejs': see the jasmine config in Gruntfile.js) and debugging the generated _SpecRunner.html in a browser
 7. Commit your changes
 8. Open a pull request back to master in loglevel
