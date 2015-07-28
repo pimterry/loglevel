@@ -115,7 +115,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begin logging at the requested level.
 
-* A `log.setDefaultLevel(level)` method.
+* A `log.setDefaultLevel(level)` method. [*pre-release: coming soon*]
 
   This sets the current log level only if one has not been persisted and can’t be loaded. This is useful when initializing scripts; if a developer or user has previously called `setLevel()`, this won’t alter their settings. For example, your application might set the log level to `error` in a production environment, but when debugging an issue, you might call `setLevel("trace")` on the console to see all the logs. If that `error` setting was set using `setDefaultLevel()`, it will still say as `trace` on subsequent page loads and refreshes instead of resetting to `error`.
 
@@ -125,7 +125,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
 
-* A `log.getLevel()` method.
+* A `log.getLevel()` method. [*pre-release: coming soon*]
 
   Returns the current logging level.
 
@@ -145,7 +145,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
   log.debug("My ", "concatenated ", "log message");
   ```
 
-* A `log.getLogger(loggerName)` method.
+* A `log.getLogger(loggerName)` method. [*pre-release: coming soon*]
 
   This gets you a new logger object that works exactly like the root `log` object, but can have its level and logging methods set independently. All loggers must have a name (which is a non-empty string). Calling `getLogger()` multiple times with the same name will return an identical logger object.
 
@@ -205,8 +205,8 @@ For example, a plugin to prefix all log messages with "Newsflash: " would look l
 
 ```javascript
 var originalFactory = log.methodFactory;
-log.methodFactory = function (methodName, logLevel, loggerName) {
-    var rawMethod = originalFactory(methodName, logLevel, loggerName);
+log.methodFactory = function (methodName, logLevel) {
+    var rawMethod = originalFactory(methodName, logLevel);
 
     return function (message) {
         rawMethod("Newsflash: " + message);
