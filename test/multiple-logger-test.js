@@ -11,7 +11,13 @@ define(['test/test-helpers'], function(testHelpers) {
         describe("log.getLogger()", function() {
             it("returns a new logger that is not the default one", function(log) {
                 var newLogger = log.getLogger("newLogger");
+
                 expect(newLogger).not.toEqual(log);
+            });
+
+            it("returns a new logger with all the normal methods", function(log) {
+                var newLogger = log.getLogger("newLogger");
+
                 expect(newLogger.trace).toBeDefined();
                 expect(newLogger.debug).toBeDefined();
                 expect(newLogger.info).toBeDefined();
@@ -21,7 +27,7 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(newLogger.setDefaultLevel).toBeDefined();
                 expect(newLogger.enableAll).toBeDefined();
                 expect(newLogger.disableAll).toBeDefined();
-                expect(newLogger.methodFactory).toBeDefined();
+                expect(newLogger.wrapLogMethods).toBeDefined();
             });
 
             it("returns loggers without `getLogger()` and `noConflict()`", function(log) {
@@ -98,12 +104,30 @@ define(['test/test-helpers'], function(testHelpers) {
             });
 
             it("loggers are created with the same methodFactory as the default logger", function(log) {
-                log.methodFactory = function(methodName, level) {
-                  return function() {};
-                };
+                log.wrapLogMethods(function (underlyingMethod) {
+                    return function () {
+                        underlyingMethod("wrapped-call");
+                    };
+                });
 
                 var newLogger = log.getLogger("newLogger");
-                expect(newLogger.methodFactory).toEqual(log.methodFactory);
+                newLogger.error("unwrapped-raw-message");
+
+                expect(console.log).toHaveBeenCalledWith("wrapped-call");
+            });
+
+            it("logger's wrappers do not change if a wrapper is subsequently added to the default logger", function(log) {
+                var newLogger = log.getLogger("newLogger");
+
+                log.wrapLogMethods(function (underlyingMethod) {
+                    return function () {
+                        underlyingMethod("wrapped-call");
+                    };
+                });
+
+                newLogger.error("unwrapped-raw-message");
+
+                expect(console.log).toHaveBeenCalledWith("unwrapped-raw-message");
             });
 
             it("new loggers correctly inherit a logging level of `0`", function(log) {
