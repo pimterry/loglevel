@@ -151,7 +151,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   In large applications, it can be incredibly useful to turn logging on and off for particular modules as you are working with them. Using the `getLogger()` method lets you create a separate logger for each part of your application with its own logging level.
 
-  Likewise, for small, independent modules, using a named logger instead of the default, root logger allows developers using your module to selectively turn on deep, trace-level logging when trying to debug problems, while logging only errors or silencing logging altogether under normal circumstances.
+  Likewise, for small, independent modules, using a named logger instead of the default root logger allows developers using your module to selectively turn on deep, trace-level logging when trying to debug problems, while logging only errors or silencing logging altogether under normal circumstances.
 
   Example usage *(using CommonJS modules, but you could do the same with any module system):*
 
@@ -180,7 +180,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
   // (but nothing from module one.)
   ```
 
-  Loggers returned by `getLogger()` support all the same properties and methods and default, root logger, excepting `noConflict()` and the `getLogger()` method itself.
+  Loggers returned by `getLogger()` support all the same properties and methods as the default root logger, excepting `noConflict()` and the `getLogger()` method itself.
 
   Like the root logger, other loggers can have their logging level saved. If a logger’s level has not been saved, it will inherit the root logger’s level when it is first created. If the root logger’s level changes later, the new level will not affect other loggers that have already been created.
 
@@ -206,7 +206,7 @@ For example, a plugin to prefix all log messages with "Newsflash: " would look l
 ```javascript
 var originalFactory = log.methodFactory;
 log.methodFactory = function (methodName, logLevel, loggerName) {
-    var rawMethod = originalFactory(methodName, logLevel);
+    var rawMethod = originalFactory(methodName, logLevel, loggerName);
 
     return function (message) {
         rawMethod("Newsflash: " + message);
