@@ -33,11 +33,19 @@ test('basic test', function() {
     ok(typeof logging.setDefaultLevel === "function", "setDefaultLevel is a function");
     ok(typeof logging.enableAll === "function", "enableAll is a function");
     ok(typeof logging.disableAll === "function", "disableAll is a function");
-   
+    ok(typeof logging.getLogger === "function", "getLogger is a function");
+
     // Use the API to make sure it doesn't blantantly fail with exceptions
     logging.trace("a trace message");
     logging.debug("a debug message");
     logging.info("an info message");
     logging.warn("a warn message");
     logging.error("an error message");
+
+    var newLogger = logging.getLogger("newLogger");
+    newLogger.trace("a trace message");
+    newLogger.debug("a debug message");
+    newLogger.info("an info message");
+    newLogger.warn("a warn message");
+    newLogger.error("an error message");
 });
