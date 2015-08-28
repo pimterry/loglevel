@@ -263,7 +263,7 @@ v1.3.0 - Make persistence optional in setLevel, plus lots of documentation updat
 
 v1.3.1 - With the new optional persistence, stop unnecessarily persisting the initially set default level (warn)
 
-v1.4 - Add getLevel(), setDefaultLevel() and getLogger() functionality for more fine-grained log level control
+v1.4.0 - Add getLevel(), setDefaultLevel() and getLogger() functionality for more fine-grained log level control
 
 ## License
 Copyright (c) 2013 Tim Perry  
