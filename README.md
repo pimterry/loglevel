@@ -127,7 +127,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
 * A `log.getLevel()` method. [*pre-release: coming soon*]
 
-  Returns the current logging level.
+  Returns the current logging level, as a number from 0 (trace) to 5 (silent)
 
   It's very unlikely you'll need to use this for normal application logging; it's provided partly to help plugin development, and partly to let you optimize logging code as below, where debug data is only generated if the level is set such that it'll actually be logged. This probably doesn't affect you, unless you've run profiling on your code and you have hard numbers telling you that your log data generation is a real performance problem.
 
