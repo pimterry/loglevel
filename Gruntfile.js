@@ -9,7 +9,7 @@ module.exports = function (grunt) {
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %>' +
                 ' - <%= pkg.homepage %>' +
                 ' - (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>' +
-                ' - licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+                ' - licensed <%= pkg.license %> */\n',
         // Task configuration.
         concat: {
             options: {
