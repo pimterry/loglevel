@@ -1,5 +1,5 @@
 
-# loglevel [![NPM Version][npm-image]][npm-url] [![Build Status](https://travis-ci.org/pimterry/loglevel.png)](https://travis-ci.org/pimterry/loglevel) [![Coverage Status](https://coveralls.io/repos/pimterry/loglevel/badge.png?branch=master)](https://coveralls.io/r/pimterry/loglevel?branch=master) [![Dependency status](https://david-dm.org/pimterry/loglevel/dev-status.png)](https://david-dm.org/pimterry/loglevel#info=devDependencies&view=table)  
+# loglevel [![NPM Version][npm-image]][npm-url] [![Build Status](https://travis-ci.org/pimterry/loglevel.png)](https://travis-ci.org/pimterry/loglevel) [![Coverage Status](https://coveralls.io/repos/pimterry/loglevel/badge.png?branch=master)](https://coveralls.io/r/pimterry/loglevel?branch=master)
 
 
 [npm-image]: https://img.shields.io/npm/v/loglevel.svg?style=flat
