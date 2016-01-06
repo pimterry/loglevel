@@ -194,7 +194,9 @@ The loglevel API is extremely minimal. All methods are available on the root log
 ### Existing plugins:
 
 ServerSend - https://github.com/artemyarulin/loglevel-serverSend - Forward your log messages to a remote server.
+
 Standard Streams - https://github.com/NatLibFi/loglevel-std-streams - Route logging through STDERR in Node for easier log management.
+
 Message Prefix - https://github.com/NatLibFi/loglevel-message-prefix - Dynamic (timestamp/level) and static ('foo') message prefixing.
 
 ### Writing plugins:
