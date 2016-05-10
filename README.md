@@ -199,6 +199,8 @@ Standard Streams - https://github.com/NatLibFi/loglevel-std-streams - Route logg
 
 Message Prefix - https://github.com/NatLibFi/loglevel-message-prefix - Dynamic (timestamp/level) and static ('foo') message prefixing.
 
+DEBUG - https://github.com/vectrlabs/loglevel-debug - Control logging from a DEBUG environmental variable (similar to the classic [Debug](https://github.com/visionmedia/debug) module)
+
 ### Writing plugins:
 
 Loglevel provides a simple reliable minimal base for console logging that works everywhere. This means it doesn't include lots of fancy functionality that might be useful in some cases, such as log formatting and redirection (e.g. also sending log messages to a server over AJAX)
