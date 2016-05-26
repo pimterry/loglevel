@@ -63,6 +63,21 @@ define(['test/test-helpers'], function(testHelpers) {
             });
         });
 
+        describe("log.getLoggers()", function() {
+          it("returns an empty list initially", function(log) {
+            expect(log.getLoggers()).toEqual([]);
+          });
+
+          it("returns a list of existing loggers", function(log) {
+            log.getLogger("logger1");
+            log.getLogger("logger2");
+            expect(log.getLoggers()).toEqual([
+              "logger1",
+              "logger2"
+            ]);
+          });
+        });
+
         describe("inheritance", function() {
             beforeEach(function() {
                 window.console = {"log" : jasmine.createSpy("console.log")};
