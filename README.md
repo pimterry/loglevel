@@ -275,6 +275,8 @@ v1.3.1 - With the new optional persistence, stop unnecessarily persisting the in
 
 v1.4.0 - Add getLevel(), setDefaultLevel() and getLogger() functionality for more fine-grained log level control
 
+v1.4.1 - Reorder UMD (#92) to improve bundling tool compatibility
+
 ## License
 Copyright (c) 2013 Tim Perry  
 Licensed under the MIT license.

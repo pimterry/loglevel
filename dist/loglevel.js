@@ -1,10 +1,10 @@
-/*! loglevel - v1.4.0 - https://github.com/pimterry/loglevel - (c) 2015 Tim Perry - licensed MIT */
+/*! loglevel - v1.4.1 - https://github.com/pimterry/loglevel - (c) 2016 Tim Perry - licensed MIT */
 (function (root, definition) {
     "use strict";
-    if (typeof module === 'object' && module.exports && typeof require === 'function') {
-        module.exports = definition();
-    } else if (typeof define === 'function' && typeof define.amd === 'object') {
+    if (typeof define === 'function' && define.amd) {
         define(definition);
+    } else if (typeof module === 'object' && module.exports) {
+        module.exports = definition();
     } else {
         root.log = definition();
     }
