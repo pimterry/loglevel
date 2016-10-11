@@ -199,6 +199,8 @@ Standard Streams - https://github.com/NatLibFi/loglevel-std-streams - Route logg
 
 Message Prefix - https://github.com/NatLibFi/loglevel-message-prefix - Dynamic (timestamp/level) and static ('foo') message prefixing.
 
+Message Buffer - https://github.com/NatLibFi/loglevel-message-buffer - Buffer messages, and flush them on-demand later.
+
 DEBUG - https://github.com/vectrlabs/loglevel-debug - Control logging from a DEBUG environmental variable (similar to the classic [Debug](https://github.com/visionmedia/debug) module)
 
 ### Writing plugins:
