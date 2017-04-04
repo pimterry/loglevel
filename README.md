@@ -72,6 +72,13 @@ log.error("too easy");
 </script>
 ```
 
+### As an ES6 module (assuming some transpilation step):
+
+```javascript
+import * as log from 'loglevel';
+log.debug("all done");
+```
+
 ### With noConflict():
 
 If you're using another JavaScript library that exposes a 'log' global, you can run into conflicts with loglevel.  Similarly to jQuery, you can solve this by putting loglevel into no-conflict mode immediately after it is loaded onto the page. This resets to 'log' global to its value before loglevel was loaded (typically `undefined`), and returns the loglevel object, which you can then bind to another name yourself.
