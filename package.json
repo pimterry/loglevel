@@ -22,7 +22,9 @@
   },
   "scripts": {
     "test": "grunt test",
-    "ci": "grunt ci"
+    "ci": "grunt ci",
+    "dist": "grunt dist",
+    "watch": "grunt watch"
   },
   "dependencies": {},
   "devDependencies": {

@@ -106,9 +106,9 @@ The loglevel API is extremely minimal. All methods are available on the root log
   * `log.error(msg)`
 
   Exact output formatting of these will depend on the console available in the current context of your application. For example, many environments will include a full stack trace with all trace() calls, and icons or similar to highlight other calls.
-  
+
   These methods should never fail in any environment, even if no console object is currently available, and should always fall back to an available log method even if the specific method called (e.g. warn) isn't available.
-  
+
   Be aware that all this means that these method won't necessarily always produce exactly the output you expect in every environment; loglevel only guarantees that these methods will never explode on you, and that it will call the most relevant method it can find, with your argument. Firefox is a notable example here: due to a [current Firefox bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1172314) `log.trace(msg)` calls in Firefox will print only the stacktrace, and won't include any passed message arguments.
 
 * A `log.setLevel(level, [persist])` method.
@@ -239,7 +239,7 @@ If you develop and release a plugin, please get in contact! I'd be happy to refe
 ## Developing & Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality.
 
-Builds can be run with grunt: run `grunt dist` to build a distributable version of the project (in /dist), or `grunt test` to just run the tests and linting. During development you can run `grunt watch` and it will monitor source files, and rerun the tests and linting as appropriate when they're changed.
+Builds can be run with npm: run `npm run dist` to build a distributable version of the project (in /dist), or `npm test` to just run the tests and linting. During development you can run `npm run watch` and it will monitor source files, and rerun the tests and linting as appropriate when they're changed.
 
 _Also, please don't manually edit files in the "dist" subdirectory as they are generated via Grunt. You'll find source code in the "lib" subdirectory!_
 
@@ -248,7 +248,7 @@ _Also, please don't manually edit files in the "dist" subdirectory as they are g
 To do a release of loglevel:
 
 * Update the version number in package.json and bower.json
-* Run `grunt dist` to build a distributable version in dist/
+* Run `npm run dist` to build a distributable version in dist/
 * Update the release history in this file (below)
 * Commit the built code, tagging it with the version number and a brief message about the release
 * Push to Github
@@ -287,5 +287,5 @@ v1.4.0 - Add getLevel(), setDefaultLevel() and getLogger() functionality for mor
 v1.4.1 - Reorder UMD (#92) to improve bundling tool compatibility
 
 ## License
-Copyright (c) 2013 Tim Perry  
+Copyright (c) 2013 Tim Perry
 Licensed under the MIT license.
