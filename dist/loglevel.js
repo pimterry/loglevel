@@ -1,4 +1,4 @@
-/*! loglevel - v1.4.1 - https://github.com/pimterry/loglevel - (c) 2016 Tim Perry - licensed MIT */
+/*! loglevel - v1.4.1 - https://github.com/pimterry/loglevel - (c) 2017 Tim Perry - licensed MIT */
 (function (root, definition) {
     "use strict";
     if (typeof define === 'function' && define.amd) {
@@ -10,21 +10,20 @@
     }
 }(this, function () {
     "use strict";
+
+    // Slightly dubious tricks to cut down minimized file size
     var noop = function() {};
     var undefinedType = "undefined";
 
-    function realMethod(methodName) {
-        if (typeof console === undefinedType) {
-            return false; // We can't build a real method without a console to log to
-        } else if (console[methodName] !== undefined) {
-            return bindMethod(console, methodName);
-        } else if (console.log !== undefined) {
-            return bindMethod(console, 'log');
-        } else {
-            return noop;
-        }
-    }
+    var logMethods = [
+        "trace",
+        "debug",
+        "info",
+        "warn",
+        "error"
+    ];
 
+    // Cross-browser bind equivalent that works at least back to IE6
     function bindMethod(obj, methodName) {
         var method = obj[methodName];
         if (typeof method.bind === 'function') {
@@ -41,16 +40,21 @@
         }
     }
 
-    // these private functions always need `this` to be set properly
-
-    function enableLoggingWhenConsoleArrives(methodName, level, loggerName) {
-        return function () {
-            if (typeof console !== undefinedType) {
-                replaceLoggingMethods.call(this, level, loggerName);
-                this[methodName].apply(this, arguments);
-            }
-        };
+    // Build the best logging method possible for this env
+    // Wherever possible we want to bind, not wrap, to preserve stack traces
+    function realMethod(methodName) {
+        if (typeof console === undefinedType) {
+            return false; // No method possible, for now - fixed later by enableLoggingWhenConsoleArrives
+        } else if (console[methodName] !== undefined) {
+            return bindMethod(console, methodName);
+        } else if (console.log !== undefined) {
+            return bindMethod(console, 'log');
+        } else {
+            return noop;
+        }
     }
+
+    // These private functions always need `this` to be set properly
 
     function replaceLoggingMethods(level, loggerName) {
         /*jshint validthis:true */
@@ -62,19 +66,24 @@
         }
     }
 
+    // In old IE versions, the console isn't present until you first open it.
+    // We build realMethod() replacements here that regenerate logging methods
+    function enableLoggingWhenConsoleArrives(methodName, level, loggerName) {
+        return function () {
+            if (typeof console !== undefinedType) {
+                replaceLoggingMethods.call(this, level, loggerName);
+                this[methodName].apply(this, arguments);
+            }
+        };
+    }
+
+    // By default, we use closely bound real methods wherever possible, and
+    // otherwise we wait for a console to appear, and then try again.
     function defaultMethodFactory(methodName, level, loggerName) {
         /*jshint validthis:true */
         return realMethod(methodName) ||
                enableLoggingWhenConsoleArrives.apply(this, arguments);
     }
-
-    var logMethods = [
-        "trace",
-        "debug",
-        "info",
-        "warn",
-        "error"
-    ];
 
     function Logger(name, defaultLevel, factory) {
       var self = this;
@@ -107,6 +116,7 @@
               storedLevel = window.localStorage[storageKey];
           } catch (ignore) {}
 
+          // Fallback to cookies if local storage gives us nothing
           if (typeof storedLevel === undefinedType) {
               try {
                   var cookie = window.document.cookie;
@@ -128,7 +138,7 @@
 
       /*
        *
-       * Public API
+       * Public logger API - see https://github.com/pimterry/loglevel for details
        *
        */
 
@@ -183,7 +193,7 @@
 
     /*
      *
-     * Package-level API
+     * Top-level API
      *
      */
 
