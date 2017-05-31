@@ -195,6 +195,21 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   Likewise, loggers will inherit the root logger’s `methodFactory`. After creation, each logger can have its `methodFactory` independently set. See the *plugins* section below for more about `methodFactory`.
 
+* A `log.getLoggers()` method.
+
+  This returns a list of all the named loggers which have been created with `log.getLogger()`. The root logger is not included in this list.
+
+  ```javascript
+  var log = require("loglevel");
+
+  // Create a few loggers
+  log.getLogger("logger1");
+  log.getLogger("logger2");
+
+  // Returns '["logger1", "logger2"]'
+  log.getLoggers();
+  ```
+
 
 ## Plugins
 
