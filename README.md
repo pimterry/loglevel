@@ -200,13 +200,15 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
 ### Existing plugins:
 
+[loglevel-plugin-prefix](https://github.com/kutuluk/loglevel-plugin-prefix) - plugin for loglevel message prefixing.
+
+[loglevel-plugin-remote](https://github.com/kutuluk/loglevel-plugin-remote) - plugin for sending loglevel messages to a remote log server.
+
 ServerSend - https://github.com/artemyarulin/loglevel-serverSend - Forward your log messages to a remote server.
 
 Standard Streams - https://github.com/NatLibFi/loglevel-std-streams - Route logging through STDERR in Node for easier log management.
 
 Message Prefix - https://github.com/NatLibFi/loglevel-message-prefix - Dynamic (timestamp/level) and static ('foo') message prefixing.
-
-Message Prefix - https://github.com/kutuluk/loglevel-prefix - Minimal, dependency-free and lightweight message prefixing.
 
 Message Buffer - https://github.com/NatLibFi/loglevel-message-buffer - Buffer messages, and flush them on-demand later.
 
