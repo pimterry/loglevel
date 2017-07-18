@@ -75,7 +75,7 @@ log.error("too easy");
 ### As an ES6 module (assuming some transpilation step):
 
 ```javascript
-import * as log from 'loglevel';
+import log from 'loglevel';
 log.debug("all done");
 ```
 
