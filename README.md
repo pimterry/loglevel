@@ -105,6 +105,8 @@ The loglevel API is extremely minimal. All methods are available on the root log
   * `log.warn(msg)`
   * `log.error(msg)`
 
+  `log.log(msg)` is also available, as an alias for `log.debug(msg)`, to improve compatibility with `console`, and make migration easier.
+
   Exact output formatting of these will depend on the console available in the current context of your application. For example, many environments will include a full stack trace with all trace() calls, and icons or similar to highlight other calls.
 
   These methods should never fail in any environment, even if no console object is currently available, and should always fall back to an available log method even if the specific method called (e.g. warn) isn't available.
