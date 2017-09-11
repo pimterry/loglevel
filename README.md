@@ -292,6 +292,8 @@ v1.4.0 - Add getLevel(), setDefaultLevel() and getLogger() functionality for mor
 
 v1.4.1 - Reorder UMD (#92) to improve bundling tool compatibility
 
+v1.5.0 - Fix log.debug (#111) after V8 changes deprecating console.debug, check for `window` upfront (#104), and add `.log` alias for `.debug` (#64)
+
 ## License
 Copyright (c) 2013 Tim Perry
 Licensed under the MIT license.

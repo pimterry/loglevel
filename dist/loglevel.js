@@ -1,4 +1,4 @@
-/*! loglevel - v1.4.1 - https://github.com/pimterry/loglevel - (c) 2017 Tim Perry - licensed MIT */
+/*! loglevel - v1.5.0 - https://github.com/pimterry/loglevel - (c) 2017 Tim Perry - licensed MIT */
 (function (root, definition) {
     "use strict";
     if (typeof define === 'function' && define.amd) {
@@ -43,6 +43,10 @@
     // Build the best logging method possible for this env
     // Wherever possible we want to bind, not wrap, to preserve stack traces
     function realMethod(methodName) {
+        if (methodName === 'debug') {
+            methodName = 'log';
+        }
+
         if (typeof console === undefinedType) {
             return false; // No method possible, for now - fixed later by enableLoggingWhenConsoleArrives
         } else if (console[methodName] !== undefined) {
@@ -64,6 +68,9 @@
                 noop :
                 this.methodFactory(methodName, level, loggerName);
         }
+
+        // Define log.log as an alias for log.debug
+        this.log = this.debug;
     }
 
     // In old IE versions, the console isn't present until you first open it.
@@ -96,6 +103,8 @@
       function persistLevelIfPossible(levelNum) {
           var levelName = (logMethods[levelNum] || 'silent').toUpperCase();
 
+          if (typeof window === undefinedType) return;
+
           // Use localStorage if available
           try {
               window.localStorage[storageKey] = levelName;
@@ -111,6 +120,8 @@
 
       function getPersistedLevel() {
           var storedLevel;
+
+          if (typeof window === undefinedType) return;
 
           try {
               storedLevel = window.localStorage[storageKey];
