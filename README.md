@@ -9,6 +9,8 @@ Minimal lightweight simple logging for JavaScript. loglevel replaces console.log
 
 This is a barebones reliable everyday logging library. It does not do fancy things, it does not let you reconfigure appenders or add complex log filtering rules or boil tea (more's the pity), but it does have the all core functionality that you actually use:
 
+<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/iJW7FWKrcEHBcxrqjGxT9JPS/pimterry/loglevel'>  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/iJW7FWKrcEHBcxrqjGxT9JPS/pimterry/loglevel.svg' /></a>
+
 ## Features
 
 ### Simple
