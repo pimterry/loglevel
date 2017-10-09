@@ -1,4 +1,4 @@
-/*! loglevel - v1.5.0 - https://github.com/pimterry/loglevel - (c) 2017 Tim Perry - licensed MIT */
+/*! loglevel - v1.5.1 - https://github.com/pimterry/loglevel - (c) 2017 Tim Perry - licensed MIT */
 (function (root, definition) {
     "use strict";
     if (typeof define === 'function' && define.amd) {

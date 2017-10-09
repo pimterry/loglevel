@@ -295,6 +295,8 @@ v1.4.1 - Reorder UMD (#92) to improve bundling tool compatibility
 
 v1.5.0 - Fix log.debug (#111) after V8 changes deprecating console.debug, check for `window` upfront (#104), and add `.log` alias for `.debug` (#64)
 
+v1.5.1 - Fix bug (#112) in level-persistence cookie fallback, which failed if it wasn't the first cookie present
+
 ## License
 Copyright (c) 2013 Tim Perry
 Licensed under the MIT license.
