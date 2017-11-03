@@ -199,6 +199,9 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   Likewise, loggers will inherit the root logger’s `methodFactory`. After creation, each logger can have its `methodFactory` independently set. See the *plugins* section below for more about `methodFactory`.
 
+* A `log.getLoggers()` method.
+
+  This will return you the dictionary of all loggers created with `getLogger`, keyed off of their names.
 
 ## Plugins
 
