@@ -265,7 +265,6 @@ To do a release of loglevel:
 * Commit the built code, tagging it with the version number and a brief message about the release
 * Push to Github
 * Run `npm publish .` to publish to NPM
-* Autoupdate gh-pages docs
 
 ## Release History
 v0.1.0 - First working release with apparent compatibility with everything tested
