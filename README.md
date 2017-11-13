@@ -39,12 +39,13 @@ If you're using NPM, you can just run `npm install loglevel`.
 
 Alternatively, loglevel is also available via [Bower](https://github.com/bower/bower) (`bower install loglevel`), as a [Webjar](http://www.webjars.org/), or an [Atmosphere package](https://atmospherejs.com/spacejamio/loglevel) (for Meteor)
 
-Alternatively if you just want to grab the file yourself, you can download either the current stable [production version][min] or the [development version][max] directly, or reference it remotely on CDNJS at `//cdnjs.cloudflare.com/ajax/libs/loglevel/1.5.0/loglevel.min.js`
+Alternatively if you just want to grab the file yourself, you can download either the current stable [production version][min] or the [development version][max] directly, or reference it remotely on unpkg at [`https://unpkg.com/loglevel/dist/loglevel.min.js`][cdn] (this will redirect to a latest version, use the resulting redirected URL if you want to pin that version).
 
 Finally, if you want to tweak loglevel to your own needs or you immediately need the cutting-edge version, clone this repo and see [Developing & Contributing](#developing--contributing) below for build instructions.
 
 [min]: https://raw.github.com/pimterry/loglevel/master/dist/loglevel.min.js
 [max]: https://raw.github.com/pimterry/loglevel/master/dist/loglevel.js
+[cdn]: https://unpkg.com/loglevel/dist/loglevel.min.js
 
 ## Setting it up
 
@@ -264,7 +265,6 @@ To do a release of loglevel:
 * Commit the built code, tagging it with the version number and a brief message about the release
 * Push to Github
 * Run `npm publish .` to publish to NPM
-* Update CDN url once https://cdnjs.com/libraries/loglevel picks up the new version
 * Autoupdate gh-pages docs
 
 ## Release History
