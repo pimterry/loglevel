@@ -300,6 +300,8 @@ v1.5.0 - Fix log.debug (#111) after V8 changes deprecating console.debug, check 
 
 v1.5.1 - Fix bug (#112) in level-persistence cookie fallback, which failed if it wasn't the first cookie present
 
+v1.6.0 - Add a name property to loggers and add log.getLoggers() (#114), and recommend unpkg as CDN instead of CDNJS.
+
 ## License
 Copyright (c) 2013 Tim Perry
 Licensed under the MIT license.
