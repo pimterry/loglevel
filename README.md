@@ -1,15 +1,12 @@
 
 # loglevel [![NPM version][npm-image]][npm-url] [![NPM downloads](https://img.shields.io/npm/dw/loglevel.svg)](https://www.npmjs.com/package/loglevel) [![Build status](https://travis-ci.org/pimterry/loglevel.png)](https://travis-ci.org/pimterry/loglevel) [![Coveralls percentage](https://img.shields.io/coveralls/pimterry/loglevel.svg)](https://coveralls.io/r/pimterry/loglevel?branch=master)
 
-
 [npm-image]: https://img.shields.io/npm/v/loglevel.svg?style=flat
 [npm-url]: https://npmjs.org/package/loglevel
 
 Minimal lightweight simple logging for JavaScript. loglevel replaces console.log() and friends with level-based logging and filtering, with none of console's downsides.
 
 This is a barebones reliable everyday logging library. It does not do fancy things, it does not let you reconfigure appenders or add complex log filtering rules or boil tea (more's the pity), but it does have the all core functionality that you actually use:
-
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/iJW7FWKrcEHBcxrqjGxT9JPS/pimterry/loglevel'>  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/iJW7FWKrcEHBcxrqjGxT9JPS/pimterry/loglevel.svg' /></a>
 
 ## Features
 
