@@ -52,7 +52,7 @@ loglevel supports AMD (e.g. RequireJS), CommonJS (e.g. Node.js) and direct usage
 
 ```javascript
 var log = require('loglevel');
-log.info("unreasonably simple");
+log.warn("unreasonably simple");
 ```
 
 ### AMD (e.g. RequireJS)
@@ -68,7 +68,7 @@ define(['loglevel'], function(log) {
 ```html
 <script src="loglevel.min.js"></script>
 <script>
-log.error("too easy");
+log.warn("too easy");
 </script>
 ```
 
@@ -76,7 +76,7 @@ log.error("too easy");
 
 ```javascript
 import * as log from 'loglevel';
-log.debug("all done");
+log.warn("ultra-compatible");
 ```
 
 ### With noConflict():
@@ -90,7 +90,7 @@ For example:
 <script>
 var logging = log.noConflict();
 
-logging.error("still pretty easy");
+logging.warn("still pretty easy");
 </script>
 ```
 
