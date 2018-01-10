@@ -298,6 +298,8 @@ v1.5.1 - Fix bug (#112) in level-persistence cookie fallback, which failed if it
 
 v1.6.0 - Add a name property to loggers and add log.getLoggers() (#114), and recommend unpkg as CDN instead of CDNJS.
 
+v1.6.1 - Various small documentation & test updates
+
 ## License
 Copyright (c) 2013 Tim Perry
 Licensed under the MIT license.
