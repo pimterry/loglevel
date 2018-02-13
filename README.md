@@ -1,305 +1,295 @@
+# log-n-roll
 
-# loglevel [![NPM version][npm-image]][npm-url] [![NPM downloads](https://img.shields.io/npm/dw/loglevel.svg)](https://www.npmjs.com/package/loglevel) [![Build status](https://travis-ci.org/pimterry/loglevel.png)](https://travis-ci.org/pimterry/loglevel) [![Coveralls percentage](https://img.shields.io/coveralls/pimterry/loglevel.svg)](https://coveralls.io/r/pimterry/loglevel?branch=master)
+> Tiny 1kb logger with slim api and ability of limitless extension.
 
-[npm-image]: https://img.shields.io/npm/v/loglevel.svg?style=flat
-[npm-url]: https://npmjs.org/package/loglevel
+[![NPM version](https://img.shields.io/npm/v/log-n-roll.svg?style=flat-square)](https://www.npmjs.com/package/log-n-roll)[![Build Status](https://img.shields.io/travis/kutuluk/log-n-roll/master.svg?style=flat-square)](https://travis-ci.org/kutuluk/log-n-roll)
 
-Minimal lightweight simple logging for JavaScript. loglevel replaces console.log() and friends with level-based logging and filtering, with none of console's downsides.
+- **Tiny:** weighs about one kilobyte gzipped
+- **Pluggable:** one built-in plugin for pretty formatting and limitless possibilities for extension
 
-This is a barebones reliable everyday logging library. It does not do fancy things, it does not let you reconfigure appenders or add complex log filtering rules or boil tea (more's the pity), but it does have the all core functionality that you actually use:
+## Note
 
-## Features
+**This packege is Proof-of-Concept and should be considered as an unstable. Nevertheless, the basic idea has already been proved. Release coming soon.**
 
-### Simple
+## Install
 
-* Log things at a given level (trace/debug/info/warn/error) to the console object (as seen in all modern browsers & node.js)
-* Filter logging by level (all the above or 'silent'), so you can disable all but error logging in production, and then run log.setLevel("trace") in your console to turn it all back on for a furious debugging session
-* Single file, no dependencies, weighs in at 1.1KB minified and gzipped
+This project uses [node](http://nodejs.org) and [npm](https://npmjs.com). Go check them out if you don't have them locally installed.
 
-### Effective
-
-* Log methods gracefully fall back to simpler console logging methods if more specific ones aren't available: so calls to log.debug() go to console.debug() if possible, or console.log() if not
-* Logging calls still succeed even if there's no console object at all, so your site doesn't break when people visit with old browsers that don't support the console object (here's looking at you IE) and similar
-* This then comes together giving a consistent reliable API that works in every JavaScript environment with a console available, and never breaks anything anywhere else
-
-### Convenient
-
-* Log output keeps line numbers: most JS logging frameworks call console.log methods through wrapper functions, clobbering your stacktrace and making the extra info many browsers provide useless. We'll have none of that thanks.
-* It works with all the standard JavaScript loading systems out of the box (CommonJS, AMD, or just as a global)
-* Logging is filtered to "warn" level by default, to keep your live site clean in normal usage (or you can trivially re-enable everything with an initial log.enableAll() call)
-* Magically handles situations where console logging is not initially available (IE8/9), and automatically enables logging as soon as it does become available (when developer console is opened)
-* Extensible, to add other log redirection, filtering, or formatting functionality, while keeping all the above (except you will clobber your stacktrace, see Plugins below)
-
-## Downloading loglevel
-
-If you're using NPM, you can just run `npm install loglevel`.
-
-Alternatively, loglevel is also available via [Bower](https://github.com/bower/bower) (`bower install loglevel`), as a [Webjar](http://www.webjars.org/), or an [Atmosphere package](https://atmospherejs.com/spacejamio/loglevel) (for Meteor)
-
-Alternatively if you just want to grab the file yourself, you can download either the current stable [production version][min] or the [development version][max] directly, or reference it remotely on unpkg at [`https://unpkg.com/loglevel/dist/loglevel.min.js`][cdn] (this will redirect to a latest version, use the resulting redirected URL if you want to pin that version).
-
-Finally, if you want to tweak loglevel to your own needs or you immediately need the cutting-edge version, clone this repo and see [Developing & Contributing](#developing--contributing) below for build instructions.
-
-[min]: https://raw.github.com/pimterry/loglevel/master/dist/loglevel.min.js
-[max]: https://raw.github.com/pimterry/loglevel/master/dist/loglevel.js
-[cdn]: https://unpkg.com/loglevel/dist/loglevel.min.js
-
-## Setting it up
-
-loglevel supports AMD (e.g. RequireJS), CommonJS (e.g. Node.js) and direct usage (e.g. loading globally with a &lt;script&gt; tag) loading methods. You should be able to do nearly anything, and then skip to the next section anyway and have it work. Just in case though, here's some specific examples that definitely do the right thing:
-
-### CommonsJS (e.g. Node)
-
-```javascript
-var log = require('loglevel');
-log.warn("unreasonably simple");
+```sh
+$ npm install log-n-roll
 ```
 
-### AMD (e.g. RequireJS)
+Then with a module bundler like [rollup](http://rollupjs.org/) or [webpack](https://webpack.js.org/), use as you would anything else:
 
 ```javascript
-define(['loglevel'], function(log) {
-   log.warn("dangerously convenient");
-});
+// using ES6 modules
+import log from 'log-n-roll';
+
+// using CommonJS modules
+var log = require('log-n-roll');
 ```
 
-### Directly in your web page:
+The [UMD](https://github.com/umdjs/umd) build is also available on [unpkg](https://unpkg.com):
 
 ```html
-<script src="loglevel.min.js"></script>
-<script>
-log.warn("too easy");
-</script>
+<script src="https://unpkg.com/log-n-roll/dist/log-n-roll.umd.js"></script>
 ```
 
-### As an ES6 module (assuming some transpilation step):
+You can find the library on `window.log`.
+
+## Usage
 
 ```javascript
-import * as log from 'loglevel';
-log.warn("ultra-compatible");
+const log = require('log-n-roll');
+
+log.trace('Trace shows stacktrace');
+
+// Using the built-in plugin
+log.use(log.prefixer);
+log.trace('Using any number of plugins adds to the stacktrace only one extra line');
+
+log.info("By default, the level of the default logger is 'trace'. All messages are displayed");
+
+// Loading the processor
+let two = 2;
+for (let i = 0; i < 1000000; i++) {
+  two *= two;
+  two = Math.sqrt(two);
+}
+
+log.debug('Debug shows the time difference from the last call of any logger method');
+log.info('Placeholders are supported. Two = %s', two);
+log.warn('Warn message');
+log.error('Error message');
+
+// Getting the named logger and setting its level to 'warn'
+const child = log('child', 'warn');
+child.info('Messages below the level of the logger are ignored');
+
+child.level = 'info';
+child.info('The level of the logger can be changed at any time');
+
+child().info(
+  'Default logger can be obtained from any logger: child() %s== log() %s== log',
+  child() === log() ? '=' : '!',
+  log() === log ? '=' : '!',
+);
+
+child('any').info(
+  'Any logger can be obtained from any logger: child("any") %s== log("any")',
+  child('any') === log('any') ? '=' : '!',
+);
+
+log('any').debug('Any logger has extended the level from the default logger');
+child('any').info('Any logger has extended the plugins props from the default logger');
 ```
 
-### With noConflict():
-
-If you're using another JavaScript library that exposes a 'log' global, you can run into conflicts with loglevel.  Similarly to jQuery, you can solve this by putting loglevel into no-conflict mode immediately after it is loaded onto the page. This resets to 'log' global to its value before loglevel was loaded (typically `undefined`), and returns the loglevel object, which you can then bind to another name yourself.
-
-For example:
-
-```html
-<script src="loglevel.min.js"></script>
-<script>
-var logging = log.noConflict();
-
-logging.warn("still pretty easy");
-</script>
+**Output:**
 ```
-
-## Documentation
-
-The loglevel API is extremely minimal. All methods are available on the root loglevel object, which it's suggested you name 'log' (this is the default if you import it in globally, and is what's set up in the above examples). The API consists of:
-
-* 5 actual logging methods, ordered and available as:
-  * `log.trace(msg)`
-  * `log.debug(msg)`
-  * `log.info(msg)`
-  * `log.warn(msg)`
-  * `log.error(msg)`
-
-  `log.log(msg)` is also available, as an alias for `log.debug(msg)`, to improve compatibility with `console`, and make migration easier.
-
-  Exact output formatting of these will depend on the console available in the current context of your application. For example, many environments will include a full stack trace with all trace() calls, and icons or similar to highlight other calls.
-
-  These methods should never fail in any environment, even if no console object is currently available, and should always fall back to an available log method even if the specific method called (e.g. warn) isn't available.
-
-  Be aware that all this means that these method won't necessarily always produce exactly the output you expect in every environment; loglevel only guarantees that these methods will never explode on you, and that it will call the most relevant method it can find, with your argument. Firefox is a notable example here: due to a [current Firefox bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1172314) `log.trace(msg)` calls in Firefox will print only the stacktrace, and won't include any passed message arguments.
-
-* A `log.setLevel(level, [persist])` method.
-
-  This disables all logging below the given level, so that after a log.setLevel("warn") call log.warn("something") or log.error("something") will output messages, but log.info("something") will not.
-
-  This can take either a log level name or 'silent' (which disables everything) in one of a few forms:
-  * As a log level from the internal levels list, e.g. log.levels.SILENT ← _for type safety_
-  * As a string, like 'error' (case-insensitive) ← _for a reasonable practical balance_
-  * As a numeric index from 0 (trace) to 5 (silent) ← _deliciously terse, and more easily programmable (...although, why?)_
-
-  Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node), or if you pass `false` as the optional 'persist' second argument, persistence will be skipped.
-
-  If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begin logging at the requested level.
-
-* A `log.setDefaultLevel(level)` method.
-
-  This sets the current log level only if one has not been persisted and can’t be loaded. This is useful when initializing scripts; if a developer or user has previously called `setLevel()`, this won’t alter their settings. For example, your application might set the log level to `error` in a production environment, but when debugging an issue, you might call `setLevel("trace")` on the console to see all the logs. If that `error` setting was set using `setDefaultLevel()`, it will still say as `trace` on subsequent page loads and refreshes instead of resetting to `error`.
-
-  The `level` argument takes is the same values that you might pass to `setLevel()`. Levels set using `setDefaultLevel()` never persist to subsequent page loads.
-
-* `log.enableAll()` and `log.disableAll()` methods.
-
-  These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
-
-* A `log.getLevel()` method.
-
-  Returns the current logging level, as a number from 0 (trace) to 5 (silent)
-
-  It's very unlikely you'll need to use this for normal application logging; it's provided partly to help plugin development, and partly to let you optimize logging code as below, where debug data is only generated if the level is set such that it'll actually be logged. This probably doesn't affect you, unless you've run profiling on your code and you have hard numbers telling you that your log data generation is a real performance problem.
-
-  ```javascript
-  if (log.getLevel() <= log.levels.DEBUG) {
-    var logData = runExpensiveDataGeneration();
-    log.debug(logData);
-  }
-  ```
-
-  This notably isn't the right solution to avoid the cost of string concatenation in your logging. Firstly, it's very unlikely that string concatenation in your logging is really an important performance problem. Even if you do genuinely have hard metrics showing that it is though, the better solution that wrapping your log statements in this is to use multiple arguments, as below. The underlying console API will automatically concatenate these for you if logging is enabled, and if it isn't then all log methods are no-ops, and no concatenation will be done at all.
-
-  ```javascript
-  // Prints 'My concatenated log message'
-  log.debug("My ", "concatenated ", "log message");
-  ```
-
-* A `log.getLogger(loggerName)` method.
-
-  This gets you a new logger object that works exactly like the root `log` object, but can have its level and logging methods set independently. All loggers must have a name (which is a non-empty string). Calling `getLogger()` multiple times with the same name will return an identical logger object.
-
-  In large applications, it can be incredibly useful to turn logging on and off for particular modules as you are working with them. Using the `getLogger()` method lets you create a separate logger for each part of your application with its own logging level.
-
-  Likewise, for small, independent modules, using a named logger instead of the default root logger allows developers using your module to selectively turn on deep, trace-level logging when trying to debug problems, while logging only errors or silencing logging altogether under normal circumstances.
-
-  Example usage *(using CommonJS modules, but you could do the same with any module system):*
-
-  ```javascript
-  // In module-one.js:
-  var log = require("loglevel").getLogger("module-one");
-  function doSomethingAmazing() {
-    log.debug("Amazing message from module one.");
-  }
-
-  // In module-two.js:
-  var log = require("loglevel").getLogger("module-two");
-  function doSomethingSpecial() {
-    log.debug("Special message from module two.");
-  }
-
-  // In your main application module:
-  var log = require("loglevel");
-  var moduleOne = require("module-one");
-  var moduleTwo = require("module-two");
-  log.getLogger("module-two").setLevel("TRACE");
-
-  moduleOne.doSomethingAmazing();
-  moduleTwo.doSomethingSpecial();
-  // logs "Special message from module two."
-  // (but nothing from module one.)
-  ```
-
-  Loggers returned by `getLogger()` support all the same properties and methods as the default root logger, excepting `noConflict()` and the `getLogger()` method itself.
-
-  Like the root logger, other loggers can have their logging level saved. If a logger’s level has not been saved, it will inherit the root logger’s level when it is first created. If the root logger’s level changes later, the new level will not affect other loggers that have already been created.
-
-  Likewise, loggers will inherit the root logger’s `methodFactory`. After creation, each logger can have its `methodFactory` independently set. See the *plugins* section below for more about `methodFactory`.
-
-* A `log.getLoggers()` method.
-
-  This will return you the dictionary of all loggers created with `getLogger`, keyed off of their names.
+Trace: Trace shows stacktrace
+    at Object.<anonymous> (C:\Users\u36\Dropbox\kutuluk\log-n-roll\examples\basic.js:3:5)
+    ...
+Trace: 17:42:21.579 [trace] default : Using any number of plugins adds to the stacktrace only one extra line
+    at Function.trace (C:\Users\u36\Dropbox\kutuluk\log-n-roll\dist\log-n-roll.js:1:730)
+    at Object.<anonymous> (C:\Users\u36\Dropbox\kutuluk\log-n-roll\examples\basic.js:7:5)
+    ...
+17:42:21.579 [ info] default : By default, the level of the default logger is 'trace'. All messages are displayed
+       +54ms [debug] default : Debug shows the time difference from the last call of any logger method
+17:42:21.634 [ info] default : Placeholders are supported. Two = 2
+17:42:21.635 [ warn] default : Warn message
+17:42:21.635 [error] default : Error message
+17:42:21.636 [ info]   child : The level of the logger can be changed at any time
+17:42:21.636 [ info] default : Default logger can be obtained from any logger: child() === log() === log
+17:42:21.637 [ info]     any : Any logger can be obtained from any logger: child("any") === log("any")
+        +0ms [debug]     any : Any logger has extended the level from the default logger
+17:42:21.637 [ info]     any : Any logger has extended the plugins props from the default logger
+```
 
 ## Plugins
 
-### Existing plugins:
+The resulted examples of plugins are simplified. Despite the fact that they are workable, it is not recommended to use in production.
 
-[loglevel-plugin-prefix](https://github.com/kutuluk/loglevel-plugin-prefix) - plugin for loglevel message prefixing.
-
-[loglevel-plugin-remote](https://github.com/kutuluk/loglevel-plugin-remote) - plugin for sending loglevel messages to a remote log server.
-
-ServerSend - https://github.com/artemyarulin/loglevel-serverSend - Forward your log messages to a remote server.
-
-Standard Streams - https://github.com/NatLibFi/loglevel-std-streams - Route logging through STDERR in Node for easier log management.
-
-Message Prefix - https://github.com/NatLibFi/loglevel-message-prefix - Dynamic (timestamp/level) and static ('foo') message prefixing.
-
-Message Buffer - https://github.com/NatLibFi/loglevel-message-buffer - Buffer messages, and flush them on-demand later.
-
-DEBUG - https://github.com/vectrlabs/loglevel-debug - Control logging from a DEBUG environmental variable (similar to the classic [Debug](https://github.com/visionmedia/debug) module)
-
-### Writing plugins:
-
-Loglevel provides a simple reliable minimal base for console logging that works everywhere. This means it doesn't include lots of fancy functionality that might be useful in some cases, such as log formatting and redirection (e.g. also sending log messages to a server over AJAX)
-
-Including that would increase the size and complexity of the library, but more importantly would remove stacktrace information. Currently log methods are either disabled, or enabled with directly bound versions of the console.log methods (where possible). This means your browser shows the log message as coming from your code at the call to `log.info("message!")` not from within loglevel, since it really calls the bound console method directly, without indirection. The indirection required to dynamically format, further filter, or redirect log messages would stop this.
-
-There's clearly enough enthusiasm for this even at that cost though that loglevel now includes a plugin API. To use it, redefine log.methodFactory(methodName, logLevel, loggerName) with a function of your own. This will be called for each enabled method each time the level is set (including initially), and should return a function to be used for the given log method, at the given level, for a logger with the given name. If you'd like to retain all the reliability and features of loglevel, it's recommended that this wraps the initially provided value of `log.methodFactory`
-
-For example, a plugin to prefix all log messages with "Newsflash: " would look like:
-
+**log-stacktrace.js**
 ```javascript
-var originalFactory = log.methodFactory;
-log.methodFactory = function (methodName, logLevel, loggerName) {
-    var rawMethod = originalFactory(methodName, logLevel, loggerName);
+function getStackTrace() {
+  try {
+    throw new Error();
+  } catch (trace) {
+    return trace.stack;
+  }
+}
 
-    return function (message) {
-        rawMethod("Newsflash: " + message);
-    };
+module.exports = (logger, props) => {
+  // Return noop plugin if stacktrace support is absent
+  if (!getStackTrace()) {
+    return () => {};
+  }
+
+  props = Object.assign(
+    {
+      levels: ['trace', 'warn', 'error'],
+      depth: 3,
+    },
+    props,
+  );
+
+  return (state) => {
+    if (!props.levels.some(level => level === state.label)) {
+      return;
+    }
+
+    let stacktrace = getStackTrace();
+
+    const lines = stacktrace.split('\n');
+    lines.splice(0, 4);
+    const { depth } = props;
+    if (depth && lines.length !== depth + 1) {
+      const shrink = lines.splice(0, depth);
+      stacktrace = shrink.join('\n');
+      if (lines.length) stacktrace += `\n    and ${lines.length} more`;
+    } else {
+      stacktrace = lines.join('\n');
+    }
+
+    state.stacktrace = stacktrace;
+  };
 };
-log.setLevel(log.getLevel()); // Be sure to call setLevel method in order to apply plugin
 ```
 
-*(The above supports only a single log.warn("") argument for clarity, but it's easy to extend to a [fuller varadic version](http://jsbin.com/xehoye/edit?html,console))*
+**log-meta.js**
+```javascript
+module.exports = (logger, props) => (state) => {
+  const meta = Object.assign({}, props);
 
-If you develop and release a plugin, please get in contact! I'd be happy to reference it here for future users. Some consistency is helpful; naming your plugin 'loglevel-PLUGINNAME' (e.g. loglevel-newsflash) is preferred, as is giving it the 'loglevel-plugin' keyword in your package.json
+  const { args } = state;
 
-## Developing & Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality.
+  if (args.length && typeof args[0] === 'object') {
+    Object.assign(meta, args.shift());
+  }
 
-Builds can be run with npm: run `npm run dist` to build a distributable version of the project (in /dist), or `npm test` to just run the tests and linting. During development you can run `npm run watch` and it will monitor source files, and rerun the tests and linting as appropriate when they're changed.
+  state.meta = meta;
+};
+```
 
-_Also, please don't manually edit files in the "dist" subdirectory as they are generated via Grunt. You'll find source code in the "lib" subdirectory!_
+**log-message.js**
+```javascript
+const { format } = require('util');
 
-#### Release process
+module.exports = () => (state) => {
+  state.message = format(...state.args);
+};
+```
 
-To do a release of loglevel:
+**log-json.js**
+```javascript
+module.exports = (logger, props) => {
+  const fields = Object.keys(props);
 
-* Update the version number in package.json and bower.json
-* Run `npm run dist` to build a distributable version in dist/
-* Update the release history in this file (below)
-* Commit the built code, tagging it with the version number and a brief message about the release
-* Push to Github
-* Run `npm publish .` to publish to NPM
+  return (state) => {
+    const json = {};
 
-## Release History
-v0.1.0 - First working release with apparent compatibility with everything tested
+    fields.forEach((name) => {
+      json[name] = typeof props[name] === 'function'
+        ? props[name](state)
+        : state[props[name]] || state[name];
+    });
 
-v0.2.0 - Updated release with various tweaks and polish and real proper documentation attached
+    state.json = JSON.stringify(json, null, '\t');
+  };
+};
+```
 
-v0.3.0 - Some bugfixes (#12, #14), cookie-based log level persistence, doc tweaks, support for Bower and JamJS
+**to-file.js**
+```javascript
+const fs = require('fs');
 
-v0.3.1 - Fixed incorrect text in release build banner, various other minor tweaks
+module.exports = (logger, props) => {
+  props = Object.assign(
+    {
+      file: 'app.log',
+      fields: ['message', 'stacktrace'],
+      separator: '\n',
+      eol: '\n',
+      roll: true,
+    },
+    props,
+  );
 
-v0.4.0 - Use LocalStorage for level persistence if available, compatibility improvements for IE, improved error messages, multi-environment tests
+  return (state) => {
+    const fields = props.fields.map(field => state[field]).filter(field => field);
 
-v0.5.0 - Fix for Modernizr+IE8 issues, improved setLevel error handling, support for auto-activation of desired logging when console eventually turns up in IE8
+    fs.appendFileSync(props.file, fields.join(props.separator) + props.eol);
 
-v0.6.0 - Handle logging in Safari private browsing mode (#33), fix TRACE level persistence bug (#35), plus various minor tweaks
+    state.roll = props.roll;
+  };
+};
+```
 
-v1.0.0 - Official stable release! Fixed a bug with localStorage in Android webviews, improved CommonJS detection, and added noConflict().
+### An example of using these plugins
 
-v1.1.0 - Added support for including loglevel with preprocessing and .apply() (#50), and fixed QUnit dep version which made tests potentially unstable.
+**plugins.js**
+```javascript
+const log = require('../dist/log-n-roll');
 
-v1.2.0 - New plugin API! Plus various bits of refactoring and tidy up, nicely simplifying things and trimming the size down.
+const stacktrace = require('../examples/plugins/log-stacktrace');
+const meta = require('../examples/plugins/log-meta');
+const message = require('../examples/plugins/log-message');
+const json = require('../examples/plugins/log-json');
 
-v1.3.0 - Make persistence optional in setLevel, plus lots of documentation updates and other small tweaks
+const toFile = require('../examples/plugins/to-file');
 
-v1.3.1 - With the new optional persistence, stop unnecessarily persisting the initially set default level (warn)
+log.use(stacktrace).use(meta, { source: 'plagins.js' }).use(log.prefixer).use(message)
+  .use(json, {
+    message: 'message',
+    timestamp: state => new Date(state.timestamp).toISOString(),
+    level: 'label',
+    logger: 'logger',
+    meta: 'meta',
+    stacktrace: state => (state.stacktrace ? state.stacktrace.split('\n') : []),
+  });
 
-v1.4.0 - Add getLevel(), setDefaultLevel() and getLogger() functionality for more fine-grained log level control
+log.info({ tag: 'message1' }, 'Hello, %s', 'console!');
 
-v1.4.1 - Reorder UMD (#92) to improve bundling tool compatibility
+log.use(toFile, { file: 'my.log' });
 
-v1.5.0 - Fix log.debug (#111) after V8 changes deprecating console.debug, check for `window` upfront (#104), and add `.log` alias for `.debug` (#64)
+log.info({ tag: 'message2' }, 'Hello, %s', 'file!');
 
-v1.5.1 - Fix bug (#112) in level-persistence cookie fallback, which failed if it wasn't the first cookie present
+const child = log('child')
+  .use(toFile, {
+    fields: ['json'],
+    eol: ',\n',
+    roll: false,
+  })
+  .use(meta, { format: 'json' })
+  .unuse(log.prefixer);
 
-v1.6.0 - Add a name property to loggers and add log.getLoggers() (#114), and recommend unpkg as CDN instead of CDNJS.
+child.trace({ tag: 'message3' }, 'Goodbye, %s', 'console!');
+```
 
-v1.6.1 - Various small documentation & test updates
+**Console output:**
+```
+17:45:35.926 [ info] default : Hello, console!
+17:45:35.926 [ info] default : Hello, file!
+```
 
-## License
-Copyright (c) 2013 Tim Perry
-Licensed under the MIT license.
+**my.log:**
+```
+17:45:35.926 [ info] default : Hello, file!
+{
+	"message": "Goodbye, console!",
+	"timestamp": "2018-02-13T13:45:35.941Z",
+	"level": "trace",
+	"logger": "child",
+	"meta": {
+		"source": "plugins.js",
+		"format": "json",
+		"tag": "message3"
+	},
+	"stacktrace": [
+		"    at Object.<anonymous> (C:\\Users\\u36\\Dropbox\\kutuluk\\log-n-roll\\examples\\plugins.js:35:7)",
+		"    at Module._compile (module.js:635:30)",
+		"    at Object.Module._extensions..js (module.js:646:10)",
+		"    and 4 more"
+	]
+},
+```

@@ -21,3 +21,6 @@ npm-debug.log
 
 _SpecRunner.html
 .grunt
+
+dist/
+lib/
