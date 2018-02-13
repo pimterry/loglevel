@@ -1,56 +1,45 @@
 {
-  "name": "loglevel",
-  "description": "Minimal lightweight logging for JavaScript, adding reliable log level methods to any available console.log methods",
-  "version": "1.6.1",
-  "homepage": "https://github.com/pimterry/loglevel",
-  "author": {
-    "name": "Tim Perry",
-    "email": "pimterry@gmail.com",
-    "url": "http://tim-perry.co.uk"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/pimterry/loglevel.git"
-  },
-  "bugs": {
-    "url": "https://github.com/pimterry/loglevel/issues"
-  },
-  "license": "MIT",
-  "main": "lib/loglevel",
-  "engines": {
-    "node": ">= 0.6.0"
-  },
-  "scripts": {
-    "test": "grunt test",
-    "ci": "grunt ci",
-    "dist": "grunt dist",
-    "watch": "grunt watch"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-cli": "~0.1.13",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-concat": "~0.5.0",
-    "grunt-contrib-connect": "~0.8.0",
-    "grunt-contrib-jasmine": "~0.5.2",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-qunit": "~0.5.2",
-    "grunt-contrib-uglify": "~0.5.1",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-coveralls": "^1.0.0",
-    "grunt-jasmine-node": "~0.2.1",
-    "grunt-open": "~0.2.3",
-    "grunt-preprocess": "^4.0.0",
-    "grunt-saucelabs": "^8.2.0",
-    "grunt-template-jasmine-istanbul": "~0.2.5",
-    "grunt-template-jasmine-requirejs": "~0.1.6",
-    "qunitjs": "1.14.0"
-  },
+  "name": "log-n-roll",
+  "description": "Tiny 1kb logger with slim api and ability of limitless extension",
   "keywords": [
     "log",
     "logger",
     "logging",
-    "browser"
-  ]
+    "browser",
+    "node"
+  ],
+  "repository": "github:kutuluk/log-n-roll",
+  "author": "Evgeniy Pavlov <mail@kutuluk.com>",
+  "license": "MIT",
+  "version": "0.2.0",
+  "source": "src/log-n-roll.js",
+  "main": "dist/log-n-roll.js",
+  "module": "dist/log-n-roll.m.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rimraf dist lib && mkdirp dist lib",
+    "microbundle": "microbundle --name log && microbundle -o lib -f cjs --compress false",
+    "plugins:stacktracer": "microbundle -i src/plugins/stacktracer.js -o plugins",
+    "plugins": "npm-run-all --silent plugins:*",
+    "build": "npm-run-all --silent clean microbundle",
+    "lint": "eslint src",
+    "test": "mocha",
+    "release": "npm install && npm-run-all --silent lint build && npm publish"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-chai-friendly": "^0.4.1",
+    "eslint-plugin-import": "^2.8.0",
+    "microbundle": "^0.4.3",
+    "mkdirp": "^0.5.1",
+    "mocha": "^5.0.0",
+    "npm-run-all": "^4.1.2",
+    "rimraf": "^2.6.2",
+    "sinon": "^4.2.2"
+  }
 }
