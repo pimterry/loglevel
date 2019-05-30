@@ -17,6 +17,7 @@
   },
   "license": "MIT",
   "main": "lib/loglevel",
+  "types": "./index.d.ts",
   "engines": {
     "node": ">= 0.6.0"
   },
