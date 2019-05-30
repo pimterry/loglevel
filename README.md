@@ -301,6 +301,8 @@ v1.6.0 - Add a name property to loggers and add log.getLoggers() (#114), and rec
 
 v1.6.1 - Various small documentation & test updates
 
+v1.6.2 - Include TypeScript type definitions in the package itself
+
 ## License
 Copyright (c) 2013 Tim Perry
 Licensed under the MIT license.
