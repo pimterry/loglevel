@@ -28,6 +28,7 @@ This is a barebones reliable everyday logging library. It does not do fancy thin
 * It works with all the standard JavaScript loading systems out of the box (CommonJS, AMD, or just as a global)
 * Logging is filtered to "warn" level by default, to keep your live site clean in normal usage (or you can trivially re-enable everything with an initial log.enableAll() call)
 * Magically handles situations where console logging is not initially available (IE8/9), and automatically enables logging as soon as it does become available (when developer console is opened)
+* TypeScript type definitions included, so no need for extra `@types` packages
 * Extensible, to add other log redirection, filtering, or formatting functionality, while keeping all the above (except you will clobber your stacktrace, see Plugins below)
 
 ## Downloading loglevel
