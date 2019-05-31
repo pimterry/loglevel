@@ -22,7 +22,7 @@
     "node": ">= 0.6.0"
   },
   "scripts": {
-    "test": "grunt test",
+    "test": "grunt test && tsc --noEmit ./test/type-test.ts",
     "ci": "grunt ci",
     "dist": "grunt dist",
     "watch": "grunt watch"
@@ -46,7 +46,8 @@
     "grunt-saucelabs": "^8.2.0",
     "grunt-template-jasmine-istanbul": "~0.2.5",
     "grunt-template-jasmine-requirejs": "~0.1.6",
-    "qunitjs": "1.14.0"
+    "qunitjs": "1.14.0",
+    "typescript": "^3.5.1"
   },
   "keywords": [
     "log",
