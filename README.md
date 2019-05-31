@@ -95,6 +95,21 @@ logging.warn("still pretty easy");
 </script>
 ```
 
+### TypeScript:
+
+loglevel includes its own type definitions, assuming you're using a modern module environment (e.g. Node.JS, webpack, etc), you should be able to use the ES6 syntax above, and everything will work immediately. If not, file a bug!
+
+If you really want to use LogLevel as a global however, but from TypeScript, you'll need to declare it as such first. To do that:
+
+* Create a `loglevel.d.ts` file
+* Ensure that file is included in your build (e.g. add it to `include` in your tsconfig, pass it on the command line, or use `///<reference path="./loglevel.d.ts" />`)
+* In that file, add:
+  ```typescript
+  import * as log from 'loglevel';
+  export as namespace log;
+  export = log;
+  ```
+
 ## Documentation
 
 The loglevel API is extremely minimal. All methods are available on the root loglevel object, which it's suggested you name 'log' (this is the default if you import it in globally, and is what's set up in the above examples). The API consists of:
