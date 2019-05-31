@@ -5,8 +5,6 @@
 //                          Christian Rackerseder <https://github.com/screendriver>
 
 declare const log: log.RootLogger;
-
-export as namespace log;
 export = log;
 
 declare namespace log {
