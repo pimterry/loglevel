@@ -318,6 +318,8 @@ v1.6.1 - Various small documentation & test updates
 
 v1.6.2 - Include TypeScript type definitions in the package itself
 
+v1.6.3 - Avoid TypeScript type conflicts with other global `log` types (e.g. `core-js`)
+
 ## License
 Copyright (c) 2013 Tim Perry
 Licensed under the MIT license.
