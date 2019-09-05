@@ -1,6 +1,6 @@
 {
   "name": "loglevel",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "main": "dist/loglevel.min.js",
   "dependencies": {},
   "ignore": [

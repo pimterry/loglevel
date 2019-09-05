@@ -320,6 +320,8 @@ v1.6.2 - Include TypeScript type definitions in the package itself
 
 v1.6.3 - Avoid TypeScript type conflicts with other global `log` types (e.g. `core-js`)
 
+v1.6.4 - Ensure package.json's 'main' is a fully qualified path, to fix webpack issues
+
 ## License
 Copyright (c) 2013 Tim Perry
 Licensed under the MIT license.
