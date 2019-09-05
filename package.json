@@ -16,7 +16,7 @@
     "url": "https://github.com/pimterry/loglevel/issues"
   },
   "license": "MIT",
-  "main": "lib/loglevel",
+  "main": "lib/loglevel.js",
   "types": "./index.d.ts",
   "engines": {
     "node": ">= 0.6.0"
