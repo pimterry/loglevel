@@ -127,7 +127,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   These methods should never fail in any environment, even if no console object is currently available, and should always fall back to an available log method even if the specific method called (e.g. warn) isn't available.
 
-  Be aware that all this means that these method won't necessarily always produce exactly the output you expect in every environment; loglevel only guarantees that these methods will never explode on you, and that it will call the most relevant method it can find, with your argument. Firefox is a notable example here: due to a [current Firefox bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1172314) `log.trace(msg)` calls in Firefox will print only the stacktrace, and won't include any passed message arguments.
+  Be aware that all this means that these method won't necessarily always produce exactly the output you expect in every environment; loglevel only guarantees that these methods will never explode on you, and that it will call the most relevant method it can find, with your argument. For example, `log.trace(msg)` in IE11, and Firefox before version 64, prints the stacktrace by itself and doesn't include your message (see #84 & #138).
 
 * A `log.setLevel(level, [persist])` method.
 
