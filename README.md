@@ -324,6 +324,8 @@ v1.6.4 - Ensure package.json's 'main' is a fully qualified path, to fix webpack 
 
 v1.6.5 - Ensure the provided message is included when calling trace() in IE11
 
+v1.6.6 - Fix bugs in v1.6.5, which caused issues in node.js & IE < 9
+
 ## License
 Copyright (c) 2013 Tim Perry
 Licensed under the MIT license.

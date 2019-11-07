@@ -1,4 +1,4 @@
-/*! loglevel - v1.6.5 - https://github.com/pimterry/loglevel - (c) 2019 Tim Perry - licensed MIT */
+/*! loglevel - v1.6.6 - https://github.com/pimterry/loglevel - (c) 2019 Tim Perry - licensed MIT */
 (function (root, definition) {
     "use strict";
     if (typeof define === 'function' && define.amd) {
@@ -14,9 +14,8 @@
     // Slightly dubious tricks to cut down minimized file size
     var noop = function() {};
     var undefinedType = "undefined";
-    var isIE = (
-        window.navigator.userAgent.indexOf('Trident/') >= 0 ||
-        window.navigator.userAgent.indexOf('MSIE ') >= 0
+    var isIE = (typeof window !== undefinedType) && (
+        /Trident\/|MSIE /.test(window.navigator.userAgent)
     );
 
     var logMethods = [
@@ -46,7 +45,14 @@
 
     // Trace() doesn't print the message in IE, so for that case we need to wrap it
     function traceForIE() {
-        if (console.log) console.log.apply(console, arguments);
+        if (console.log) {
+            if (console.log.apply) {
+                console.log.apply(console, arguments);
+            } else {
+                // In old IE, native console methods themselves don't have apply().
+                Function.prototype.apply.apply(console.log, [console, arguments]);
+            }
+        }
         if (console.trace) console.trace();
     }
 
