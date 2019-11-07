@@ -15,6 +15,10 @@
   "bugs": {
     "url": "https://github.com/pimterry/loglevel/issues"
   },
+  "funding": {
+    "type": "tidelift",
+    "url": "https://tidelift.com/subscription/pkg/npm-loglevel?utm_medium=referral&utm_source=npm_fund"
+  },
   "license": "MIT",
   "main": "lib/loglevel.js",
   "types": "./index.d.ts",
