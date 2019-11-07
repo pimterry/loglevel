@@ -1,4 +1,4 @@
-/*! loglevel - v1.6.4 - https://github.com/pimterry/loglevel - (c) 2019 Tim Perry - licensed MIT */
+/*! loglevel - v1.6.5 - https://github.com/pimterry/loglevel - (c) 2019 Tim Perry - licensed MIT */
 (function (root, definition) {
     "use strict";
     if (typeof define === 'function' && define.amd) {
@@ -14,6 +14,10 @@
     // Slightly dubious tricks to cut down minimized file size
     var noop = function() {};
     var undefinedType = "undefined";
+    var isIE = (
+        window.navigator.userAgent.indexOf('Trident/') >= 0 ||
+        window.navigator.userAgent.indexOf('MSIE ') >= 0
+    );
 
     var logMethods = [
         "trace",
@@ -40,6 +44,12 @@
         }
     }
 
+    // Trace() doesn't print the message in IE, so for that case we need to wrap it
+    function traceForIE() {
+        if (console.log) console.log.apply(console, arguments);
+        if (console.trace) console.trace();
+    }
+
     // Build the best logging method possible for this env
     // Wherever possible we want to bind, not wrap, to preserve stack traces
     function realMethod(methodName) {
@@ -49,6 +59,8 @@
 
         if (typeof console === undefinedType) {
             return false; // No method possible, for now - fixed later by enableLoggingWhenConsoleArrives
+        } else if (methodName === 'trace' && isIE) {
+            return traceForIE;
         } else if (console[methodName] !== undefined) {
             return bindMethod(console, methodName);
         } else if (console.log !== undefined) {

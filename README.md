@@ -322,6 +322,8 @@ v1.6.3 - Avoid TypeScript type conflicts with other global `log` types (e.g. `co
 
 v1.6.4 - Ensure package.json's 'main' is a fully qualified path, to fix webpack issues
 
+v1.6.5 - Ensure the provided message is included when calling trace() in IE11
+
 ## License
 Copyright (c) 2013 Tim Perry
 Licensed under the MIT license.
