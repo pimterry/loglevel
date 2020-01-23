@@ -326,6 +326,12 @@ v1.6.5 - Ensure the provided message is included when calling trace() in IE11
 
 v1.6.6 - Fix bugs in v1.6.5, which caused issues in node.js & IE < 9
 
+## `loglevel` for enterprise
+
+Available as part of the Tidelift Subscription.
+
+The maintainers of `loglevel` and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/npm-loglevel?utm_source=npm-loglevel&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
+
 ## License
 Copyright (c) 2013 Tim Perry
 Licensed under the MIT license.
