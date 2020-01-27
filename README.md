@@ -73,11 +73,22 @@ log.warn("too easy");
 </script>
 ```
 
-### As an ES6 module (assuming some transpilation step):
+### As an ES6 module:
+
+loglevel is written as a UMD module, with a single object exported. ES6 module loaders & transpilers don't all handle this the same way. Some will treat the object as the default export, while others use it as the root exported object. Here are the two cases:
+
+For tools like TypeScript and Browserify, which treat root exports as the root value of the module:
 
 ```javascript
 import * as log from 'loglevel';
-log.warn("ultra-compatible");
+log.warn("module-tastic");
+```
+
+For tools like Babel, and Node.js's [experimental ESM support](https://nodejs.org/api/esm.html), which treat root exports as the default export of the module:
+
+```javascript
+import log from 'loglevel';
+log.warn("module-tastic");
 ```
 
 ### With noConflict():
