@@ -1,4 +1,4 @@
-/*! loglevel - v1.6.6 - https://github.com/pimterry/loglevel - (c) 2019 Tim Perry - licensed MIT */
+/*! loglevel - v1.6.7 - https://github.com/pimterry/loglevel - (c) 2020 Tim Perry - licensed MIT */
 (function (root, definition) {
     "use strict";
     if (typeof define === 'function' && define.amd) {
@@ -14,7 +14,7 @@
     // Slightly dubious tricks to cut down minimized file size
     var noop = function() {};
     var undefinedType = "undefined";
-    var isIE = (typeof window !== undefinedType) && (
+    var isIE = (typeof window !== undefinedType) && (typeof window.navigator !== undefinedType) && (
         /Trident\/|MSIE /.test(window.navigator.userAgent)
     );
 
