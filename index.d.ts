@@ -100,6 +100,13 @@ declare namespace log {
         debug(...msg: any[]): void;
 
         /**
+         * Output debug message to console including appropriate icons
+         *
+         * @param msg any data to log to the console
+         */
+        log(...msg: any[]): void;
+
+        /**
          * Output info message to console including appropriate icons
          *
          * @param msg any data to log to the console
