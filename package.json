@@ -1,7 +1,7 @@
 {
   "name": "loglevel",
   "description": "Minimal lightweight logging for JavaScript, adding reliable log level methods to any available console.log methods",
-  "version": "1.6.7",
+  "version": "1.6.8",
   "homepage": "https://github.com/pimterry/loglevel",
   "author": {
     "name": "Tim Perry",

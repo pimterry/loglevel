@@ -339,6 +339,8 @@ v1.6.6 - Fix bugs in v1.6.5, which caused issues in node.js & IE < 9
 
 v1.6.7 - Fix a bug in environments with `window` defined but no `window.navigator`
 
+v1.6.8 - Update TypeScript type definitions to include `log.log()`.
+
 ## `loglevel` for enterprise
 
 Available as part of the Tidelift Subscription.
