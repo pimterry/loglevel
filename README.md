@@ -155,7 +155,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
 * A `log.setDefaultLevel(level)` method.
 
-  This sets the current log level only if one has not been persisted and can’t be loaded. This is useful when initializing scripts; if a developer or user has previously called `setLevel()`, this won’t alter their settings. For example, your application might set the log level to `error` in a production environment, but when debugging an issue, you might call `setLevel("trace")` on the console to see all the logs. If that `error` setting was set using `setDefaultLevel()`, it will still say as `trace` on subsequent page loads and refreshes instead of resetting to `error`.
+  This sets the current log level only if one has not been persisted and can’t be loaded. This is useful when initializing scripts; if a developer or user has previously called `setLevel()`, this won’t alter their settings. For example, your application might set the log level to `error` in a production environment, but when debugging an issue, you might call `setLevel("trace")` on the console to see all the logs. If that `error` setting was set using `setDefaultLevel()`, it will still stay as `trace` on subsequent page loads and refreshes instead of resetting to `error`.
 
   The `level` argument takes is the same values that you might pass to `setLevel()`. Levels set using `setDefaultLevel()` never persist to subsequent page loads.
 
