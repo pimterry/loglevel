@@ -185,7 +185,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
 * A `log.getLogger(loggerName)` method.
 
-  This gets you a new logger object that works exactly like the root `log` object, but can have its level and logging methods set independently. All loggers must have a name (which is a non-empty string). Calling `getLogger()` multiple times with the same name will return an identical logger object.
+  This gets you a new logger object that works exactly like the root `log` object, but can have its level and logging methods set independently. All loggers must have a name (which is a non-empty string, or a [Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol)). Calling `getLogger()` multiple times with the same name will return an identical logger object.
 
   In large applications, it can be incredibly useful to turn logging on and off for particular modules as you are working with them. Using the `getLogger()` method lets you create a separate logger for each part of your application with its own logging level.
 
@@ -220,7 +220,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   Loggers returned by `getLogger()` support all the same properties and methods as the default root logger, excepting `noConflict()` and the `getLogger()` method itself.
 
-  Like the root logger, other loggers can have their logging level saved. If a logger’s level has not been saved, it will inherit the root logger’s level when it is first created. If the root logger’s level changes later, the new level will not affect other loggers that have already been created.
+  Like the root logger, other loggers can have their logging level saved. If a logger’s level has not been saved, it will inherit the root logger’s level when it is first created. If the root logger’s level changes later, the new level will not affect other loggers that have already been created. Loggers with Symbol names (rather than string names) will be always considered as unique instances, and will never have their logging level saved or restored.
 
   Likewise, loggers will inherit the root logger’s `methodFactory`. After creation, each logger can have its `methodFactory` independently set. See the *plugins* section below for more about `methodFactory`.
 

@@ -24,4 +24,17 @@ describe("loglevel included via node", function () {
 
         expect(console.info).toHaveBeenCalledWith("test message");
     });
+
+    it("supports using symbols as names", function() {
+        var log = require('../lib/loglevel');
+
+        var s1 = Symbol("a-symbol");
+        var s2 = Symbol("a-symbol");
+
+        var logger1 = log.getLogger(s1);
+        var logger2 = log.getLogger(s2);
+
+        // Should be unequal: same name, but different symbol instances
+        expect(logger1).not.toEqual(logger2);
+    });
 });
