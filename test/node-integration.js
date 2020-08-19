@@ -32,9 +32,13 @@ describe("loglevel included via node", function () {
         var s2 = Symbol("a-symbol");
 
         var logger1 = log.getLogger(s1);
+        var defaultLevel = logger1.getLevel();
+        logger1.setLevel(log.levels.TRACE);
+
         var logger2 = log.getLogger(s2);
 
         // Should be unequal: same name, but different symbol instances
         expect(logger1).not.toEqual(logger2);
+        expect(logger2.getLevel()).toEqual(defaultLevel);
     });
 });
