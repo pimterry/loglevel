@@ -238,12 +238,6 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
 ServerSend - https://github.com/artemyarulin/loglevel-serverSend - Forward your log messages to a remote server.
 
-Standard Streams - https://github.com/NatLibFi/loglevel-std-streams - Route logging through STDERR in Node for easier log management.
-
-Message Prefix - https://github.com/NatLibFi/loglevel-message-prefix - Dynamic (timestamp/level) and static ('foo') message prefixing.
-
-Message Buffer - https://github.com/NatLibFi/loglevel-message-buffer - Buffer messages, and flush them on-demand later.
-
 DEBUG - https://github.com/vectrlabs/loglevel-debug - Control logging from a DEBUG environmental variable (similar to the classic [Debug](https://github.com/visionmedia/debug) module)
 
 ### Writing plugins:
