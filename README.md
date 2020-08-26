@@ -339,6 +339,8 @@ v1.6.7 - Fix a bug in environments with `window` defined but no `window.navigato
 
 v1.6.8 - Update TypeScript type definitions to include `log.log()`.
 
+v1.7.0 - Add support for Symbol-named loggers, and a `.default` property to help with ES6 module usage.
+
 ## `loglevel` for enterprise
 
 Available as part of the Tidelift Subscription.
