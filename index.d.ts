@@ -68,6 +68,11 @@ declare namespace log {
          * This will return you the dictionary of all loggers created with getLogger, keyed off of their names.
          */
         getLoggers(): { [name: string]: Logger };
+
+        /**
+         * A .default property for ES6 default import compatibility
+         */
+        default: RootLogger;
     }
 
     interface Logger {

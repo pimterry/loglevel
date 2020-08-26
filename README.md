@@ -77,21 +77,23 @@ log.warn("too easy");
 
 ### As an ES6 module:
 
-loglevel is written as a UMD module, with a single object exported. ES6 module loaders & transpilers don't all handle this the same way. Some will treat the object as the default export, while others use it as the root exported object. Here are the two cases:
+loglevel is written as a UMD module, with a single object exported. Unfortunately ES6 module loaders & transpilers don't all handle this the same way. Some will treat the object as the default export, while others use it as the root exported object. In addition, loglevel includes `default` property on the root object, designed to help handle this differences. Nonetheless, there's two possible syntaxes that might work for you:
 
-For tools like TypeScript and Browserify, which treat root exports as the root value of the module:
+For most tools, using the default import is the most convenient and flexible option:
+
+```javascript
+import log from 'loglevel';
+log.warn("module-tastic");
+```
+
+For some tools though, it might better to wildcard import the whole object:
 
 ```javascript
 import * as log from 'loglevel';
 log.warn("module-tastic");
 ```
 
-For tools like Babel, and Node.js's [experimental ESM support](https://nodejs.org/api/esm.html), which treat root exports as the default export of the module:
-
-```javascript
-import log from 'loglevel';
-log.warn("module-tastic");
-```
+There's no major difference, unless you're using TypeScript & building a loglevel plugin (in that case, see https://github.com/pimterry/loglevel/issues/149). In general though, just use whichever suits your environment, and everything should work out fine.
 
 ### With noConflict():
 
