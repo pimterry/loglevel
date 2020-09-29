@@ -17,7 +17,7 @@
   },
   "funding": {
     "type": "tidelift",
-    "url": "https://tidelift.com/subscription/pkg/npm-loglevel?utm_medium=referral&utm_source=npm_fund"
+    "url": "https://tidelift.com/funding/github/npm/loglevel"
   },
   "license": "MIT",
   "main": "lib/loglevel.js",
