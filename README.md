@@ -341,6 +341,8 @@ v1.6.8 - Update TypeScript type definitions to include `log.log()`.
 
 v1.7.0 - Add support for Symbol-named loggers, and a `.default` property to help with ES6 module usage.
 
+v1.7.1 - Update TypeScript types to support Symbol-named loggers.
+
 ## `loglevel` for enterprise
 
 Available as part of the Tidelift Subscription.
