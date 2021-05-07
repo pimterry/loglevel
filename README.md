@@ -250,7 +250,7 @@ Loglevel provides a simple reliable minimal base for console logging that works 
 
 Including that would increase the size and complexity of the library, but more importantly would remove stacktrace information. Currently log methods are either disabled, or enabled with directly bound versions of the console.log methods (where possible). This means your browser shows the log message as coming from your code at the call to `log.info("message!")` not from within loglevel, since it really calls the bound console method directly, without indirection. The indirection required to dynamically format, further filter, or redirect log messages would stop this.
 
-There's clearly enough enthusiasm for this even at that cost though that loglevel now includes a plugin API. To use it, redefine log.methodFactory(methodName, logLevel, loggerName) with a function of your own. This will be called for each enabled method each time the level is set (including initially), and should return a function to be used for the given log method, at the given level, for a logger with the given name. If you'd like to retain all the reliability and features of loglevel, it's recommended that this wraps the initially provided value of `log.methodFactory`
+There's clearly enough enthusiasm for this even at that cost though that loglevel now includes a plugin API. To use it, redefine `log.methodFactory(methodName, logLevel, loggerName)` with a function of your own. This will be called for each enabled method each time the level is set (including initially), and should return a function to be used for the given log method `methodName`, at the given *configured* (not actual) level `logLevel`, for a logger with the given name `loggerName`. If you'd like to retain all the reliability and features of loglevel, it's recommended that this wraps the initially provided value of `log.methodFactory`.
 
 For example, a plugin to prefix all log messages with "Newsflash: " would look like:
 
@@ -266,7 +266,7 @@ log.methodFactory = function (methodName, logLevel, loggerName) {
 log.setLevel(log.getLevel()); // Be sure to call setLevel method in order to apply plugin
 ```
 
-*(The above supports only a single log.warn("") argument for clarity, but it's easy to extend to a [fuller variadic version](http://jsbin.com/xehoye/edit?html,console))*
+*(The above supports only a single string `log.warn("...")` argument for clarity, but it's easy to extend to a [fuller variadic version](http://jsbin.com/xehoye/edit?html,console).)*
 
 If you develop and release a plugin, please get in contact! I'd be happy to reference it here for future users. Some consistency is helpful; naming your plugin 'loglevel-PLUGINNAME' (e.g. loglevel-newsflash) is preferred, as is giving it the 'loglevel-plugin' keyword in your package.json
 
