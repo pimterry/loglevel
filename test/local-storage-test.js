@@ -96,6 +96,14 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect("info").toBeTheStoredLevel();
                 expect("error").not.toBeTheStoredLevel();
             });
+
+            it("log.setLevel() clears the saved level if `persist` argument is `{ reset: true }`", function(log) {
+                log.setLevel("error", { reset: true });
+
+                expect(undefined).toBeTheStoredLevel();
+                expect("info").not.toBeTheStoredLevel();
+                expect("error").not.toBeTheStoredLevel();
+            });
         });
 
         describe("If warn level is saved", function () {

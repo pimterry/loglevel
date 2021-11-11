@@ -153,7 +153,8 @@ The loglevel API is extremely minimal. All methods are available on the root log
   * As a string, like 'error' (case-insensitive) ← _for a reasonable practical balance_
   * As a numeric index from 0 (trace) to 5 (silent) ← _deliciously terse, and more easily programmable (...although, why?)_
 
-  Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node), or if you pass `false` as the optional 'persist' second argument, persistence will be skipped.
+  Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node), or if you pass `false` as the optional 'persist' second argument, persistence will be skipped. If you pass `{ reset: true }` as the optional 'persist' second argument, the persisted level will be
+  cleared (causing future log.setDefaultLevel() calls to fall back to the default level).
 
   If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begin logging at the requested level.
 
