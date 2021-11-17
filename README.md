@@ -163,6 +163,10 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
   The `level` argument takes is the same values that you might pass to `setLevel()`. Levels set using `setDefaultLevel()` never persist to subsequent page loads.
 
+* A `log.resetLevel()` method.
+
+  This resets the current log level to the default level (or `warn` if no explicit default was set) and clears the persisted level if one was previously persisted.
+
 * `log.enableAll()` and `log.disableAll()` methods.
 
   These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
