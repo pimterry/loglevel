@@ -168,6 +168,12 @@ declare namespace log {
         setDefaultLevel(level: LogLevelDesc): void;
 
         /**
+         * This resets the current log level to the default level (or `warn` if no explicit default was set) and clears
+         * the persisted level if one was previously persisted.
+         */
+        resetLevel(): void;
+
+        /**
          * This enables all log messages, and is equivalent to log.setLevel("trace").
          *
          * @param persist Where possible the log level will be persisted. LocalStorage will be used if available, falling
