@@ -347,6 +347,8 @@ v1.7.0 - Add support for Symbol-named loggers, and a `.default` property to help
 
 v1.7.1 - Update TypeScript types to support Symbol-named loggers.
 
+v1.8.0 - Add resetLevel() method to clear persisted levels & reset to defaults
+
 ## `loglevel` for enterprise
 
 Available as part of the Tidelift Subscription.
