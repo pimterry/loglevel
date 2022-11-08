@@ -349,6 +349,8 @@ v1.7.1 - Update TypeScript types to support Symbol-named loggers.
 
 v1.8.0 - Add resetLevel() method to clear persisted levels & reset to defaults
 
+v1.8.1 - Fix incorrect type definitions for MethodFactory
+
 ## `loglevel` for enterprise
 
 Available as part of the Tidelift Subscription.
