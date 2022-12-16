@@ -134,7 +134,7 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
 #### Logging Methods
 
-5 actual logging methods, ordered and available as
+5 actual logging methods, ordered and available as:
 
 * `log.trace(msg)`
 * `log.debug(msg)`
@@ -142,106 +142,106 @@ The loglevel API is extremely minimal. All methods are available on the root log
 * `log.warn(msg)`
 * `log.error(msg)`
 
-  `log.log(msg)` is also available, as an alias for `log.debug(msg)`, to improve compatibility with `console`, and make migration easier.
+`log.log(msg)` is also available, as an alias for `log.debug(msg)`, to improve compatibility with `console`, and make migration easier.
 
-  Exact output formatting of these will depend on the console available in the current context of your application. For example, many environments will include a full stack trace with all trace() calls, and icons or similar to highlight other calls.
+Exact output formatting of these will depend on the console available in the current context of your application. For example, many environments will include a full stack trace with all trace() calls, and icons or similar to highlight other calls.
 
-  These methods should never fail in any environment, even if no console object is currently available, and should always fall back to an available log method even if the specific method called (e.g. warn) isn't available.
+These methods should never fail in any environment, even if no console object is currently available, and should always fall back to an available log method even if the specific method called (e.g. warn) isn't available.
 
-  Be aware that all this means that these method won't necessarily always produce exactly the output you expect in every environment; loglevel only guarantees that these methods will never explode on you, and that it will call the most relevant method it can find, with your argument. For example, `log.trace(msg)` in Firefox before version 64 prints the stacktrace by itself, and doesn't include your message (see [#84](https://github.com/pimterry/loglevel/issues/84)).
+Be aware that all this means that these method won't necessarily always produce exactly the output you expect in every environment; loglevel only guarantees that these methods will never explode on you, and that it will call the most relevant method it can find, with your argument. For example, `log.trace(msg)` in Firefox before version 64 prints the stacktrace by itself, and doesn't include your message (see [#84](https://github.com/pimterry/loglevel/issues/84)).
 
 #### `log.setLevel(level, [persist])`
 
-  This disables all logging below the given level, so that after a log.setLevel("warn") call log.warn("something") or log.error("something") will output messages, but log.info("something") will not.
+This disables all logging below the given level, so that after a log.setLevel("warn") call log.warn("something") or log.error("something") will output messages, but log.info("something") will not.
 
-  This can take either a log level name or 'silent' (which disables everything) in one of a few forms:
+This can take either a log level name or 'silent' (which disables everything) in one of a few forms:
 
 * As a log level from the internal levels list, e.g. log.levels.SILENT ← _for type safety_
 * As a string, like 'error' (case-insensitive) ← _for a reasonable practical balance_
 * As a numeric index from 0 (trace) to 5 (silent) ← _deliciously terse, and more easily programmable (...although, why?)_
 
-  Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node), or if you pass `false` as the optional 'persist' second argument, persistence will be skipped.
+Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node), or if you pass `false` as the optional 'persist' second argument, persistence will be skipped.
 
-  If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begin logging at the requested level.
+If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begin logging at the requested level.
 
 #### `log.setDefaultLevel(level)`
 
-  This sets the current log level only if one has not been persisted and can’t be loaded. This is useful when initializing scripts; if a developer or user has previously called `setLevel()`, this won’t alter their settings. For example, your application might set the log level to `error` in a production environment, but when debugging an issue, you might call `setLevel("trace")` on the console to see all the logs. If that `error` setting was set using `setDefaultLevel()`, it will still stay as `trace` on subsequent page loads and refreshes instead of resetting to `error`.
+This sets the current log level only if one has not been persisted and can’t be loaded. This is useful when initializing scripts; if a developer or user has previously called `setLevel()`, this won’t alter their settings. For example, your application might set the log level to `error` in a production environment, but when debugging an issue, you might call `setLevel("trace")` on the console to see all the logs. If that `error` setting was set using `setDefaultLevel()`, it will still stay as `trace` on subsequent page loads and refreshes instead of resetting to `error`.
 
-  The `level` argument takes is the same values that you might pass to `setLevel()`. Levels set using `setDefaultLevel()` never persist to subsequent page loads.
+The `level` argument takes is the same values that you might pass to `setLevel()`. Levels set using `setDefaultLevel()` never persist to subsequent page loads.
 
 #### `log.resetLevel()`
 
-  This resets the current log level to the default level (or `warn` if no explicit default was set) and clears the persisted level if one was previously persisted.
+This resets the current log level to the default level (or `warn` if no explicit default was set) and clears the persisted level if one was previously persisted.
 
 #### `log.enableAll()` and `log.disableAll()`
 
-  These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
+These enable or disable all log messages, and are equivalent to log.setLevel("trace") and log.setLevel("silent") respectively.
 
 #### `log.getLevel()`
 
-  Returns the current logging level, as a number from 0 (trace) to 5 (silent)
+Returns the current logging level, as a number from 0 (trace) to 5 (silent)
 
-  It's very unlikely you'll need to use this for normal application logging; it's provided partly to help plugin development, and partly to let you optimize logging code as below, where debug data is only generated if the level is set such that it'll actually be logged. This probably doesn't affect you, unless you've run profiling on your code and you have hard numbers telling you that your log data generation is a real performance problem.
+It's very unlikely you'll need to use this for normal application logging; it's provided partly to help plugin development, and partly to let you optimize logging code as below, where debug data is only generated if the level is set such that it'll actually be logged. This probably doesn't affect you, unless you've run profiling on your code and you have hard numbers telling you that your log data generation is a real performance problem.
 
-  ```javascript
-  if (log.getLevel() <= log.levels.DEBUG) {
-    var logData = runExpensiveDataGeneration();
-    log.debug(logData);
-  }
-  ```
+```javascript
+if (log.getLevel() <= log.levels.DEBUG) {
+  var logData = runExpensiveDataGeneration();
+  log.debug(logData);
+}
+```
 
-  This notably isn't the right solution to avoid the cost of string concatenation in your logging. Firstly, it's very unlikely that string concatenation in your logging is really an important performance problem. Even if you do genuinely have hard metrics showing that it is though, the better solution that wrapping your log statements in this is to use multiple arguments, as below. The underlying console API will automatically concatenate these for you if logging is enabled, and if it isn't then all log methods are no-ops, and no concatenation will be done at all.
+This notably isn't the right solution to avoid the cost of string concatenation in your logging. Firstly, it's very unlikely that string concatenation in your logging is really an important performance problem. Even if you do genuinely have hard metrics showing that it is though, the better solution that wrapping your log statements in this is to use multiple arguments, as below. The underlying console API will automatically concatenate these for you if logging is enabled, and if it isn't then all log methods are no-ops, and no concatenation will be done at all.
 
-  ```javascript
-  // Prints 'My concatenated log message'
-  log.debug("My ", "concatenated ", "log message");
-  ```
+```javascript
+// Prints 'My concatenated log message'
+log.debug("My ", "concatenated ", "log message");
+```
 
 #### `log.getLogger(loggerName)`
 
-  This gets you a new logger object that works exactly like the root `log` object, but can have its level and logging methods set independently. All loggers must have a name (which is a non-empty string, or a [Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol)). Calling `getLogger()` multiple times with the same name will return an identical logger object.
+This gets you a new logger object that works exactly like the root `log` object, but can have its level and logging methods set independently. All loggers must have a name (which is a non-empty string, or a [Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol)). Calling `getLogger()` multiple times with the same name will return an identical logger object.
 
-  In large applications, it can be incredibly useful to turn logging on and off for particular modules as you are working with them. Using the `getLogger()` method lets you create a separate logger for each part of your application with its own logging level.
+In large applications, it can be incredibly useful to turn logging on and off for particular modules as you are working with them. Using the `getLogger()` method lets you create a separate logger for each part of your application with its own logging level.
 
-  Likewise, for small, independent modules, using a named logger instead of the default root logger allows developers using your module to selectively turn on deep, trace-level logging when trying to debug problems, while logging only errors or silencing logging altogether under normal circumstances.
+Likewise, for small, independent modules, using a named logger instead of the default root logger allows developers using your module to selectively turn on deep, trace-level logging when trying to debug problems, while logging only errors or silencing logging altogether under normal circumstances.
 
-  Example usage _(using CommonJS modules, but you could do the same with any module system):_
+Example usage _(using CommonJS modules, but you could do the same with any module system):_
 
-  ```javascript
-  // In module-one.js:
-  var log = require("loglevel").getLogger("module-one");
-  function doSomethingAmazing() {
-    log.debug("Amazing message from module one.");
-  }
+```javascript
+// In module-one.js:
+var log = require("loglevel").getLogger("module-one");
+function doSomethingAmazing() {
+  log.debug("Amazing message from module one.");
+}
 
-  // In module-two.js:
-  var log = require("loglevel").getLogger("module-two");
-  function doSomethingSpecial() {
-    log.debug("Special message from module two.");
-  }
+// In module-two.js:
+var log = require("loglevel").getLogger("module-two");
+function doSomethingSpecial() {
+  log.debug("Special message from module two.");
+}
 
-  // In your main application module:
-  var log = require("loglevel");
-  var moduleOne = require("module-one");
-  var moduleTwo = require("module-two");
-  log.getLogger("module-two").setLevel("TRACE");
+// In your main application module:
+var log = require("loglevel");
+var moduleOne = require("module-one");
+var moduleTwo = require("module-two");
+log.getLogger("module-two").setLevel("TRACE");
 
-  moduleOne.doSomethingAmazing();
-  moduleTwo.doSomethingSpecial();
-  // logs "Special message from module two."
-  // (but nothing from module one.)
-  ```
+moduleOne.doSomethingAmazing();
+moduleTwo.doSomethingSpecial();
+// logs "Special message from module two."
+// (but nothing from module one.)
+```
 
-  Loggers returned by `getLogger()` support all the same properties and methods as the default root logger, excepting `noConflict()` and the `getLogger()` method itself.
+Loggers returned by `getLogger()` support all the same properties and methods as the default root logger, excepting `noConflict()` and the `getLogger()` method itself.
 
-  Like the root logger, other loggers can have their logging level saved. If a logger’s level has not been saved, it will inherit the root logger’s level when it is first created. If the root logger’s level changes later, the new level will not affect other loggers that have already been created. Loggers with Symbol names (rather than string names) will be always considered as unique instances, and will never have their logging level saved or restored.
+Like the root logger, other loggers can have their logging level saved. If a logger’s level has not been saved, it will inherit the root logger’s level when it is first created. If the root logger’s level changes later, the new level will not affect other loggers that have already been created. Loggers with Symbol names (rather than string names) will be always considered as unique instances, and will never have their logging level saved or restored.
 
-  Likewise, loggers will inherit the root logger’s `methodFactory`. After creation, each logger can have its `methodFactory` independently set. See the _plugins_ section below for more about `methodFactory`.
+Likewise, loggers will inherit the root logger’s `methodFactory`. After creation, each logger can have its `methodFactory` independently set. See the _plugins_ section below for more about `methodFactory`.
 
 #### `log.getLoggers()`
 
-  This will return you the dictionary of all loggers created with `getLogger`, keyed off of their names.
+This will return you the dictionary of all loggers created with `getLogger`, keyed off of their names.
 
 ## Plugins
 
