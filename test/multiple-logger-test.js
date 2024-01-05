@@ -172,6 +172,15 @@ define(['test/test-helpers'], function(testHelpers) {
                 log.rebuild(true);
                 expect(newLogger).toBeAtLevel("ERROR");
             });
+
+            it("should not change a child's explicitly set level even if un-persisted when calling root.rebuild(children=true)", function(log) {
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                newLogger.setLevel("DEBUG", false);
+
+                log.rebuild(true);
+                expect(newLogger).toBeAtLevel("DEBUG");
+            });
         });
     });
 });
