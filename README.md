@@ -154,21 +154,21 @@ Be aware that all this means that these method won't necessarily always produce 
 
 #### `log.setLevel(level, [persist])`
 
-This disables all logging below the given level, so that after a log.setLevel("warn") call log.warn("something") or log.error("something") will output messages, but log.info("something") will not.
+This disables all logging below the given level, so that after a `log.setLevel("warn")` call `log.warn("something")` or `log.error("something")` will output messages, but `log.info("something")` will not.
 
-This can take either a log level name or 'silent' (which disables everything) in one of a few forms:
+This can take either a log level name or `'silent'` (which disables everything) in one of a few forms:
 
-* As a log level from the internal levels list, e.g. log.levels.SILENT ← _for type safety_
-* As a string, like 'error' (case-insensitive) ← _for a reasonable practical balance_
-* As a numeric index from 0 (trace) to 5 (silent) ← _deliciously terse, and more easily programmable (...although, why?)_
+* As a log level from the internal levels list, e.g. `log.levels.SILENT` ← _for type safety_
+* As a string, like `'error'` (case-insensitive) ← _for a reasonable practical balance_
+* As a numeric index from `0` (trace) to `5` (silent) ← _deliciously terse, and more easily programmable (...although, why?)_
 
-Where possible the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node), or if you pass `false` as the optional 'persist' second argument, persistence will be skipped.
+Where possible, the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (i.e. in Node), or if you pass `false` as the optional 'persist' second argument, persistence will be skipped.
 
-If log.setLevel() is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begin logging at the requested level.
+If `log.setLevel()` is called when a console object is not available (in IE 8 or 9 before the developer tools have been opened, for example) logging will remain silent until the console becomes available, and then begin logging at the requested level.
 
 #### `log.setDefaultLevel(level)`
 
-This sets the current log level only if one has not been persisted and can’t be loaded. This is useful when initializing scripts; if a developer or user has previously called `setLevel()`, this won’t alter their settings. For example, your application might set the log level to `error` in a production environment, but when debugging an issue, you might call `setLevel("trace")` on the console to see all the logs. If that `error` setting was set using `setDefaultLevel()`, it will still stay as `trace` on subsequent page loads and refreshes instead of resetting to `error`.
+This sets the current log level only if one has never been explicitly set, either via `log.setLevel()` or loaded from a previously persisted `setLevel()` call. This is useful when initializing scripts; if a developer or user has previously called `setLevel()`, this won’t alter their settings. For example, your application might set the log level to `error` in a production environment, but when debugging an issue, you might call `setLevel("trace")` on the console to see all the logs. If that `error` setting was set using `setDefaultLevel()`, it will still stay as `trace` on subsequent page loads and refreshes instead of resetting to `error`.
 
 The `level` argument takes is the same values that you might pass to `setLevel()`. Levels set using `setDefaultLevel()` never persist to subsequent page loads.
 
@@ -245,6 +245,14 @@ Likewise, loggers will inherit the root logger’s `methodFactory`. After creati
 
 This will return you the dictionary of all loggers created with `getLogger`, keyed off of their names.
 
+#### `log.rebuild([includeChildren])`
+
+Ensure the various logging methods (`log.info()`, `log.warn()`, etc.) behave as expected given the currently set logging level. Setting the `includeChildren` argument to `true` will also rebuild all child loggers of the logger this was called on.
+
+This is mostly useful for plugin development. When you call `log.setLevel()` or `log.setDefaultLevel()`, this is called automatically under the hood. However, if you change the logger’s `methodFactory`, you should use this to rebuild all the logging methods with your new factory.
+
+If you change the level of the root logger and want it to affect other child loggers that you’ve already created (and have not called `otherChildLogger.setLevel()` on), you can do so by calling `log.rebuild(true)`.
+
 ## Plugins
 
 ### Existing plugins
@@ -276,7 +284,7 @@ log.methodFactory = function (methodName, logLevel, loggerName) {
         rawMethod("Newsflash: " + message);
     };
 };
-log.setLevel(log.getLevel()); // Be sure to call setLevel method in order to apply plugin
+log.rebuild(); // Be sure to call the rebuild method in order to apply plugin.
 ```
 
 *(The above supports only a single string `log.warn("...")` argument for clarity, but it's easy to extend to a [fuller variadic version](http://jsbin.com/xehoye/edit?html,console).)*
