@@ -149,6 +149,29 @@ define(['test/test-helpers'], function(testHelpers) {
               var newLogger = log.getLogger("newLogger");
               expect(newLogger).toBeAtLevel("trace");
             });
+
+            it("rebuilds existing child loggers via root.rebuild(children=true)", function(log) {
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                expect(newLogger).toBeAtLevel("TRACE");
+
+                log.setLevel("ERROR");
+                expect(newLogger).toBeAtLevel("TRACE");
+
+                log.rebuild(true);
+                expect(newLogger).toBeAtLevel("ERROR");
+            });
+
+            it("should not change a child's persisted level when calling root.rebuild(children=true)", function(log) {
+                testHelpers.setStoredLevel("ERROR", "newLogger");
+
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                expect(newLogger).toBeAtLevel("ERROR");
+
+                log.rebuild(true);
+                expect(newLogger).toBeAtLevel("ERROR");
+            });
         });
     });
 });
