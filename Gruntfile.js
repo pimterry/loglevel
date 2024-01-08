@@ -37,7 +37,7 @@ module.exports = function (grunt) {
                     specs: 'test/*-test.js',
                     vendor: 'test/vendor/*.js',
                     helpers: 'test/*-helper.js',
-                    template: require('grunt-template-jasmine-requirejs')
+                    template: require('./vendor/grunt-template-jasmine-requirejs')
                 }
             },
             global: {
@@ -78,7 +78,7 @@ module.exports = function (grunt) {
                             }
                         ],
 
-                        template: require('grunt-template-jasmine-requirejs'),
+                        template: require('./vendor/grunt-template-jasmine-requirejs'),
                         templateOptions: {
                             requireConfig: {
                                 paths: {

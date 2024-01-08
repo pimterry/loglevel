@@ -66,7 +66,7 @@ define(['test/test-helpers'], function(testHelpers) {
         describe("inheritance", function() {
             beforeEach(function() {
                 window.console = {"log" : jasmine.createSpy("console.log")};
-                this.addMatchers({
+                jasmine.addMatchers({
                     "toBeAtLevel" : testHelpers.toBeAtLevel
                 });
                 testHelpers.clearStoredLevels();

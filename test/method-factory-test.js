@@ -9,16 +9,16 @@ define(['test/test-helpers'], function(testHelpers) {
             log.methodFactory = jasmine.createSpy("methodFactory");
 
             log.setLevel("trace");
-            expect(log.methodFactory.calls.length).toEqual(5);
-            expect(log.methodFactory.argsForCall[0]).toEqual(["trace", 0, undefined]);
-            expect(log.methodFactory.argsForCall[1]).toEqual(["debug", 0, undefined]);
-            expect(log.methodFactory.argsForCall[2]).toEqual(["info",  0, undefined]);
-            expect(log.methodFactory.argsForCall[3]).toEqual(["warn",  0, undefined]);
-            expect(log.methodFactory.argsForCall[4]).toEqual(["error", 0, undefined]);
+            expect(log.methodFactory.calls.count()).toEqual(5);
+            expect(log.methodFactory.calls.argsFor(0)).toEqual(["trace", 0, undefined]);
+            expect(log.methodFactory.calls.argsFor(1)).toEqual(["debug", 0, undefined]);
+            expect(log.methodFactory.calls.argsFor(2)).toEqual(["info",  0, undefined]);
+            expect(log.methodFactory.calls.argsFor(3)).toEqual(["warn",  0, undefined]);
+            expect(log.methodFactory.calls.argsFor(4)).toEqual(["error", 0, undefined]);
 
             log.setLevel("error");
-            expect(log.methodFactory.calls.length).toEqual(6);
-            expect(log.methodFactory.argsForCall[5]).toEqual(["error", 4, undefined]);
+            expect(log.methodFactory.calls.count()).toEqual(6);
+            expect(log.methodFactory.calls.argsFor(5)).toEqual(["error", 4, undefined]);
         });
 
         it("functions returned by methodFactory should be used as logging functions", function(log) {
@@ -35,7 +35,7 @@ define(['test/test-helpers'], function(testHelpers) {
             logger.methodFactory = jasmine.createSpy("methodFactory");
 
             logger.setLevel("error");
-            expect(logger.methodFactory.argsForCall[0]).toEqual(["error", 4, "newLogger"]);
+            expect(logger.methodFactory.calls.argsFor(0)).toEqual(["error", 4, "newLogger"]);
         });
 
     });
