@@ -26,9 +26,14 @@
     "node": ">= 0.6.0"
   },
   "scripts": {
-    "test": "grunt test && tsc --noEmit ./test/type-test.ts",
+    "lint": "grunt jshint",
+    "test": "grunt test && npm run test-types",
+    "test-browser": "grunt test-browser",
+    "test-node": "grunt test-node",
+    "test-types": "tsc --noEmit ./test/type-test.ts",
     "ci": "grunt ci",
     "dist": "grunt dist",
+    "dist-build": "grunt dist-build",
     "watch": "grunt watch"
   },
   "dependencies": {},
