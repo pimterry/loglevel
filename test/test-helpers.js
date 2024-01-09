@@ -141,17 +141,6 @@ define(function () {
         };
     };
 
-    // Jasmine matcher for tests that otherwise have no expectations. This is
-    // a built in feature in Jasmine 2.8+ and is polyfilled here to support
-    // older versions.
-    self.nothing = function nothing() {
-        return {
-            compare: function() {
-                return { pass: true };
-            }
-        };
-    };
-
     self.setCookieStoredLevel = function setCookieStoredLevel(level, name) {
         window.document.cookie =
             encodeURIComponent(getStorageKey(name)) + "=" +
