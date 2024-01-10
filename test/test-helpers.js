@@ -175,15 +175,15 @@ define(function () {
     };
 
     self.describeIf = function describeIf(condition, name, test) {
-        if (condition) {
-            jasmine.getEnv().describe(name, test);
-        }
+        var env = jasmine.getEnv();
+        var implementation = condition ? env.describe : env.xdescribe;
+        return implementation(name, test);
     };
 
     self.itIf = function itIf(condition, name, test) {
-        if (condition) {
-            jasmine.getEnv().it(name, test);
-        }
+        var env = jasmine.getEnv();
+        var implementation = condition ? env.it : env.xit;
+        return implementation(name, test);
     };
 
     // Forcibly reloads loglevel and asynchronously hands the resulting log to
