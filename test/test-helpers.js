@@ -196,9 +196,27 @@ define(function () {
         });
     };
 
-    // Wraps Jasmine's it(name, test) call to reload the loglevel dependency for the given test
-    self.itWithFreshLog = function itWithFreshLog(name, test) {
-        jasmine.getEnv().it(name, function(done) {
+    // Wraps Jasmine's `it(name, test)` call to reload the loglevel module
+    // for the given test. An optional boolean first argument causes this to
+    // behave like `itIf()` instead of `it()`.
+    //
+    // Normal usage:
+    //   itWithFreshLog("test name", function(log) {
+    //       // test code
+    //    });
+    //
+    // Conditional usage:
+    //   itWithFreshLog(shouldRunTest(), "test name", function(log) {
+    //       // test code
+    //    });
+    self.itWithFreshLog = function itWithFreshLog(condition, name, test) {
+        if (!test) {
+            test = name;
+            name = condition;
+            condition = true;
+        }
+
+        self.itIf(condition, name, function(done) {
             function runTest (log) {
                 if (test.length > 1) {
                     return test(log, done);
