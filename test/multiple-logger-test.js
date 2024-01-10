@@ -149,8 +149,22 @@ define(['test/test-helpers'], function(testHelpers) {
               var newLogger = log.getLogger("newLogger");
               expect(newLogger).toBeAtLevel("trace");
             });
+        });
 
-            it("rebuilds existing child loggers via root.rebuild(children=true)", function(log) {
+        describe("logger.rebuild()", function() {
+            beforeEach(function() {
+                window.console = {"log" : jasmine.createSpy("console.log")};
+                jasmine.addMatchers({
+                    "toBeAtLevel" : testHelpers.toBeAtLevel
+                });
+                testHelpers.clearStoredLevels();
+            });
+
+            afterEach(function() {
+                window.console = originalConsole;
+            });
+
+            it("rebuilds existing child loggers", function(log) {
                 log.setLevel("TRACE");
                 var newLogger = log.getLogger("newLogger");
                 expect(newLogger).toBeAtLevel("TRACE");
@@ -162,7 +176,7 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(newLogger).toBeAtLevel("ERROR");
             });
 
-            it("should not change a child's persisted level when calling root.rebuild(children=true)", function(log) {
+            it("should not change a child's persisted level", function(log) {
                 testHelpers.setStoredLevel("ERROR", "newLogger");
 
                 log.setLevel("TRACE");
@@ -173,7 +187,7 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(newLogger).toBeAtLevel("ERROR");
             });
 
-            it("should not change a child's explicitly set level even if un-persisted when calling root.rebuild(children=true)", function(log) {
+            it("should not change a child's explicitly set level even if un-persisted", function(log) {
                 log.setLevel("TRACE");
                 var newLogger = log.getLogger("newLogger");
                 newLogger.setLevel("DEBUG", false);
