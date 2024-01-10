@@ -17,6 +17,10 @@ define(['test/test-helpers'], function(testHelpers) {
         });
 
         describe("If no level is saved", function() {
+            beforeEach(function() {
+                testHelpers.clearStoredLevels();
+            });
+
             it("current level is the default level", function(log) {
                 log.setDefaultLevel("trace");
                 expect(log.getLevel()).toBe(log.levels.TRACE);
