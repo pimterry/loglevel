@@ -14,27 +14,26 @@ define(['../lib/loglevel', 'test/test-helpers'], function(log, testHelpers) {
                 log.info("info");
                 log.warn("warn");
                 log.error("error");
+                expect().nothing();
             });
         });
 
         describeIf(typeof console !== "undefined", "log methods", function() {
             it("can all be called", function() {
-                if (typeof console !== "undefined") {
-                    log.setLevel(log.levels.TRACE);
-                }
-
+                log.setLevel(log.levels.TRACE);
                 log.trace("trace");
                 log.debug("debug");
                 log.log("log");
                 log.info("info");
                 log.warn("warn");
                 log.error("error");
+                expect().nothing();
             });
         });
 
         describeIf(typeof console !== "undefined", "log levels", function() {
             beforeEach(function() {
-                this.addMatchers({
+                jasmine.addMatchers({
                     "toBeTheStoredLevel" : testHelpers.toBeTheStoredLevel
                 });
             });
@@ -45,6 +44,7 @@ define(['../lib/loglevel', 'test/test-helpers'], function(log, testHelpers) {
                 log.setLevel(log.levels.INFO);
                 log.setLevel(log.levels.WARN);
                 log.setLevel(log.levels.ERROR);
+                expect().nothing();
             });
 
             itIf(testHelpers.isAnyLevelStoragePossible(), "are persisted", function() {

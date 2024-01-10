@@ -23,20 +23,28 @@ define(function () {
 
     var self = {};
 
-    // Jasmine matcher to check the log level of a log object
-    self.toBeAtLevel = function toBeAtLevel(level) {
-        var log = this.actual;
-        var expectedWorkingCalls = log.levels.SILENT - log.levels[level.toUpperCase()];
-        var realLogMethod = window.console.log;
-        var priorCalls = realLogMethod.calls.length;
+    // Jasmine matcher to check the log level of a log object. Usage:
+    //   expect(log).toBeAtLevel("DEBUG");
+    self.toBeAtLevel = function toBeAtLevel() {
+        return {
+            compare: function (log, level) {
+                var expectedWorkingCalls = log.levels.SILENT - log.levels[level.toUpperCase()];
+                var realLogMethod = window.console.log;
+                var priorCalls = realLogMethod.calls.count();
 
-        for (var ii = 0; ii < logMethods.length; ii++) {
-            var methodName = logMethods[ii];
-            log[methodName](methodName);
-        }
+                for (var ii = 0; ii < logMethods.length; ii++) {
+                    var methodName = logMethods[ii];
+                    log[methodName](methodName);
+                }
 
-        expect(realLogMethod.calls.length - priorCalls).toEqual(expectedWorkingCalls);
-        return true;
+                var actualCalls = realLogMethod.calls.count() - priorCalls;
+                var actualLevel = logMethods[log.levels.SILENT - actualCalls];
+                return {
+                    pass: actualCalls === expectedWorkingCalls,
+                    message: "Expected level to be '" + level + "' but found '" + actualLevel + "'"
+                };
+            }
+        };
     };
 
     self.isCookieStorageAvailable = function isCookieStorageAvailable() {
@@ -66,8 +74,10 @@ define(function () {
         return self.isCookieStorageAvailable() || self.isLocalStorageAvailable();
     };
 
-    self.toBeTheLevelStoredByCookie = function toBeTheLevelStoredByCookie(name) {
-        var level = this.actual === undefined ? undefined : this.actual.toUpperCase();
+    // Check whether a cookie is storing the given level for the given logger
+    // name. If level is `undefined`, this will check that it is *not* stored.
+    function isLevelInCookie(level, name) {
+        level = level === undefined ? undefined : level.toUpperCase();
         var storageKey = encodeURIComponent(getStorageKey(name));
 
         if(level === undefined) {
@@ -77,22 +87,58 @@ define(function () {
         } else {
             return false;
         }
+    }
+
+    // Jasmine matcher to check whether the given log level is in a cookie.
+    // Usage: `expect("DEBUG").toBeTheLevelStoredByCookie("name-of-logger")`
+    self.toBeTheLevelStoredByCookie = function toBeTheLevelStoredByCookie() {
+        return {
+            compare: function (actual, name) {
+                return {
+                    pass: isLevelInCookie(actual, name),
+                    message: "Level '" + actual + "' for the " + (name || "default") + " logger is not stored in a cookie"
+                };
+            }
+        };
     };
 
-    self.toBeTheLevelStoredByLocalStorage = function toBeTheLevelStoredByLocalStorage(name) {
-        var level = this.actual === undefined ? undefined : this.actual.toUpperCase();
+    // Check whether local storage is storing the given level for the given
+    // logger name. If level is `undefined`, this will check that it is *not*
+    // stored.
+    function isLevelInLocalStorage(level, name) {
+        level = level === undefined ? undefined : level.toUpperCase();
 
         if (window.localStorage[getStorageKey(name)] === level) {
             return true;
         }
 
         return false;
+    }
+
+    // Jasmine matcher to check whether the given log level is in local storage.
+    // Usage: `expect("DEBUG").toBeTheLevelStoredByLocalStorage("name-of-logger")`
+    self.toBeTheLevelStoredByLocalStorage = function toBeTheLevelStoredByLocalStorage() {
+        return {
+            compare: function (actual, name) {
+                return {
+                    pass: isLevelInLocalStorage(actual, name),
+                    message: "Level '" + actual + "' for the " + (name || "default") + " logger is not stored in local storage"
+                };
+            }
+        };
     };
 
-    // Jasmine matcher to check whether a given string was saved by loglevel
-    self.toBeTheStoredLevel = function toBeTheStoredLevel(name) {
-        return self.toBeTheLevelStoredByLocalStorage.call(this, name) ||
-               self.toBeTheLevelStoredByCookie.call(this, name);
+    // Jasmine matcher to check whether a given level has been persisted.
+    self.toBeTheStoredLevel = function toBeTheStoredLevel() {
+        return {
+            compare: function (actual, name) {
+                return {
+                    pass: isLevelInLocalStorage(actual, name) ||
+                          isLevelInCookie(actual, name),
+                    message: "Level '" + actual + "' is not persisted for the " + (name || "default") + " logger"
+                };
+            }
+        };
     };
 
     self.setCookieStoredLevel = function setCookieStoredLevel(level, name) {
@@ -140,29 +186,32 @@ define(function () {
         }
     };
 
-    // Forcibly reloads loglevel, and asynchronously hands the resulting log back to the given callback
-    // via Jasmine async magic
-    self.withFreshLog = function withFreshLog(toRun) {
+    // Forcibly reloads loglevel and asynchronously hands the resulting log to
+    // a callback.
+    self.withFreshLog = function withFreshLog(toRun, onError) {
         require.undef("lib/loglevel");
 
-        var freshLog;
-
-        waitsFor(function() {
-            require(['lib/loglevel'], function(log) {
-                freshLog = log;
-            });
-            return typeof freshLog !== "undefined";
-        });
-
-        runs(function() {
-            toRun(freshLog);
+        require(['lib/loglevel'], function(log) {
+            toRun(log);
         });
     };
 
     // Wraps Jasmine's it(name, test) call to reload the loglevel dependency for the given test
     self.itWithFreshLog = function itWithFreshLog(name, test) {
-        jasmine.getEnv().it(name, function() {
-            self.withFreshLog(test);
+        jasmine.getEnv().it(name, function(done) {
+            function runTest (log) {
+                if (test.length > 1) {
+                    return test(log, done);
+                } else {
+                    try {
+                        test(log);
+                        done();
+                    } catch (error) {
+                        done.fail(error);
+                    }
+                }
+            }
+            self.withFreshLog(runTest);
         });
     };
 

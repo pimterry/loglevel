@@ -10,7 +10,7 @@ define(['test/test-helpers'], function(testHelpers) {
 
         beforeEach(function() {
             window.console = {"log" : jasmine.createSpy("console.log")};
-            this.addMatchers({
+            jasmine.addMatchers({
                 "toBeAtLevel" : testHelpers.toBeAtLevel,
                 "toBeTheStoredLevel" : testHelpers.toBeTheLevelStoredByLocalStorage,
                 "toBeTheLevelStoredByLocalStorage": testHelpers.toBeTheLevelStoredByLocalStorage,
@@ -48,12 +48,12 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect("debug").not.toBeTheStoredLevel();
             });
         });
-        
+
         describe("If trace level is saved", function () {
             beforeEach(function () {
                 testHelpers.setStoredLevel("trace");
             });
-            
+
             it("trace is the default log level", function (log) {
                 expect(log).toBeAtLevel("trace");
             });
@@ -68,7 +68,7 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(log).toBeAtLevel("debug");
             });
         });
-        
+
         describe("If info level is saved", function() {
             beforeEach(function() {
                 testHelpers.setStoredLevel("info");

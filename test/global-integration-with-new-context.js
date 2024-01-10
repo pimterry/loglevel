@@ -16,6 +16,7 @@ describe("loglevel from a global <script> tag with a custom context", function (
         MyCustomLogger.setLevel(MyCustomLogger.levels.INFO);
         MyCustomLogger.setLevel(MyCustomLogger.levels.WARN);
         MyCustomLogger.setLevel(MyCustomLogger.levels.ERROR);
+        expect().nothing();
     });
 
     it("successfully logs", function () {

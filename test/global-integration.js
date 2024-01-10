@@ -12,6 +12,7 @@ describe("loglevel from a global <script> tag", function () {
         log.setLevel(log.levels.INFO);
         log.setLevel(log.levels.WARN);
         log.setLevel(log.levels.ERROR);
+        expect().nothing();
     });
 
     it("successfully logs", function () {

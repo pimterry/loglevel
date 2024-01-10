@@ -4,7 +4,7 @@ function consoleLogIsCalledBy(log, methodName) {
     it(methodName + " calls console.log", function() {
         log.setLevel(log.levels.TRACE);
         log[methodName]("Log message for call to " + methodName);
-        expect(console.log.calls.length).toEqual(1);
+        expect(console.log.calls.count()).toEqual(1);
     });
 }
 
@@ -12,7 +12,7 @@ function mockConsole() {
     return {"log" : jasmine.createSpy("console.log")};
 }
 
-define(['../lib/loglevel'], function(log) {
+define(['../lib/loglevel', 'test/test-helpers'], function(log, testHelpers) {
     var originalConsole = window.console;
 
     describe("Fallback functionality:", function() {
@@ -40,6 +40,7 @@ define(['../lib/loglevel'], function(log) {
             it("active method calls are allowed, once the active setLevel fails", function() {
                 log.setLevel(log.levels.TRACE);
                 log.trace("hello");
+                expect().nothing();
             });
 
             describe("if a console later appears", function () {
@@ -81,10 +82,12 @@ define(['../lib/loglevel'], function(log) {
 
             it("log can be set to silent", function() {
                 log.setLevel(log.levels.SILENT);
+                expect().nothing();
             });
 
             it("log can be set to an active level", function() {
                 log.setLevel(log.levels.ERROR);
+                expect().nothing();
             });
 
             consoleLogIsCalledBy(log, "trace");
