@@ -57,9 +57,24 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(function() { log.getLogger(function(){}); }).toThrow();
                 expect(function() { log.getLogger(null); }).toThrow();
                 expect(function() { log.getLogger(undefined); }).toThrow();
-                if (window.Symbol) {
-                    expect(function() { log.getLogger(Symbol()); }).toThrow();
-                }
+            });
+
+            // NOTE: this test is the same as the similarly-named test in
+            // `node-integration.js` (which only runs in Node.js). If making
+            // changes here, be sure to adjust that test as well.
+            it(typeof Symbol !== "undefined", "supports using symbols as names", function(log) {
+                var s1 = Symbol("a-symbol");
+                var s2 = Symbol("a-symbol");
+
+                var logger1 = log.getLogger(s1);
+                var defaultLevel = logger1.getLevel();
+                logger1.setLevel(log.levels.TRACE);
+
+                var logger2 = log.getLogger(s2);
+
+                // Should be unequal: same name, but different symbol instances
+                expect(logger1).not.toEqual(logger2);
+                expect(logger2.getLevel()).toEqual(defaultLevel);
             });
         });
 

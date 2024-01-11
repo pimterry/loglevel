@@ -25,6 +25,9 @@ describe("loglevel included via node", function () {
         expect(console.info).toHaveBeenCalledWith("test message");
     });
 
+    // NOTE: this test is the same as the similarly-named test in
+    // `multiple-logger-test.js` (which only runs in browsers). If making
+    // changes here, be sure to adjust that test as well.
     it("supports using symbols as names", function() {
         var log = require('../lib/loglevel');
 

@@ -180,21 +180,23 @@ define(['test/test-helpers'], function(testHelpers) {
         describeIf(testHelpers.isCookieStorageAvailable() && testHelpers.isLocalStorageAvailable(),
                    "if localStorage and cookies are both available", function () {
 
-            it("the level stored in cookies is ignored if a local storage level is set", function () {
+            it("the level stored in cookies is ignored if a local storage level is set", function (log, done) {
                 testHelpers.setCookieStoredLevel("info");
                 testHelpers.setLocalStorageStoredLevel("debug");
 
                 testHelpers.withFreshLog(function (log) {
                     expect(log).toBeAtLevel("debug");
+                    done();
                 });
             });
 
-            it("the level stored in cookies is used if no local storage level is set", function () {
+            it("the level stored in cookies is used if no local storage level is set", function (log, done) {
                 testHelpers.setCookieStoredLevel("info");
                 window.localStorage.clear();
 
                 testHelpers.withFreshLog(function (log) {
                     expect(log).toBeAtLevel("info");
+                    done();
                 });
             });
 

@@ -165,7 +165,7 @@ define(function () {
             window.localStorage.clear();
         }
         if (self.isCookieStorageAvailable()) {
-            var storedKeys = window.document.cookie.match(/(?:^|;\s)(loglevel(\:\w+)?)(?=\=)/g);
+            var storedKeys = window.document.cookie.match(/(?:^|;\s)(loglevel(%3a\w+)?)(?=\=)/ig);
             if (storedKeys) {
                 for (var i = 0; i < storedKeys.length; i++) {
                     window.document.cookie = storedKeys[i] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
@@ -175,15 +175,15 @@ define(function () {
     };
 
     self.describeIf = function describeIf(condition, name, test) {
-        if (condition) {
-            jasmine.getEnv().describe(name, test);
-        }
+        var env = jasmine.getEnv();
+        var implementation = condition ? env.describe : env.xdescribe;
+        return implementation(name, test);
     };
 
     self.itIf = function itIf(condition, name, test) {
-        if (condition) {
-            jasmine.getEnv().it(name, test);
-        }
+        var env = jasmine.getEnv();
+        var implementation = condition ? env.it : env.xit;
+        return implementation(name, test);
     };
 
     // Forcibly reloads loglevel and asynchronously hands the resulting log to
@@ -196,9 +196,27 @@ define(function () {
         });
     };
 
-    // Wraps Jasmine's it(name, test) call to reload the loglevel dependency for the given test
-    self.itWithFreshLog = function itWithFreshLog(name, test) {
-        jasmine.getEnv().it(name, function(done) {
+    // Wraps Jasmine's `it(name, test)` call to reload the loglevel module
+    // for the given test. An optional boolean first argument causes this to
+    // behave like `itIf()` instead of `it()`.
+    //
+    // Normal usage:
+    //   itWithFreshLog("test name", function(log) {
+    //       // test code
+    //    });
+    //
+    // Conditional usage:
+    //   itWithFreshLog(shouldRunTest(), "test name", function(log) {
+    //       // test code
+    //    });
+    self.itWithFreshLog = function itWithFreshLog(condition, name, test) {
+        if (!test) {
+            test = name;
+            name = condition;
+            condition = true;
+        }
+
+        self.itIf(condition, name, function(done) {
             function runTest (log) {
                 if (test.length > 1) {
                     return test(log, done);
