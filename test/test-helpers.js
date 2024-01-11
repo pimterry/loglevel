@@ -165,7 +165,7 @@ define(function () {
             window.localStorage.clear();
         }
         if (self.isCookieStorageAvailable()) {
-            var storedKeys = window.document.cookie.match(/(?:^|;\s)(loglevel(\:\w+)?)(?=\=)/g);
+            var storedKeys = window.document.cookie.match(/(?:^|;\s)(loglevel(%3a\w+)?)(?=\=)/ig);
             if (storedKeys) {
                 for (var i = 0; i < storedKeys.length; i++) {
                     window.document.cookie = storedKeys[i] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
