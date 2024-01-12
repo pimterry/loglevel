@@ -114,39 +114,6 @@ module.exports = function (grunt) {
                 keepalive: true
             }
         },
-        'saucelabs-jasmine': {
-            // Requires valid SAUCE_USERNAME and SAUCE_ACCESS_KEY in env to run.
-            all: {
-                options: {
-                    urls: ['http://localhost:8000/_SpecRunner.html'],
-                    browsers: [
-                        {"browserName": "firefox", "platform": "Windows 2003", "version": "3.6"},
-                        {"browserName": "firefox", "platform": "Windows 2003", "version": "4"},
-                        {"browserName": "firefox", "platform": "Windows 2003", "version": "25"},
-                        {"browserName": "safari", "platform": "Mac 10.6", "version": "5"},
-                        {"browserName": "safari", "platform": "Mac 10.8", "version": "6"},
-                        {"browserName": "googlechrome", "platform": "Windows 7"},
-                        {"browserName": "opera", "platform": "Windows 2003", "version": "12"},
-                        // Disabled because old IE breaks the Jasmine runner; these have to be manually tested
-                        // {"browserName": "iehta", "platform": "Windows XP", "version": "6"},
-                        // {"browserName": "iehta", "platform": "Windows XP", "version": "7"},
-                        // {"browserName": "iehta", "platform": "Windows XP", "version": "8"},
-                        {"browserName": "iehta", "platform": "Windows 7", "version": "9"},
-                        {"browserName": "iehta", "platform": "Windows 7", "version": "10"},
-                        {"browserName": "opera", "platform": "Windows 7", "version": "12"},
-                        {"browserName": "android", "platform": "Linux", "version": "4.0"},
-                        {"browserName": "iphone", "platform": "OS X 10.8", "version": "6"}
-                    ],
-                    concurrency: 3,
-                    detailedError: true,
-                    testTimeout:10000,
-                    testInterval:1000,
-                    testReadyTimeout:2000,
-                    testname: 'loglevel jasmine test',
-                    tags: [process.env.TRAVIS_REPO_SLUG || "local", process.env.TRAVIS_COMMIT || "manual"]
-                }
-            }
-        },
         jshint: {
             options: {
                 jshintrc: '.jshintrc'
@@ -203,7 +170,6 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-open');
-    grunt.loadNpmTasks('grunt-saucelabs');
     grunt.loadNpmTasks('grunt-preprocess');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
@@ -218,9 +184,6 @@ module.exports = function (grunt) {
 
     // Test with a live server and an actual browser
     grunt.registerTask('integration-test', ['jasmine:requirejs:src:build', 'open:jasmine', 'connect:test:keepalive']);
-
-    // Test with lots of browsers on saucelabs. Requires valid SAUCE_USERNAME and SAUCE_ACCESS_KEY in env to run.
-    grunt.registerTask('saucelabs', ['jasmine:requirejs:src:build', 'connect:test', 'saucelabs-jasmine']);
 
     // Default task.
     grunt.registerTask('default', 'test');
