@@ -95,9 +95,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        coveralls: {
-            src: 'coverage/lcov.info'
-        },
         open: {
             jasmine: {
                 path: 'http://127.0.0.1:8000/_SpecRunner.html'
@@ -158,7 +155,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-coveralls');
     grunt.loadNpmTasks('grunt-jasmine-node');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -182,6 +178,5 @@ module.exports = function (grunt) {
 
     // Default task.
     grunt.registerTask('default', 'test');
-    grunt.registerTask('ci', ['test', 'coveralls']);
 
 };

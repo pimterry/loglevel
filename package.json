@@ -31,7 +31,6 @@
     "test-browser": "grunt test-browser",
     "test-node": "grunt test-node",
     "test-types": "tsc --noEmit ./test/type-test.ts",
-    "ci": "grunt ci",
     "dist": "grunt dist",
     "dist-build": "grunt dist-build",
     "watch": "grunt watch"
@@ -49,7 +48,6 @@
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-uglify": "^3.4.0",
     "grunt-contrib-watch": "^1.1.0",
-    "grunt-coveralls": "^1.0.0",
     "grunt-jasmine-node": "~0.2.1",
     "grunt-open": "~0.2.3",
     "grunt-preprocess": "^5.1.0",
