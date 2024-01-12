@@ -1,6 +1,10 @@
 'use strict';
 
 module.exports = function (grunt) {
+    var jasmineRequireJsOptions = {
+        specs: 'test/*-test.js',
+        helpers: 'test/*-helper.js',
+    };
 
     // Project configuration.
     grunt.initConfig({
@@ -34,8 +38,8 @@ module.exports = function (grunt) {
             requirejs: {
                 src: [],
                 options: {
-                    specs: 'test/*-test.js',
-                    helpers: 'test/*-helper.js',
+                    specs: jasmineRequireJsOptions.specs,
+                    helpers: jasmineRequireJsOptions.helpers,
                     template: require('./vendor/grunt-template-jasmine-requirejs')
                 }
             },
@@ -51,11 +55,13 @@ module.exports = function (grunt) {
                     specs: 'test/global-integration-with-new-context.js',
                 }
             },
+            // Wraps the `requirejs` configuration above with Instanbul code
+            // coverage tracking.
             withCoverage: {
                 src: 'lib/**/*.js',
                 options: {
-                    specs: 'test/*-test.js',
-                    helpers: 'test/*-helper.js',
+                    specs: jasmineRequireJsOptions.specs,
+                    helpers: jasmineRequireJsOptions.helpers,
                     template: require('grunt-template-jasmine-istanbul'),
                     templateOptions: {
                         coverage: 'coverage/coverage.json',
@@ -74,14 +80,7 @@ module.exports = function (grunt) {
                             }
                         ],
 
-                        template: require('./vendor/grunt-template-jasmine-requirejs'),
-                        templateOptions: {
-                            requireConfig: {
-                                paths: {
-                                    "lib": '.grunt/grunt-contrib-jasmine/lib/'
-                                }
-                            }
-                        }
+                        template: require('./vendor/grunt-template-jasmine-requirejs')
                     }
                 }
             }
@@ -175,7 +174,7 @@ module.exports = function (grunt) {
 
     // Check everything is good
     grunt.registerTask('test', ['jshint', 'test-browser', 'test-node']);
-    grunt.registerTask('test-browser', ['jasmine:requirejs', 'jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine:withCoverage']);
+    grunt.registerTask('test-browser', ['jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine:withCoverage']);
     grunt.registerTask('test-node', ['jasmine_node']);
 
     // Test with a live server and an actual browser
