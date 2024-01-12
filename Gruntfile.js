@@ -35,7 +35,6 @@ module.exports = function (grunt) {
                 src: [],
                 options: {
                     specs: 'test/*-test.js',
-                    vendor: 'test/vendor/*.js',
                     helpers: 'test/*-helper.js',
                     template: require('./vendor/grunt-template-jasmine-requirejs')
                 }
@@ -44,21 +43,18 @@ module.exports = function (grunt) {
                 src: 'lib/**/*.js',
                 options: {
                     specs: 'test/global-integration.js',
-                    vendor: 'test/vendor/*.js'
                 }
             },
             context: {
                 src: 'test/test-context-using-apply.generated.js',
                 options: {
                     specs: 'test/global-integration-with-new-context.js',
-                    vendor: 'test/vendor/*.js'
                 }
             },
             withCoverage: {
                 src: 'lib/**/*.js',
                 options: {
                     specs: 'test/*-test.js',
-                    vendor: 'test/vendor/*.js',
                     helpers: 'test/*-helper.js',
                     template: require('grunt-template-jasmine-istanbul'),
                     templateOptions: {
