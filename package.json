@@ -47,7 +47,6 @@
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-jasmine": "~1.0.3",
     "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-qunit": "^2.0.0",
     "grunt-contrib-uglify": "^3.4.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-coveralls": "^1.0.0",
@@ -56,7 +55,6 @@
     "grunt-preprocess": "^5.1.0",
     "grunt-saucelabs": "^8.2.0",
     "grunt-template-jasmine-istanbul": "~0.4.0",
-    "qunitjs": "1.14.0",
     "typescript": "^3.5.1"
   },
   "keywords": [

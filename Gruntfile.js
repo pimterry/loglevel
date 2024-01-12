@@ -181,9 +181,6 @@ module.exports = function (grunt) {
                 tasks: ['jshint:test', 'test']
             }
         },
-        qunit: {
-            all: ['test/*-qunit.html']
-        },
         preprocess: {
             "test-context-using-apply": {
                 src: 'test/test-context-using-apply.js',
@@ -203,7 +200,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-jasmine-node');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
 
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-open');
@@ -217,7 +213,7 @@ module.exports = function (grunt) {
 
     // Check everything is good
     grunt.registerTask('test', ['jshint', 'test-browser', 'test-node']);
-    grunt.registerTask('test-browser', ['jasmine:requirejs', 'jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine:withCoverage', 'qunit']);
+    grunt.registerTask('test-browser', ['jasmine:requirejs', 'jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine:withCoverage']);
     grunt.registerTask('test-node', ['jasmine_node']);
 
     // Test with a live server and an actual browser
