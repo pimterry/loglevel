@@ -212,10 +212,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     // Build a distributable release
-    grunt.registerTask('dist', ['test', 'concat', 'uglify']);
+    grunt.registerTask('dist', ['test', 'dist-build']);
+    grunt.registerTask('dist-build', ['concat', 'uglify']);
 
     // Check everything is good
-    grunt.registerTask('test', ['jshint', 'jasmine:requirejs', 'jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine_node', 'jasmine:withCoverage', 'qunit']);
+    grunt.registerTask('test', ['jshint', 'test-browser', 'test-node']);
+    grunt.registerTask('test-browser', ['jasmine:requirejs', 'jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine:withCoverage', 'qunit']);
+    grunt.registerTask('test-node', ['jasmine_node']);
 
     // Test with a live server and an actual browser
     grunt.registerTask('integration-test', ['jasmine:requirejs:src:build', 'open:jasmine', 'connect:test:keepalive']);
