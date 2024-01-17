@@ -23,4 +23,22 @@ describe("loglevel from a global <script> tag", function () {
 
         expect(console.log).toHaveBeenCalledWith("test message");
     });
+
+    describe("noConflict()", function () {
+        var globalLog;
+
+        beforeEach(function () {
+            globalLog = window.log;
+        });
+
+        afterEach(function () {
+            window.log = globalLog;
+        });
+
+        it("removes global reference to `log`", function () {
+            var local = log.noConflict();
+            expect(window.log).toBeUndefined();
+            expect(local).toEqual(globalLog);
+        });
+    });
 });

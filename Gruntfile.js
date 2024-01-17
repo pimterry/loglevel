@@ -1,6 +1,10 @@
 'use strict';
 
 module.exports = function (grunt) {
+    var jasmineRequireJsOptions = {
+        specs: 'test/*-test.js',
+        helpers: 'test/*-helper.js',
+    };
 
     // Project configuration.
     grunt.initConfig({
@@ -34,9 +38,8 @@ module.exports = function (grunt) {
             requirejs: {
                 src: [],
                 options: {
-                    specs: 'test/*-test.js',
-                    vendor: 'test/vendor/*.js',
-                    helpers: 'test/*-helper.js',
+                    specs: jasmineRequireJsOptions.specs,
+                    helpers: jasmineRequireJsOptions.helpers,
                     template: require('./vendor/grunt-template-jasmine-requirejs')
                 }
             },
@@ -44,22 +47,21 @@ module.exports = function (grunt) {
                 src: 'lib/**/*.js',
                 options: {
                     specs: 'test/global-integration.js',
-                    vendor: 'test/vendor/*.js'
                 }
             },
             context: {
                 src: 'test/test-context-using-apply.generated.js',
                 options: {
                     specs: 'test/global-integration-with-new-context.js',
-                    vendor: 'test/vendor/*.js'
                 }
             },
+            // Wraps the `requirejs` configuration above with Instanbul code
+            // coverage tracking.
             withCoverage: {
                 src: 'lib/**/*.js',
                 options: {
-                    specs: 'test/*-test.js',
-                    vendor: 'test/vendor/*.js',
-                    helpers: 'test/*-helper.js',
+                    specs: jasmineRequireJsOptions.specs,
+                    helpers: jasmineRequireJsOptions.helpers,
                     template: require('grunt-template-jasmine-istanbul'),
                     templateOptions: {
                         coverage: 'coverage/coverage.json',
@@ -78,14 +80,7 @@ module.exports = function (grunt) {
                             }
                         ],
 
-                        template: require('./vendor/grunt-template-jasmine-requirejs'),
-                        templateOptions: {
-                            requireConfig: {
-                                paths: {
-                                    "lib": '.grunt/grunt-contrib-jasmine/lib/'
-                                }
-                            }
-                        }
+                        template: require('./vendor/grunt-template-jasmine-requirejs')
                     }
                 }
             }
@@ -100,9 +95,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        coveralls: {
-            src: 'coverage/lcov.info'
-        },
         open: {
             jasmine: {
                 path: 'http://127.0.0.1:8000/_SpecRunner.html'
@@ -112,39 +104,6 @@ module.exports = function (grunt) {
             test: {
                 port: 8000,
                 keepalive: true
-            }
-        },
-        'saucelabs-jasmine': {
-            // Requires valid SAUCE_USERNAME and SAUCE_ACCESS_KEY in env to run.
-            all: {
-                options: {
-                    urls: ['http://localhost:8000/_SpecRunner.html'],
-                    browsers: [
-                        {"browserName": "firefox", "platform": "Windows 2003", "version": "3.6"},
-                        {"browserName": "firefox", "platform": "Windows 2003", "version": "4"},
-                        {"browserName": "firefox", "platform": "Windows 2003", "version": "25"},
-                        {"browserName": "safari", "platform": "Mac 10.6", "version": "5"},
-                        {"browserName": "safari", "platform": "Mac 10.8", "version": "6"},
-                        {"browserName": "googlechrome", "platform": "Windows 7"},
-                        {"browserName": "opera", "platform": "Windows 2003", "version": "12"},
-                        // Disabled because old IE breaks the Jasmine runner; these have to be manually tested
-                        // {"browserName": "iehta", "platform": "Windows XP", "version": "6"},
-                        // {"browserName": "iehta", "platform": "Windows XP", "version": "7"},
-                        // {"browserName": "iehta", "platform": "Windows XP", "version": "8"},
-                        {"browserName": "iehta", "platform": "Windows 7", "version": "9"},
-                        {"browserName": "iehta", "platform": "Windows 7", "version": "10"},
-                        {"browserName": "opera", "platform": "Windows 7", "version": "12"},
-                        {"browserName": "android", "platform": "Linux", "version": "4.0"},
-                        {"browserName": "iphone", "platform": "OS X 10.8", "version": "6"}
-                    ],
-                    concurrency: 3,
-                    detailedError: true,
-                    testTimeout:10000,
-                    testInterval:1000,
-                    testReadyTimeout:2000,
-                    testname: 'loglevel jasmine test',
-                    tags: [process.env.TRAVIS_REPO_SLUG || "local", process.env.TRAVIS_COMMIT || "manual"]
-                }
             }
         },
         jshint: {
@@ -181,9 +140,6 @@ module.exports = function (grunt) {
                 tasks: ['jshint:test', 'test']
             }
         },
-        qunit: {
-            all: ['test/*-qunit.html']
-        },
         preprocess: {
             "test-context-using-apply": {
                 src: 'test/test-context-using-apply.js',
@@ -199,15 +155,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-coveralls');
     grunt.loadNpmTasks('grunt-jasmine-node');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
 
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-open');
-    grunt.loadNpmTasks('grunt-saucelabs');
     grunt.loadNpmTasks('grunt-preprocess');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
@@ -217,17 +170,13 @@ module.exports = function (grunt) {
 
     // Check everything is good
     grunt.registerTask('test', ['jshint', 'test-browser', 'test-node']);
-    grunt.registerTask('test-browser', ['jasmine:requirejs', 'jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine:withCoverage', 'qunit']);
+    grunt.registerTask('test-browser', ['jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine:withCoverage']);
     grunt.registerTask('test-node', ['jasmine_node']);
 
     // Test with a live server and an actual browser
     grunt.registerTask('integration-test', ['jasmine:requirejs:src:build', 'open:jasmine', 'connect:test:keepalive']);
 
-    // Test with lots of browsers on saucelabs. Requires valid SAUCE_USERNAME and SAUCE_ACCESS_KEY in env to run.
-    grunt.registerTask('saucelabs', ['jasmine:requirejs:src:build', 'connect:test', 'saucelabs-jasmine']);
-
     // Default task.
     grunt.registerTask('default', 'test');
-    grunt.registerTask('ci', ['test', 'coveralls']);
 
 };

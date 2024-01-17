@@ -26,7 +26,7 @@ Before submitting a pull request to fix a bug or add a new feature, please check
 
 To be more specific, before submitting your pull request please ensure:
 
-* You haven't broken the existing test suite in any obvious browsers (at least check latest IE/FF/Chrome - automatic saucelabs tests for this are coming soon too)
+* You haven't broken the existing test suite in any obvious browsers (at least check latest IE/FF/Chrome)
 * You've added relevant tests for the bug you're fixing/the new feature you're adding/etc, which pass in all the relevant browsers
 * JSHint is happy with your new code
 * You've updated the API docs (in README.md) to detail any changes you've made to the public interface
