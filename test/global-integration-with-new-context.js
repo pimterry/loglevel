@@ -2,19 +2,6 @@
 "use strict";
 
 describe("loglevel from a global <script> tag with a custom context", function () {
-    beforeEach(function () {
-        jasmine.addMatchers({
-            // Polyfill for expect().nothing() in Jasmine 2.8+.
-            nothing: function nothing() {
-                return {
-                    compare: function() {
-                        return { pass: true };
-                    }
-                };
-            }
-        });
-    });
-
     it("is available globally", function () {
         expect(MyCustomLogger).not.toBeUndefined();
     });

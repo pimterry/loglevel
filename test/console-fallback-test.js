@@ -16,12 +16,6 @@ define(['../lib/loglevel', 'test/test-helpers'], function(log, testHelpers) {
     var originalConsole = window.console;
 
     describe("Fallback functionality:", function() {
-        beforeEach(function() {
-            jasmine.addMatchers({
-                nothing: testHelpers.nothing
-            });
-        });
-
         describe("with no console present", function() {
             beforeEach(function() {
                 window.console = undefined;

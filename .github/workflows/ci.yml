@@ -23,7 +23,7 @@ jobs:
           cache-dependency-path: 'package.json'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: JSHint
         run: npm run lint
@@ -42,7 +42,7 @@ jobs:
           cache-dependency-path: 'package.json'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Build
         run: npm run dist-build
@@ -64,7 +64,7 @@ jobs:
           cache-dependency-path: 'package.json'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Unit Tests
         run: npm run test-node
@@ -83,7 +83,7 @@ jobs:
           cache-dependency-path: 'package.json'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Unit Tests
         run: npm run test-browser
@@ -102,7 +102,7 @@ jobs:
           cache-dependency-path: 'package.json'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Typescript Tests
         run: npm run test-types
