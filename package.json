@@ -48,10 +48,10 @@
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-uglify": "^3.4.0",
     "grunt-contrib-watch": "^1.1.0",
-    "grunt-jasmine-node": "^0.3.1",
     "grunt-open": "~0.2.3",
     "grunt-preprocess": "^5.1.0",
     "grunt-template-jasmine-istanbul": "~0.4.0",
+    "jasmine": "^2.4.1",
     "typescript": "^3.5.1"
   },
   "keywords": [

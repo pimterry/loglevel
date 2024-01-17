@@ -1,5 +1,7 @@
 'use strict';
 
+var Jasmine = require('jasmine');
+
 module.exports = function (grunt) {
     var jasmineRequireJsOptions = {
         specs: 'test/*-test.js',
@@ -85,14 +87,9 @@ module.exports = function (grunt) {
                 }
             }
         },
-        "jasmine_node": {
-            test: {
-                options: {
-                    match: "node-integration.",
-                    matchall: true,
-                    projectRoot: "./test",
-                    useHelpers: false
-                }
+        jasmine_node: {
+            options: {
+                specs: ['test/node-integration.js']
             }
         },
         open: {
@@ -155,7 +152,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-jasmine-node');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
@@ -163,6 +159,22 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-open');
     grunt.loadNpmTasks('grunt-preprocess');
     grunt.loadNpmTasks('grunt-contrib-clean');
+
+    // A simple version of `grunt-jasmine-node` that works in modern engines.
+    //
+    // NOTE: This is designed for Jasmine 2.4, which matches the version used
+    // in `grunt-contrib-jasmine`. If that package is updated, this should also
+    // be updated to match.
+    grunt.registerTask('jasmine_node', 'Run Jasmine in Node.js', function() {
+        var done = this.async();
+
+        var jasmine = new Jasmine({ projectBaseDir: __dirname });
+        jasmine.onComplete(function(success) {
+            done(success);
+        });
+
+        jasmine.execute(this.options().specs);
+    });
 
     // Build a distributable release
     grunt.registerTask('dist', ['test', 'dist-build']);
@@ -178,39 +190,4 @@ module.exports = function (grunt) {
 
     // Default task.
     grunt.registerTask('default', 'test');
-
-    // HACK: grunt-jasmine-node v0.3.x is fundamentally broken with respect to
-    // configuration, but contains other fixes required to function in modern
-    // Node.js versions. This hack works around the broken-ness:
-    //
-    // Instead of loading options from `this.options()`, grunt-jasmine-node
-    // loads them via `grunt.config()`, which is not meant to for this purpose
-    // and doesn't give multitasks (which grunt-jasmine-node is) a way to read
-    // the options that they are being run with.
-    // To fix it, we patch `grunt.config()` so that it passes back the options
-    // for the "test" subtask (our only subtask; this wouldn't work if we had
-    // more) when asked for "jasmine_node"-related options.
-    //
-    // It appears that this was an accidental regression due to a bad manual
-    // merge of https://github.com/jasmine-contrib/grunt-jasmine-node/pull/36,
-    // which was based on very out-of-date code.
-    // (actual commit: https://github.com/jasmine-contrib/grunt-jasmine-node/commit/3c8012e5632fa265dd229e3a04fbcc6eb80a7730).
-    //
-    // Someone posted a PR to fix it, but it appears the project is dead:
-    // https://github.com/jasmine-contrib/grunt-jasmine-node/pull/70
-    var _gruntConfig = grunt.config;
-    grunt.config = function (property) {
-        if (arguments.length === 1 && property.indexOf('jasmine_node.') === 0) {
-            var propertyPath = property.split('.');
-            propertyPath.splice(1, 0, 'test.options');
-            var newProperty = propertyPath.join('.');
-            return _gruntConfig.call(this, newProperty);
-        }
-        return _gruntConfig.apply(this, arguments);
-    };
-    for (var key in _gruntConfig) {
-        if (_gruntConfig.hasOwnProperty(key)) {
-            grunt.config[key] = _gruntConfig[key];
-        }
-    }
 };
