@@ -22,3 +22,6 @@ indent_size = 2
 
 [*.{yaml,yml}]
 indent_size = 2
+
+[vendor/grunt-template-jasmine-requirejs/**/*]
+indent_size = 2

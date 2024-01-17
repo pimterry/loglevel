@@ -58,7 +58,8 @@ function resolvePath(filepath) {
   return path.resolve(filepath);
 }
 
-function moveRequireJs(grunt, task, versionOrPath) {
+// LOGLEVEL-FORK: copying tempfiles now requires info from the `context` object.
+function moveRequireJs(grunt, task, context, versionOrPath) {
   var pathToRequireJS,
       versionReg = /^(\d\.?)*$/;
 
@@ -74,8 +75,10 @@ function moveRequireJs(grunt, task, versionOrPath) {
         throw new Error('local file path of requirejs [' + versionOrPath + '] was not found');
       }
   }
-  task.copyTempFile(pathToRequireJS,'require.js');
+  task.copyTempFile(pathToRequireJS, path.join(context.temp, 'require.js'));
 }
+// END LOGLEVEL-FORK
+
 
 exports.process = function(grunt, task, context) {
 
@@ -149,7 +152,9 @@ exports.process = function(grunt, task, context) {
     });
   }
 
-  moveRequireJs(grunt, task, version);
+  // LOGLEVEL-FORK: this function now requires context info
+  moveRequireJs(grunt, task, context, version);
+  // END LOGLEVEL-FORK
 
   context.serializeRequireConfig = function(requireConfig) {
     var funcCounter = 0;

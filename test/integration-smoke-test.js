@@ -5,6 +5,12 @@ define(['../lib/loglevel', 'test/test-helpers'], function(log, testHelpers) {
     var itIf = testHelpers.itIf;
 
     describe("Integration smoke tests:", function() {
+        beforeEach(function() {
+            jasmine.addMatchers({
+                "nothing": testHelpers.nothing
+            });
+        });
+
         describe("log methods", function() {
             it("can all be disabled", function() {
                 log.setLevel(log.levels.SILENT);
