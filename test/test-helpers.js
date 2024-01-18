@@ -48,7 +48,7 @@ define(function () {
     };
 
     self.isCookieStorageAvailable = function isCookieStorageAvailable() {
-        if (window && window.document && window.document.cookie) {
+        if (window && window.document && window.document.cookie != null) {
             // We need to check not just that the cookie objects are available, but that they work, because
             // if we run from file:// URLs they appear present but are non-functional
             window.document.cookie = "test=hi;";
