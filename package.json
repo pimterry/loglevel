@@ -51,7 +51,7 @@
     "grunt-open": "~0.2.3",
     "grunt-preprocess": "^5.1.0",
     "grunt-template-jasmine-istanbul": "https://github.com/maenu/grunt-template-jasmine-istanbul.git#caedc636b9f9c11217a32d586717e3153edf9ba3",
-    "jasmine": "^2.4.1",
+    "jasmine": "^5.1.0",
     "typescript": "^3.5.1"
   },
   "keywords": [

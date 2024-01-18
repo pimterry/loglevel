@@ -169,11 +169,10 @@ module.exports = function (grunt) {
         var done = this.async();
 
         var jasmine = new Jasmine({ projectBaseDir: __dirname });
-        jasmine.onComplete(function(success) {
-            done(success);
-        });
-
-        jasmine.execute(this.options().specs);
+        jasmine.exitOnCompletion = false;
+        jasmine.execute(this.options().specs)
+            .then(function(info) { done(info.overallStatus === 'passed'); })
+            .catch(function(error) { done(error); });
     });
 
     // Build a distributable release
