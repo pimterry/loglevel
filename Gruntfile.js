@@ -131,7 +131,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-preprocess');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
-    // A simple version of `grunt-jasmine-node` that works in modern engines.
+    // Run Jasmine with Node.js tests (as opposed to browser tests).
     //
     // NOTE: This is designed for Jasmine 2.4, which matches the version used
     // in `grunt-contrib-jasmine`. If that package is updated, this should also
