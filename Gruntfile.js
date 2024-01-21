@@ -56,35 +56,6 @@ module.exports = function (grunt) {
                 options: {
                     specs: 'test/global-integration-with-new-context.js',
                 }
-            },
-            // Wraps the `requirejs` configuration above with Instanbul code
-            // coverage tracking.
-            withCoverage: {
-                src: 'lib/**/*.js',
-                options: {
-                    specs: jasmineRequireJsOptions.specs,
-                    helpers: jasmineRequireJsOptions.helpers,
-                    template: require('grunt-template-jasmine-istanbul'),
-                    templateOptions: {
-                        coverage: 'coverage/coverage.json',
-                        report: [
-                            {
-                                type: 'html',
-                                options: {
-                                    dir: 'coverage'
-                                }
-                            },
-                            {
-                                type: 'lcov',
-                                options: {
-                                    dir: 'coverage'
-                                }
-                            }
-                        ],
-
-                        template: require('./vendor/grunt-template-jasmine-requirejs')
-                    }
-                }
             }
         },
         jasmine_node: {
@@ -182,7 +153,7 @@ module.exports = function (grunt) {
 
     // Check everything is good
     grunt.registerTask('test', ['jshint', 'test-browser', 'test-node']);
-    grunt.registerTask('test-browser', ['jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine:withCoverage']);
+    grunt.registerTask('test-browser', ['jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine:requirejs']);
     grunt.registerTask('test-node', ['jasmine_node']);
 
     // Test with a live server and an actual browser
