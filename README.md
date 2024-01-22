@@ -168,7 +168,7 @@ If `log.setLevel()` is called when a console object is not available (in IE 8 or
 
 #### `log.setDefaultLevel(level)`
 
-This sets the current log level only if one has never been explicitly set, either via `log.setLevel()` or loaded from a previously persisted `setLevel()` call. This is useful when initializing scripts; if a developer or user has previously called `setLevel()`, this won’t alter their settings. For example, your application might set the log level to `error` in a production environment, but when debugging an issue, you might call `setLevel("trace")` on the console to see all the logs. If that `error` setting was set using `setDefaultLevel()`, it will still stay as `trace` on subsequent page loads and refreshes instead of resetting to `error`.
+This sets the current log level only if one has not been persisted and can’t be loaded. This is useful when initializing modules or scripts; if a developer or user has previously called `setLevel()`, this won’t alter their settings. For example, your application might set the log level to `error` in a production environment, but when debugging an issue, you might call `setLevel("trace")` on the console to see all the logs. If that `error` setting was set using `setDefaultLevel()`, it will still stay as `trace` on subsequent page loads and refreshes instead of resetting to `error`.
 
 The `level` argument takes is the same values that you might pass to `setLevel()`. Levels set using `setDefaultLevel()` never persist to subsequent page loads.
 
