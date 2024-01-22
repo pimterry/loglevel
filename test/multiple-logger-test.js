@@ -172,7 +172,7 @@ define(['test/test-helpers'], function(testHelpers) {
                 log.setLevel("ERROR");
                 expect(newLogger).toBeAtLevel("TRACE");
 
-                log.rebuild(true);
+                log.rebuild();
                 expect(newLogger).toBeAtLevel("ERROR");
             });
 
@@ -183,16 +183,27 @@ define(['test/test-helpers'], function(testHelpers) {
                 var newLogger = log.getLogger("newLogger");
                 expect(newLogger).toBeAtLevel("ERROR");
 
-                log.rebuild(true);
+                log.rebuild();
                 expect(newLogger).toBeAtLevel("ERROR");
             });
 
-            it("should not change a child's explicitly set level even if un-persisted", function(log) {
+            it("should not change a child's level set with `setLevel()`", function(log) {
                 log.setLevel("TRACE");
                 var newLogger = log.getLogger("newLogger");
-                newLogger.setLevel("DEBUG", false);
+                expect(newLogger).toBeAtLevel("TRACE");
 
-                log.rebuild(true);
+                newLogger.setLevel("DEBUG", false);
+                log.rebuild();
+                expect(newLogger).toBeAtLevel("DEBUG");
+            });
+
+            it("should not change a child's level set with `setDefaultLevel()`", function(log) {
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                expect(newLogger).toBeAtLevel("TRACE");
+
+                newLogger.setDefaultLevel("DEBUG");
+                log.rebuild();
                 expect(newLogger).toBeAtLevel("DEBUG");
             });
         });
