@@ -174,7 +174,7 @@ The `level` argument takes is the same values that you might pass to `setLevel()
 
 #### `log.resetLevel()`
 
-This resets the current log level to the default level (or `warn` if no explicit default was set) and clears the persisted level if one was previously persisted.
+This resets the current log level to the logger's default level (if no explicit default was set, then it resets it to the root logger's level, or to `WARN`) and clears the persisted level if one was previously persisted.
 
 #### `log.enableAll()` and `log.disableAll()`
 
@@ -245,13 +245,33 @@ Likewise, loggers will inherit the root logger’s `methodFactory`. After creati
 
 This will return you the dictionary of all loggers created with `getLogger`, keyed off of their names.
 
-#### `log.rebuild([includeChildren])`
+#### `log.rebuild()`
 
-Ensure the various logging methods (`log.info()`, `log.warn()`, etc.) behave as expected given the currently set logging level. Setting the `includeChildren` argument to `true` will also rebuild all child loggers of the logger this was called on.
+Ensure the various logging methods (`log.info()`, `log.warn()`, etc.) behave as expected given the currently set logging level and `methodFactory`. It will also rebuild all child loggers of the logger this was called on.
 
-This is mostly useful for plugin development. When you call `log.setLevel()` or `log.setDefaultLevel()`, this is called automatically under the hood. However, if you change the logger’s `methodFactory`, you should use this to rebuild all the logging methods with your new factory.
+This is mostly useful for plugin development. When you call `log.setLevel()` or `log.setDefaultLevel()`, the logger is rebuilt automatically. However, if you change the logger’s `methodFactory`, you should use this to rebuild all the logging methods with your new factory.
 
-If you change the level of the root logger and want it to affect other child loggers that you’ve already created (and have not called `otherChildLogger.setLevel()` on), you can do so by calling `log.rebuild(true)`.
+It is also useful if you change the level of the root logger and want it to affect child loggers that you’ve already created (and have not called `someChildLogger.setLevel()` or `someChildLogger.setDefaultLevel()` on). For example:
+
+```js
+var childLogger1 = log.getLogger("child1");
+childLogger1.getLevel();  // WARN (inherited from the root logger)
+
+var childLogger2 = log.getLogger("child2");
+childLogger2.setDefaultLevel("TRACE");
+childLogger2.getLevel();  // TRACE
+
+log.setLevel("ERROR");
+
+// At this point, the child loggers have not changed:
+childLogger1.getLevel();  // WARN
+childLogger2.getLevel();  // TRACE
+
+// To update them:
+log.rebuild();
+childLogger1.getLevel();  // ERROR (still inheriting from root logger)
+childLogger2.getLevel();  // TRACE (no longer inheriting because `.setDefaultLevel() was called`)
+```
 
 ## Plugins
 

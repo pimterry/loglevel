@@ -192,13 +192,12 @@ declare namespace log {
         disableAll(persist?: boolean): void;
 
         /**
-         * Rebuild the logging methods on this logger and optionally its child loggers.
+         * Rebuild the logging methods on this logger and its child loggers.
          *
          * This is mostly intended for plugin developers, but can be useful if you update a logger's `methodFactory` or
-         * if you want to apply the root logger’s level to any *pre-existing* child loggers as their new default level.
-         *
-         * @param includeChildren Call `rebuild()` recursively on any child loggers of this logger.
+         * if you want to apply the root logger’s level to any *pre-existing* child loggers (this updates the level on
+         * any child logger that hasn't used `setLevel()` or `setDefaultLevel()`).
          */
-        rebuild(includeChildren?: boolean): void;
+        rebuild(): void;
     }
 }
