@@ -1,4 +1,4 @@
-/*! loglevel - v1.8.1 - https://github.com/pimterry/loglevel - (c) 2022 Tim Perry - licensed MIT */
+/*! loglevel - v1.9.0 - https://github.com/pimterry/loglevel - (c) 2024 Tim Perry - licensed MIT */
 (function (root, definition) {
     "use strict";
     if (typeof define === 'function' && define.amd) {
@@ -25,6 +25,9 @@
         "warn",
         "error"
     ];
+
+    var _loggersByName = {};
+    var defaultLogger = null;
 
     // Cross-browser bind equivalent that works at least back to IE6
     function bindMethod(obj, methodName) {
@@ -78,25 +81,33 @@
 
     // These private functions always need `this` to be set properly
 
-    function replaceLoggingMethods(level, loggerName) {
+    function replaceLoggingMethods() {
         /*jshint validthis:true */
+        var level = this.getLevel();
+
+        // Replace the actual methods.
         for (var i = 0; i < logMethods.length; i++) {
             var methodName = logMethods[i];
             this[methodName] = (i < level) ?
                 noop :
-                this.methodFactory(methodName, level, loggerName);
+                this.methodFactory(methodName, level, this.name);
         }
 
         // Define log.log as an alias for log.debug
         this.log = this.debug;
+
+        // Return any important warnings.
+        if (typeof console === undefinedType && level < this.levels.SILENT) {
+            return "No console available for logging";
+        }
     }
 
     // In old IE versions, the console isn't present until you first open it.
     // We build realMethod() replacements here that regenerate logging methods
-    function enableLoggingWhenConsoleArrives(methodName, level, loggerName) {
+    function enableLoggingWhenConsoleArrives(methodName) {
         return function () {
             if (typeof console !== undefinedType) {
-                replaceLoggingMethods.call(this, level, loggerName);
+                replaceLoggingMethods.call(this);
                 this[methodName].apply(this, arguments);
             }
         };
@@ -104,16 +115,36 @@
 
     // By default, we use closely bound real methods wherever possible, and
     // otherwise we wait for a console to appear, and then try again.
-    function defaultMethodFactory(methodName, level, loggerName) {
+    function defaultMethodFactory(methodName, _level, _loggerName) {
         /*jshint validthis:true */
         return realMethod(methodName) ||
                enableLoggingWhenConsoleArrives.apply(this, arguments);
     }
 
-    function Logger(name, defaultLevel, factory) {
+    function Logger(name, factory) {
+      // Private instance variables.
       var self = this;
-      var currentLevel;
-      defaultLevel = defaultLevel == null ? "WARN" : defaultLevel;
+      /**
+       * The level inherited from a parent logger (or a global default). We
+       * cache this here rather than delegating to the parent so that it stays
+       * in sync with the actual logging methods that we have installed (the
+       * parent could change levels but we might not have rebuilt the loggers
+       * in this child yet).
+       * @type {number}
+       */
+      var inheritedLevel;
+      /**
+       * The default level for this logger, if any. If set, this overrides
+       * `inheritedLevel`.
+       * @type {number|null}
+       */
+      var defaultLevel;
+      /**
+       * A user-specific level for this logger. If set, this overrides
+       * `defaultLevel`.
+       * @type {number|null}
+       */
+      var userLevel;
 
       var storageKey = "loglevel";
       if (typeof name === "string") {
@@ -153,10 +184,12 @@
           if (typeof storedLevel === undefinedType) {
               try {
                   var cookie = window.document.cookie;
-                  var location = cookie.indexOf(
-                      encodeURIComponent(storageKey) + "=");
+                  var cookieName = encodeURIComponent(storageKey);
+                  var location = cookie.indexOf(cookieName + "=");
                   if (location !== -1) {
-                      storedLevel = /^([^;]+)/.exec(cookie.slice(location))[1];
+                      storedLevel = /^([^;]+)/.exec(
+                          cookie.slice(location + cookieName.length + 1)
+                      )[1];
                   }
               } catch (ignore) {}
           }
@@ -175,7 +208,6 @@
           // Use localStorage if available
           try {
               window.localStorage.removeItem(storageKey);
-              return;
           } catch (ignore) {}
 
           // Use session cookie as fallback
@@ -183,6 +215,18 @@
               window.document.cookie =
                 encodeURIComponent(storageKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
           } catch (ignore) {}
+      }
+
+      function normalizeLevel(input) {
+          var level = input;
+          if (typeof level === "string" && self.levels[level.toUpperCase()] !== undefined) {
+              level = self.levels[level.toUpperCase()];
+          }
+          if (typeof level === "number" && level >= 0 && level <= self.levels.SILENT) {
+              return level;
+          } else {
+              throw new TypeError("log.setLevel() called with invalid level: " + input);
+          }
       }
 
       /*
@@ -199,37 +243,36 @@
       self.methodFactory = factory || defaultMethodFactory;
 
       self.getLevel = function () {
-          return currentLevel;
+          if (userLevel != null) {
+            return userLevel;
+          } else if (defaultLevel != null) {
+            return defaultLevel;
+          } else {
+            return inheritedLevel;
+          }
       };
 
       self.setLevel = function (level, persist) {
-          if (typeof level === "string" && self.levels[level.toUpperCase()] !== undefined) {
-              level = self.levels[level.toUpperCase()];
+          userLevel = normalizeLevel(level);
+          if (persist !== false) {  // defaults to true
+              persistLevelIfPossible(userLevel);
           }
-          if (typeof level === "number" && level >= 0 && level <= self.levels.SILENT) {
-              currentLevel = level;
-              if (persist !== false) {  // defaults to true
-                  persistLevelIfPossible(level);
-              }
-              replaceLoggingMethods.call(self, level, name);
-              if (typeof console === undefinedType && level < self.levels.SILENT) {
-                  return "No console available for logging";
-              }
-          } else {
-              throw "log.setLevel() called with invalid level: " + level;
-          }
+
+          // NOTE: in v2, this should call rebuild(), which updates children.
+          return replaceLoggingMethods.call(this);
       };
 
       self.setDefaultLevel = function (level) {
-          defaultLevel = level;
+          defaultLevel = normalizeLevel(level);
           if (!getPersistedLevel()) {
               self.setLevel(level, false);
           }
       };
 
       self.resetLevel = function () {
-          self.setLevel(defaultLevel, false);
+          userLevel = null;
           clearPersistedLevel();
+          replaceLoggingMethods.call(this);
       };
 
       self.enableAll = function(persist) {
@@ -240,12 +283,28 @@
           self.setLevel(self.levels.SILENT, persist);
       };
 
-      // Initialize with the right level
+      self.rebuild = function () {
+          if (defaultLogger !== self) {
+              inheritedLevel = normalizeLevel(defaultLogger.getLevel());
+          }
+          replaceLoggingMethods.call(this);
+
+          if (defaultLogger === self) {
+              for (var childName in _loggersByName) {
+                _loggersByName[childName].rebuild();
+              }
+          }
+      };
+
+      // Initialize all the internal levels.
+      inheritedLevel = normalizeLevel(
+          defaultLogger ? defaultLogger.getLevel() : "WARN"
+      );
       var initialLevel = getPersistedLevel();
-      if (initialLevel == null) {
-          initialLevel = defaultLevel;
+      if (initialLevel != null) {
+          userLevel = normalizeLevel(initialLevel);
       }
-      self.setLevel(initialLevel, false);
+      replaceLoggingMethods.call(this);
     }
 
     /*
@@ -254,18 +313,19 @@
      *
      */
 
-    var defaultLogger = new Logger();
+    defaultLogger = new Logger();
 
-    var _loggersByName = {};
     defaultLogger.getLogger = function getLogger(name) {
         if ((typeof name !== "symbol" && typeof name !== "string") || name === "") {
-          throw new TypeError("You must supply a name when creating a logger.");
+            throw new TypeError("You must supply a name when creating a logger.");
         }
 
         var logger = _loggersByName[name];
         if (!logger) {
-          logger = _loggersByName[name] = new Logger(
-            name, defaultLogger.getLevel(), defaultLogger.methodFactory);
+            logger = _loggersByName[name] = new Logger(
+                name,
+                defaultLogger.methodFactory
+            );
         }
         return logger;
     };
