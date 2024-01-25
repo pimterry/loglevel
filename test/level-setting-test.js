@@ -64,31 +64,31 @@ define(['../lib/loglevel'], function(log) {
             it("no level argument", function() {
                 expect(function() {
                     log.setLevel();
-                }).toThrow("log.setLevel() called with invalid level: undefined");
+                }).toThrowError(TypeError, "log.setLevel() called with invalid level: undefined");
             });
 
             it("a null level argument", function() {
                 expect(function() {
                     log.setLevel(null);
-                }).toThrow("log.setLevel() called with invalid level: null");
+                }).toThrowError(TypeError, "log.setLevel() called with invalid level: null");
             });
 
             it("an undefined level argument", function() {
                 expect(function() {
                     log.setLevel(undefined);
-                }).toThrow("log.setLevel() called with invalid level: undefined");
+                }).toThrowError(TypeError, "log.setLevel() called with invalid level: undefined");
             });
 
             it("an invalid log level index", function() {
                 expect(function() {
                     log.setLevel(-1);
-                }).toThrow("log.setLevel() called with invalid level: -1");
+                }).toThrowError(TypeError, "log.setLevel() called with invalid level: -1");
             });
 
             it("an invalid log level name", function() {
                 expect(function() {
                     log.setLevel("InvalidLevelName");
-                }).toThrow("log.setLevel() called with invalid level: InvalidLevelName");
+                }).toThrowError(TypeError, "log.setLevel() called with invalid level: InvalidLevelName");
             });
         });
 

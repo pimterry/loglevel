@@ -190,5 +190,14 @@ declare namespace log {
          *     false as the optional 'persist' second argument, persistence will be skipped.
          */
         disableAll(persist?: boolean): void;
+
+        /**
+         * Rebuild the logging methods on this logger and its child loggers.
+         *
+         * This is mostly intended for plugin developers, but can be useful if you update a logger's `methodFactory` or
+         * if you want to apply the root logger’s level to any *pre-existing* child loggers (this updates the level on
+         * any child logger that hasn't used `setLevel()` or `setDefaultLevel()`).
+         */
+        rebuild(): void;
     }
 }

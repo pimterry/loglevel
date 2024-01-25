@@ -150,5 +150,126 @@ define(['test/test-helpers'], function(testHelpers) {
               expect(newLogger).toBeAtLevel("trace");
             });
         });
+
+        describe("logger.resetLevel()", function() {
+            beforeEach(function() {
+                window.console = {"log" : jasmine.createSpy("console.log")};
+                jasmine.addMatchers({
+                    "toBeAtLevel" : testHelpers.toBeAtLevel
+                });
+                testHelpers.clearStoredLevels();
+            });
+
+            afterEach(function() {
+                window.console = originalConsole;
+            });
+
+            it("resets to the inherited level if no local level was set", function(log) {
+                testHelpers.setStoredLevel("ERROR", "newLogger");
+
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                expect(newLogger).toBeAtLevel("ERROR");
+
+                newLogger.resetLevel();
+                expect(newLogger).toBeAtLevel("TRACE");
+
+                // resetLevel() should not have broken inheritance.
+                log.setLevel("DEBUG");
+                log.rebuild();
+                expect(newLogger).toBeAtLevel("DEBUG");
+            });
+
+            it("resets to the inherited level if no default level was set", function(log) {
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                expect(newLogger).toBeAtLevel("TRACE");
+
+                newLogger.setLevel("ERROR");
+                expect(newLogger).toBeAtLevel("ERROR");
+
+                newLogger.resetLevel();
+                expect(newLogger).toBeAtLevel("TRACE");
+
+                // resetLevel() should not have broken inheritance.
+                log.setLevel("DEBUG");
+                log.rebuild();
+                expect(newLogger).toBeAtLevel("DEBUG");
+            });
+
+            it("resets to the default level if one was set", function(log) {
+                testHelpers.setStoredLevel("ERROR", "newLogger");
+
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                newLogger.setDefaultLevel("INFO");
+                expect(newLogger).toBeAtLevel("ERROR");
+
+                newLogger.resetLevel();
+                expect(newLogger).toBeAtLevel("INFO");
+
+                // resetLevel() should not have caused inheritance to start.
+                log.setLevel("DEBUG");
+                log.rebuild();
+                expect(newLogger).toBeAtLevel("INFO");
+            });
+        });
+
+        describe("logger.rebuild()", function() {
+            beforeEach(function() {
+                window.console = {"log" : jasmine.createSpy("console.log")};
+                jasmine.addMatchers({
+                    "toBeAtLevel" : testHelpers.toBeAtLevel
+                });
+                testHelpers.clearStoredLevels();
+            });
+
+            afterEach(function() {
+                window.console = originalConsole;
+            });
+
+            it("rebuilds existing child loggers", function(log) {
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                expect(newLogger).toBeAtLevel("TRACE");
+
+                log.setLevel("ERROR");
+                expect(newLogger).toBeAtLevel("TRACE");
+
+                log.rebuild();
+                expect(newLogger).toBeAtLevel("ERROR");
+            });
+
+            it("should not change a child's persisted level", function(log) {
+                testHelpers.setStoredLevel("ERROR", "newLogger");
+
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                expect(newLogger).toBeAtLevel("ERROR");
+
+                log.rebuild();
+                expect(newLogger).toBeAtLevel("ERROR");
+            });
+
+            it("should not change a child's level set with `setLevel()`", function(log) {
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                expect(newLogger).toBeAtLevel("TRACE");
+
+                newLogger.setLevel("DEBUG", false);
+                log.rebuild();
+                expect(newLogger).toBeAtLevel("DEBUG");
+            });
+
+            it("should not change a child's level set with `setDefaultLevel()`", function(log) {
+                log.setLevel("TRACE");
+                var newLogger = log.getLogger("newLogger");
+                expect(newLogger).toBeAtLevel("TRACE");
+
+                newLogger.setDefaultLevel("DEBUG");
+                log.rebuild();
+                expect(newLogger).toBeAtLevel("DEBUG");
+            });
+        });
     });
 });
