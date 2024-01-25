@@ -17,9 +17,11 @@
   <script src="<%= temp ? temp + "/" : temp %>require.js"></script>
 
   <% with (scripts) { %>
-  <% [].concat(jasmine, boot, helpers).forEach(function(script){ %>
+  <% /* LOGLEVEL-FORK: Include new script types used by grunt-contrib-jasmine v4 */ %>
+  <% [].concat(polyfills, jasmine, boot, boot2, helpers).forEach(function(script){ %>
   <script src="<%= script %>"></script>
   <% }) %>
+  <% /* END LOGLEVEL-FORK */ %>
   <% }; %>
 
   <script>

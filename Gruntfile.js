@@ -1,5 +1,7 @@
 'use strict';
 
+var Jasmine = require('jasmine');
+
 module.exports = function (grunt) {
     var jasmineRequireJsOptions = {
         specs: 'test/*-test.js',
@@ -54,45 +56,11 @@ module.exports = function (grunt) {
                 options: {
                     specs: 'test/global-integration-with-new-context.js',
                 }
-            },
-            // Wraps the `requirejs` configuration above with Instanbul code
-            // coverage tracking.
-            withCoverage: {
-                src: 'lib/**/*.js',
-                options: {
-                    specs: jasmineRequireJsOptions.specs,
-                    helpers: jasmineRequireJsOptions.helpers,
-                    template: require('grunt-template-jasmine-istanbul'),
-                    templateOptions: {
-                        coverage: 'coverage/coverage.json',
-                        report: [
-                            {
-                                type: 'html',
-                                options: {
-                                    dir: 'coverage'
-                                }
-                            },
-                            {
-                                type: 'lcov',
-                                options: {
-                                    dir: 'coverage'
-                                }
-                            }
-                        ],
-
-                        template: require('./vendor/grunt-template-jasmine-requirejs')
-                    }
-                }
             }
         },
-        "jasmine_node": {
-            test: {
-                options: {
-                    match: "node-integration.",
-                    matchall: true,
-                    projectRoot: "./test",
-                    useHelpers: false
-                }
+        jasmine_node: {
+            options: {
+                specs: ['test/node-integration.js']
             }
         },
         open: {
@@ -155,7 +123,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-jasmine-node');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
@@ -164,13 +131,29 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-preprocess');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
+    // Run Jasmine with Node.js tests (as opposed to browser tests).
+    //
+    // NOTE: This is designed for Jasmine 2.4, which matches the version used
+    // in `grunt-contrib-jasmine`. If that package is updated, this should also
+    // be updated to match.
+    grunt.registerTask('jasmine_node', 'Run Jasmine in Node.js', function() {
+        var done = this.async();
+
+        var jasmine = new Jasmine({ projectBaseDir: __dirname });
+        jasmine.onComplete(function(success) {
+            done(success);
+        });
+
+        jasmine.execute(this.options().specs);
+    });
+
     // Build a distributable release
     grunt.registerTask('dist', ['test', 'dist-build']);
     grunt.registerTask('dist-build', ['concat', 'uglify']);
 
     // Check everything is good
     grunt.registerTask('test', ['jshint', 'test-browser', 'test-node']);
-    grunt.registerTask('test-browser', ['jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine:withCoverage']);
+    grunt.registerTask('test-browser', ['jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine:requirejs']);
     grunt.registerTask('test-node', ['jasmine_node']);
 
     // Test with a live server and an actual browser
@@ -178,5 +161,4 @@ module.exports = function (grunt) {
 
     // Default task.
     grunt.registerTask('default', 'test');
-
 };
