@@ -1,4 +1,4 @@
-/*! loglevel - v1.9.0 - https://github.com/pimterry/loglevel - (c) 2024 Tim Perry - licensed MIT */
+/*! loglevel - v1.9.1 - https://github.com/pimterry/loglevel - (c) 2024 Tim Perry - licensed MIT */
 (function (root, definition) {
     "use strict";
     if (typeof define === 'function' && define.amd) {
@@ -259,7 +259,7 @@
           }
 
           // NOTE: in v2, this should call rebuild(), which updates children.
-          return replaceLoggingMethods.call(this);
+          return replaceLoggingMethods.call(self);
       };
 
       self.setDefaultLevel = function (level) {
@@ -272,7 +272,7 @@
       self.resetLevel = function () {
           userLevel = null;
           clearPersistedLevel();
-          replaceLoggingMethods.call(this);
+          replaceLoggingMethods.call(self);
       };
 
       self.enableAll = function(persist) {
@@ -287,7 +287,7 @@
           if (defaultLogger !== self) {
               inheritedLevel = normalizeLevel(defaultLogger.getLevel());
           }
-          replaceLoggingMethods.call(this);
+          replaceLoggingMethods.call(self);
 
           if (defaultLogger === self) {
               for (var childName in _loggersByName) {
@@ -304,7 +304,7 @@
       if (initialLevel != null) {
           userLevel = normalizeLevel(initialLevel);
       }
-      replaceLoggingMethods.call(this);
+      replaceLoggingMethods.call(self);
     }
 
     /*

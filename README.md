@@ -392,6 +392,8 @@ v1.8.1 - Fix incorrect type definitions for MethodFactory
 
 v1.9.0 - Added `rebuild()` method, overhaul dev & test setup, and fix some bugs (notably around cookies) en route
 
+v1.9.1 - Fix a bug introduced in 1.9.0 that broke `setLevel()` in some ESM-focused runtime environments
+
 ## `loglevel` for enterprise
 
 Available as part of the Tidelift Subscription.
