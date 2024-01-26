@@ -30,7 +30,7 @@
     "test": "grunt test && npm run test-types",
     "test-browser": "grunt test-browser",
     "test-node": "grunt test-node",
-    "test-types": "tsc --noEmit ./test/type-test.ts",
+    "test-types": "tsc --noEmit ./test/type-test.ts && ts-node ./test/type-test.ts",
     "dist": "grunt dist",
     "dist-build": "grunt dist-build",
     "watch": "grunt watch"
@@ -51,6 +51,7 @@
     "grunt-open": "~0.2.3",
     "grunt-preprocess": "^5.1.0",
     "jasmine": "^2.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "^3.5.1"
   },
   "keywords": [
