@@ -153,7 +153,8 @@ module.exports = function (grunt) {
 
     // Check everything is good
     grunt.registerTask('test', ['jshint', 'test-browser', 'test-node']);
-    grunt.registerTask('test-browser', ['jasmine:global', 'preprocess', 'jasmine:context', 'clean:test', 'jasmine:requirejs']);
+    grunt.registerTask('test-browser', ['jasmine:global', 'test-browser-context', 'jasmine:requirejs']);
+    grunt.registerTask('test-browser-context', ['preprocess', 'jasmine:context', 'clean:test']);
     grunt.registerTask('test-node', ['jasmine_node']);
 
     // Test with a live server and an actual browser
