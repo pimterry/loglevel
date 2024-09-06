@@ -1,0 +1,13 @@
+coverage/
+.idea/
+vendor/
+test/
+.github/
+
+npm-debug.log
+*.iml
+.env
+_SpecRunner.html
+.grunt
+.jshintrc
+*.tgz
