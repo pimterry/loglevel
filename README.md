@@ -45,8 +45,8 @@ Alternatively if you just want to grab the file yourself, you can download eithe
 
 Finally, if you want to tweak loglevel to your own needs or you immediately need the cutting-edge version, clone this repo and see [Developing & Contributing](#developing--contributing) below for build instructions.
 
-[min]: https://raw.github.com/pimterry/loglevel/master/dist/loglevel.min.js
-[max]: https://raw.github.com/pimterry/loglevel/master/dist/loglevel.js
+[min]: https://raw.github.com/pimterry/loglevel/main/dist/loglevel.min.js
+[max]: https://raw.github.com/pimterry/loglevel/main/dist/loglevel.js
 [cdn]: https://unpkg.com/loglevel/dist/loglevel.min.js
 
 ## Setting it up

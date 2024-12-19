@@ -5,7 +5,7 @@ If you'd like to file a bug or a feature request for loglevel, the best option i
 
 If you're filing a feature request, please remember:
 
-* Feature requests significantly expanding the scope of loglevel outside the description in [the readme](https://github.com/pimterry/loglevel/blob/master/README.md) will probably be rejected.
+* Feature requests significantly expanding the scope of loglevel outside the description in [the readme](https://github.com/pimterry/loglevel/blob/main/README.md) will probably be rejected.
 * Features that can't be meaningfully implemented in a cross-environment compatible manner won't be implemented.
 * Please check the previously opened issues to see if somebody else has suggested it first.
 * Consider submitting a pull request to add the feature instead, if you're confident it fits within the above.
@@ -60,12 +60,12 @@ How to make your change and submit it
 1. Ensure you have Node.js v14 or later (some tests can run on earlier versions, but the full suite requires this version).
 2. Fork loglevel.
 3. Clone your fork locally.
-4. Create a branch from `master` for your change.
+4. Create a branch from `main` for your change.
 5. Write some tests in `test/` for your change, as relevant.
 6. Make your code changes in `lib/loglevel.js`.
 7. Check your code all passes (run `npm test`). If you have issues and need to debug the tests, see the details on ["running tests"](#running-tests) below.
 8. Commit your changes.
-9. Open a pull request back to `master` in loglevel.
+9. Open a pull request back to `main` in loglevel.
 
 Running Tests
 -------------
