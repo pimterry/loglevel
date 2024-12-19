@@ -4,6 +4,8 @@
 [npm-image]: https://img.shields.io/npm/v/loglevel.svg?style=flat
 [npm-url]: https://npmjs.org/package/loglevel
 
+⚠️ **You are looking at an in-development branch for Loglevel 2.0!** There will be a lot of breaking changes here. For release versions of Loglevel, check out the [`main` branch](https://github.com/pimterry/loglevel/tree/main).
+
 > _Don't debug with logs alone - check out [HTTP Toolkit](https://httptoolkit.tech/javascript): beautiful, powerful & open-source tools for building, testing & debugging HTTP(S)_
 
 Minimal lightweight simple logging for JavaScript (browsers, node.js or elsewhere). loglevel extends `console.log()` & friends with level-based logging and filtering, with none of console's downsides.
