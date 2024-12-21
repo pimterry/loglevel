@@ -8,14 +8,6 @@ var logMethods = [
     "error"
 ];
 
-function getConsoleMethod(logMethodName) {
-    if (logMethodName === 'debug') {
-        return console.log;
-    } else {
-        return console[logMethodName];
-    }
-}
-
 define(['../lib/loglevel'], function(log) {
     var originalConsole = window.console;
 
@@ -42,7 +34,7 @@ define(['../lib/loglevel'], function(log) {
                     var method = logMethods[ii];
                     log[method]("a log message");
 
-                    expect(getConsoleMethod(method)).toHaveBeenCalled();
+                    expect(console[method]).toHaveBeenCalled();
                 }
             });
         });
@@ -55,7 +47,7 @@ define(['../lib/loglevel'], function(log) {
                     var method = logMethods[ii];
                     log[method]("a log message");
 
-                    expect(getConsoleMethod(method)).not.toHaveBeenCalled();
+                    expect(console[method]).not.toHaveBeenCalled();
                 }
             });
         });
@@ -98,7 +90,7 @@ define(['../lib/loglevel'], function(log) {
                     log.setLevel(level, false);
 
                     log[level]("log message");
-                    expect(getConsoleMethod(level)).toHaveBeenCalled();
+                    expect(console[level]).toHaveBeenCalled();
                 });
             }
 
@@ -138,28 +130,28 @@ define(['../lib/loglevel'], function(log) {
                     log.setLevel(log.levels.TRACE);
 
                     log.debug("a log message");
-                    expect(console.log).toHaveBeenCalled();
+                    expect(console.debug).toHaveBeenCalled();
                 });
 
                 it("is enabled at debug level", function() {
                     log.setLevel(log.levels.DEBUG);
 
                     log.debug("a log message");
-                    expect(console.log).toHaveBeenCalled();
+                    expect(console.debug).toHaveBeenCalled();
                 });
 
                 it("is disabled at info level", function() {
                     log.setLevel(log.levels.INFO);
 
                     log.debug("a log message");
-                    expect(console.log).not.toHaveBeenCalled();
+                    expect(console.debug).not.toHaveBeenCalled();
                 });
 
                 it("is disabled at silent level", function() {
                     log.setLevel(log.levels.SILENT);
 
                     log.debug("a log message");
-                    expect(console.log).not.toHaveBeenCalled();
+                    expect(console.debug).not.toHaveBeenCalled();
                 });
             });
 
@@ -168,28 +160,28 @@ define(['../lib/loglevel'], function(log) {
                     log.setLevel(log.levels.TRACE);
 
                     log.log("a log message");
-                    expect(console.log).toHaveBeenCalled();
+                    expect(console.debug).toHaveBeenCalled();
                 });
 
                 it("is enabled at debug level", function() {
                     log.setLevel(log.levels.DEBUG);
 
                     log.log("a log message");
-                    expect(console.log).toHaveBeenCalled();
+                    expect(console.debug).toHaveBeenCalled();
                 });
 
                 it("is disabled at info level", function() {
                     log.setLevel(log.levels.INFO);
 
                     log.log("a log message");
-                    expect(console.log).not.toHaveBeenCalled();
+                    expect(console.debug).not.toHaveBeenCalled();
                 });
 
                 it("is disabled at silent level", function() {
                     log.setLevel(log.levels.SILENT);
 
                     log.log("a log message");
-                    expect(console.log).not.toHaveBeenCalled();
+                    expect(console.debug).not.toHaveBeenCalled();
                 });
             });
 
