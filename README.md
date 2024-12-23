@@ -4,6 +4,8 @@
 [npm-image]: https://img.shields.io/npm/v/loglevel.svg?style=flat
 [npm-url]: https://npmjs.org/package/loglevel
 
+⚠️ **You are looking at an in-development branch for Loglevel 2.0!** There will be a lot of breaking changes here. For release versions of Loglevel, check out the [`main` branch](https://github.com/pimterry/loglevel/tree/main).
+
 > _Don't debug with logs alone - check out [HTTP Toolkit](https://httptoolkit.tech/javascript): beautiful, powerful & open-source tools for building, testing & debugging HTTP(S)_
 
 Minimal lightweight simple logging for JavaScript (browsers, node.js or elsewhere). loglevel extends `console.log()` & friends with level-based logging and filtering, with none of console's downsides.
@@ -45,8 +47,8 @@ Alternatively if you just want to grab the file yourself, you can download eithe
 
 Finally, if you want to tweak loglevel to your own needs or you immediately need the cutting-edge version, clone this repo and see [Developing & Contributing](#developing--contributing) below for build instructions.
 
-[min]: https://raw.github.com/pimterry/loglevel/master/dist/loglevel.min.js
-[max]: https://raw.github.com/pimterry/loglevel/master/dist/loglevel.js
+[min]: https://raw.github.com/pimterry/loglevel/main/dist/loglevel.min.js
+[max]: https://raw.github.com/pimterry/loglevel/main/dist/loglevel.js
 [cdn]: https://unpkg.com/loglevel/dist/loglevel.min.js
 
 ## Setting it up
@@ -395,6 +397,11 @@ v1.9.0 - Added `rebuild()` method, overhaul dev & test setup, and fix some bugs 
 v1.9.1 - Fix a bug introduced in 1.9.0 that broke `setLevel()` in some ESM-focused runtime environments
 
 v1.9.2 - Remove unnecessarily extra test & CI files from deployed package
+
+v2.0.0 **(In development)**
+- Removed support for Internet Explorer v10 and older.
+- Calling `debug(msg)` shows up as an actual “debug” level message in browser consoles (in v1, it showed up as “log” or “info” depending on your browser).
+- The `log()` method is now equivalent to `info()` instead of `debug()`.
 
 ## `loglevel` for enterprise
 
