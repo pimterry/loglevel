@@ -401,6 +401,7 @@ v1.9.2 - Remove unnecessarily extra test & CI files from deployed package
 v2.0.0 **(In development)**
 - Removed support for Internet Explorer v10 and older.
 - Calling `debug(msg)` shows up as an actual “debug” level message in browser consoles (in v1, it showed up as “log” or “info” depending on your browser).
+- The `log()` method is now equivalent to `info()` instead of `debug()`.
 
 ## `loglevel` for enterprise
 

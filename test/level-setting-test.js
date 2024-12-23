@@ -160,28 +160,28 @@ define(['../lib/loglevel'], function(log) {
                     log.setLevel(log.levels.TRACE);
 
                     log.log("a log message");
-                    expect(console.debug).toHaveBeenCalled();
+                    expect(console.info).toHaveBeenCalled();
                 });
 
                 it("is enabled at debug level", function() {
                     log.setLevel(log.levels.DEBUG);
 
                     log.log("a log message");
-                    expect(console.debug).toHaveBeenCalled();
+                    expect(console.info).toHaveBeenCalled();
                 });
 
-                it("is disabled at info level", function() {
+                it("is enabled at info level", function() {
                     log.setLevel(log.levels.INFO);
 
                     log.log("a log message");
-                    expect(console.debug).not.toHaveBeenCalled();
+                    expect(console.info).toHaveBeenCalled();
                 });
 
                 it("is disabled at silent level", function() {
                     log.setLevel(log.levels.SILENT);
 
                     log.log("a log message");
-                    expect(console.debug).not.toHaveBeenCalled();
+                    expect(console.info).not.toHaveBeenCalled();
                 });
             });
 

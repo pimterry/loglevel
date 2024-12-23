@@ -29,15 +29,14 @@
     // Build the best logging method possible for this env
     // Wherever possible we want to bind, not wrap, to preserve stack traces
     function defaultMethodFactory(methodName, _level, _loggerName) {
-        if (typeof console === undefinedType) {
-            return noop;
-        } else if (console[methodName] !== undefined) {
-            return console[methodName].bind(console);
-        } else if (console.log !== undefined) {
-            return console.log.bind(console);
-        } else {
-            return noop;
+        if (typeof console !== undefinedType) {
+            var consoleMethod = console[methodName] || console.log;
+            if (typeof consoleMethod === "function") {
+                return consoleMethod.bind(console);
+            }
         }
+
+        return noop;
     }
 
     // These private functions always need `this` to be set properly
@@ -54,8 +53,8 @@
                 this.methodFactory(methodName, level, this.name);
         }
 
-        // Define log.log as an alias for log.debug
-        this.log = this.debug;
+        // Make `log.log` an alias to ensure compatibility with `console.*`.
+        this.log = this.info;
 
         // Return any important warnings.
         if (typeof console === undefinedType && level < this.levels.SILENT) {
