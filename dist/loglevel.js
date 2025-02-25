@@ -1,4 +1,4 @@
-/*! loglevel - v1.9.2 - https://github.com/pimterry/loglevel - (c) 2024 Tim Perry - licensed MIT */
+/*! loglevel - v1.9.2 - https://github.com/pimterry/loglevel - (c) 2025 Tim Perry - licensed MIT */
 (function (root, definition) {
     "use strict";
     if (typeof define === 'function' && define.amd) {
@@ -125,26 +125,26 @@
       // Private instance variables.
       var self = this;
       /**
-       * The level inherited from a parent logger (or a global default). We
-       * cache this here rather than delegating to the parent so that it stays
-       * in sync with the actual logging methods that we have installed (the
-       * parent could change levels but we might not have rebuilt the loggers
-       * in this child yet).
-       * @type {number}
-       */
-      var inheritedLevel;
-      /**
-       * The default level for this logger, if any. If set, this overrides
-       * `inheritedLevel`.
-       * @type {number|null}
-       */
-      var defaultLevel;
-      /**
-       * A user-specific level for this logger. If set, this overrides
-       * `defaultLevel`.
-       * @type {number|null}
-       */
-      var userLevel;
+         * The level inherited from a parent logger (or a global default). We
+         * cache this here rather than delegating to the parent so that it stays
+         * in sync with the actual logging methods that we have installed (the
+         * parent could change levels but we might not have rebuilt the loggers
+         * in this child yet).
+         * @type {number}
+         */
+        var inheritedLevel = null;
+        /**
+         * The default level for this logger, if any. If set, this overrides
+         * `inheritedLevel`.
+         * @type {number|null}
+         */
+        var defaultLevel = null;
+        /**
+         * A user-specific level for this logger. If set, this overrides
+         * `defaultLevel`.
+         * @type {number|null}
+         */
+        var userLevel = null;
 
       var storageKey = "loglevel";
       if (typeof name === "string") {
@@ -160,50 +160,50 @@
 
           // Use localStorage if available
           try {
-              window.localStorage[storageKey] = levelName;
-              return;
-          } catch (ignore) {}
+                window.localStorage[storageKey] = levelName;
+                return;
+            } catch (ignore) {}
 
-          // Use session cookie as fallback
-          try {
-              window.document.cookie =
-                encodeURIComponent(storageKey) + "=" + levelName + ";";
-          } catch (ignore) {}
-      }
+            // Use session cookie as fallback
+            try {
+                window.document.cookie =
+                    encodeURIComponent(storageKey) + "=" + levelName + ";";
+            } catch (ignore) {}
+        }
 
-      function getPersistedLevel() {
-          var storedLevel;
+        function getPersistedLevel() {
+            var storedLevel;
 
-          if (typeof window === undefinedType || !storageKey) return;
+            if (typeof window === undefinedType || !storageKey) return;
 
-          try {
-              storedLevel = window.localStorage[storageKey];
-          } catch (ignore) {}
+            try {
+                storedLevel = window.localStorage[storageKey];
+            } catch (ignore) {}
 
-          // Fallback to cookies if local storage gives us nothing
-          if (typeof storedLevel === undefinedType) {
-              try {
-                  var cookie = window.document.cookie;
-                  var cookieName = encodeURIComponent(storageKey);
-                  var location = cookie.indexOf(cookieName + "=");
-                  if (location !== -1) {
-                      storedLevel = /^([^;]+)/.exec(
-                          cookie.slice(location + cookieName.length + 1)
-                      )[1];
-                  }
-              } catch (ignore) {}
-          }
+            // Fallback to cookies if local storage gives us nothing
+            if (typeof storedLevel === undefinedType) {
+                try {
+                    var cookie = window.document.cookie;
+                    var cookieName = encodeURIComponent(storageKey);
+                    var location = cookie.indexOf(cookieName + "=");
+                    if (location !== -1) {
+                        storedLevel = /^([^;]+)/.exec(
+                            cookie.slice(location + cookieName.length + 1)
+                        )[1];
+                    }
+                } catch (ignore) {}
+            }
 
-          // If the stored level is not valid, treat it as if nothing was stored.
-          if (self.levels[storedLevel] === undefined) {
-              storedLevel = undefined;
-          }
+            // If the stored level is not valid, treat it as if nothing was stored.
+            if (self.levels[storedLevel] === undefined) {
+                storedLevel = undefined;
+            }
 
-          return storedLevel;
-      }
+            return storedLevel;
+        }
 
-      function clearPersistedLevel() {
-          if (typeof window === undefinedType || !storageKey) return;
+        function clearPersistedLevel() {
+            if (typeof window === undefinedType || !storageKey) return;
 
           // Use localStorage if available
           try {
@@ -229,10 +229,10 @@
           }
       }
 
-      /*
-       *
-       * Public logger API - see https://github.com/pimterry/loglevel for details
-       *
+        /*
+         *
+         * Public logger API - see https://github.com/pimterry/loglevel for details
+         *
        */
 
       self.name = name;
@@ -243,13 +243,48 @@
       self.methodFactory = factory || defaultMethodFactory;
 
       self.getLevel = function () {
-          if (userLevel != null) {
-            return userLevel;
-          } else if (defaultLevel != null) {
-            return defaultLevel;
-          } else {
-            return inheritedLevel;
+          if (userLevel !== null) {
+              return userLevel;
           }
+          if (defaultLevel !== null) {
+              return defaultLevel;
+          }
+          if (inheritedLevel === null) {
+              inheritedLevel = self.getInheritedLevel();
+          }
+          return inheritedLevel;
+      };
+
+      self.getInheritedLevel = function() {
+          if( defaultLogger && self.parentKey ) {
+              return defaultLogger.getLogger(self.parentKey).getLevel();
+          }
+          if( !defaultLogger || defaultLogger===self ) {
+              return normalizeLevel("WARN");
+          }
+          return normalizeLevel(
+              defaultLogger ? defaultLogger.getLevel() : "WARN" );
+      };
+
+      /** The parentKey is the name of the parent this inherits from */
+      self.parentKey = undefined;
+
+      self.clearInheritedLevel = function () {
+          inheritedLevel = null;
+          var loggerNames = Object.keys(_loggersByName);
+          for(var i=0; i<loggerNames.length; i++) {
+              var loggerName = loggerNames[i];
+              var childLogger = _loggersByName[loggerName];
+              if( childLogger.parentKey===name ) {
+                  _loggersByName[loggerName].clearInheritedLevel();
+              }
+          }
+      };
+
+      self.getLogger = function(childName) {
+          var childLogger = defaultLogger.getLogger(name +'.' + childName);
+          childLogger.parentKey = name;
+          return childLogger;
       };
 
       self.setLevel = function (level, persist) {
@@ -258,53 +293,55 @@
               persistLevelIfPossible(userLevel);
           }
 
+          self.clearInheritedLevel();
           // NOTE: in v2, this should call rebuild(), which updates children.
           return replaceLoggingMethods.call(self);
       };
 
-      self.setDefaultLevel = function (level) {
-          defaultLevel = normalizeLevel(level);
-          if (!getPersistedLevel()) {
-              self.setLevel(level, false);
-          }
-      };
+        self.setDefaultLevel = function (level) {
+            defaultLevel = normalizeLevel(level);
+            if (!getPersistedLevel()) {
+                self.setLevel(level, false);
+            } else {
+                self.clearInheritedLevel();
+            }
+        };
 
-      self.resetLevel = function () {
-          userLevel = null;
-          clearPersistedLevel();
-          replaceLoggingMethods.call(self);
-      };
+        self.resetLevel = function () {
+            userLevel = null;
+            clearPersistedLevel();
+            replaceLoggingMethods.call(self);
+            this.clearInheritedLevel();
+        };
 
-      self.enableAll = function(persist) {
-          self.setLevel(self.levels.TRACE, persist);
-      };
+        self.enableAll = function (persist) {
+            self.setLevel(self.levels.TRACE, persist);
+        };
 
-      self.disableAll = function(persist) {
-          self.setLevel(self.levels.SILENT, persist);
-      };
+        self.disableAll = function (persist) {
+            self.setLevel(self.levels.SILENT, persist);
+        };
 
-      self.rebuild = function () {
-          if (defaultLogger !== self) {
-              inheritedLevel = normalizeLevel(defaultLogger.getLevel());
-          }
-          replaceLoggingMethods.call(self);
+        self.rebuild = function () {
+            if (defaultLogger !== self) {
+                inheritedLevel = null;
+            }
+            replaceLoggingMethods.call(self);
 
-          if (defaultLogger === self) {
-              for (var childName in _loggersByName) {
-                _loggersByName[childName].rebuild();
-              }
-          }
-      };
+            if (defaultLogger === self) {
+                for (var childName in _loggersByName) {
+                    _loggersByName[childName].rebuild();
+                }
+            }
+        };
 
-      // Initialize all the internal levels.
-      inheritedLevel = normalizeLevel(
-          defaultLogger ? defaultLogger.getLevel() : "WARN"
-      );
-      var initialLevel = getPersistedLevel();
-      if (initialLevel != null) {
-          userLevel = normalizeLevel(initialLevel);
-      }
-      replaceLoggingMethods.call(self);
+        // Initialize all the internal levels.
+        inheritedLevel = self===defaultLogger ? normalizeLevel("WARN") : null;
+        var initialLevel = getPersistedLevel();
+        if (initialLevel != null) {
+            userLevel = normalizeLevel(initialLevel);
+        }
+        replaceLoggingMethods.call(self);
     }
 
     /*
