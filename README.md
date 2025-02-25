@@ -249,7 +249,9 @@ Example usage _(using CommonJS modules, but you could do the same with any modul
 
 ```javascript
 // In module-one.js:
-var logApp = require("loglevel").getLogger("app");
+var loglevel = require("loglevel");
+loglevel.setLevel("error");
+var logApp = .getLogger("app");
 var logUI = logApp.getLogger("ui");
 var logUIClass1 = logUI.getLogger("class1");
 
@@ -264,16 +266,16 @@ const utility = {
 };
 
 function doSomethingAmazing() {
-  logUIClass1.debug("Amazing message from module one.");
+  logUIClass1.debug("Amazing message from class 1 one.");
   // Will NOT send out messages
   utility.callMethod();
 }
 
-// logs "Special message from module one."
+// logs "Special message from class 1."
 // (but nothing from utils module)
 ```
 
-Loggers returned by `getLogger()` support all the same properties and methods as the default root logger, excepting `noConflict()` and the `getLogger()` method itself.
+Loggers returned by `getLogger()` support all the same properties and methods as the default root logger, excepting `noConflict()` and the `getLogger()` creating a child logger instead of a root logger.
 
 Like the root logger, other loggers can have their logging level saved. If a logger’s level has not been saved, it will inherit the root logger’s level when it is first created. If the root logger’s level changes later, the new level will not affect other loggers that have already been created. Loggers with Symbol names (rather than string names) will always be considered unique instances, and will never have their logging level saved or restored.
 
