@@ -243,6 +243,46 @@ Like the root logger, other loggers can have their logging level saved. If a log
 
 Likewise, loggers inherit the root logger’s `methodFactory`. After creation, each logger can have its `methodFactory` independently set. See the _plugins_ section below for more about `methodFactory`.
 
+#### Hierarchical Loggers `log.getLogger(parentLoggerName).getLogger(childLoggerName)`
+
+This gets you a new logger object which inherits the parent logger's log level, being named `parentLogger.childLogger`.  That allows using `setLevel` on the parent logger and having that apply to the child logger.  Suppose each class has it's own logger in the form `app` with child `ui`, `controller`, `model`, `util` etc followed by the class name.  Now, you might set the `app` to `debug`, but you don't care about the util logging, so you set `app.util` to `warn`.  That is two different levels to set, and might apply to a large number of classes.  You might also decide you don't care about `app.model.NoisyClass`, so you can set that one to warn, but still leave the other model ones active.  Or conversely, set the `app.model` to `warn` and then a model class you do care `app.model.ImportantClass` to debug.  
+
+Example usage _(using CommonJS modules, but you could do the same with any module system):_
+
+```javascript
+// In module-one.js:
+var loglevel = require("loglevel");
+loglevel.setLevel("error");
+var logApp = .getLogger("app");
+var logUI = logApp.getLogger("ui");
+var logUIClass1 = logUI.getLogger("class1");
+
+logApp.setLevel("debug");
+// Turn off utility logging
+logApp.getLogger("util").setLevel("warn");
+
+const utility = {
+  callMethod: () => {
+    logApp.getLogger("util").debug("Verbose utility logging");
+  }
+};
+
+function doSomethingAmazing() {
+  logUIClass1.debug("Amazing message from class 1 one.");
+  // Will NOT send out messages
+  utility.callMethod();
+}
+
+// logs "Special message from class 1."
+// (but nothing from utils module)
+```
+
+Loggers returned by `getLogger()` support all the same properties and methods as the default root logger, excepting `noConflict()` and the `getLogger()` creating a child logger instead of a root logger.
+
+Like the root logger, other loggers can have their logging level saved. If a logger’s level has not been saved, it will inherit the root logger’s level when it is first created. If the root logger’s level changes later, the new level will not affect other loggers that have already been created. Loggers with Symbol names (rather than string names) will always be considered unique instances, and will never have their logging level saved or restored.
+
+Likewise, loggers inherit the root logger’s `methodFactory`. After creation, each logger can have its `methodFactory` independently set. See the _plugins_ section below for more about `methodFactory`.
+
 #### `log.getLoggers()`
 
 This will return the dictionary of all loggers created with `getLogger()`, keyed by their names.

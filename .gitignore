@@ -12,6 +12,8 @@ lib-cov
 *.pid
 *.gz
 *.tgz
+*.code-workspace
+package-lock.json
 
 pids
 logs
@@ -22,3 +24,4 @@ npm-debug.log
 
 _SpecRunner.html
 .grunt
+dist/
