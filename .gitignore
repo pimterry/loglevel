@@ -22,3 +22,7 @@ npm-debug.log
 
 _SpecRunner.html
 .grunt
+
+dist/
+*.code-workspace
+package-lock.json
