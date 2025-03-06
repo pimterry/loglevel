@@ -1,4 +1,3 @@
-
 # loglevel [![NPM version][npm-image]][npm-url] [![NPM downloads](https://img.shields.io/npm/dw/loglevel.svg)](https://www.npmjs.com/package/loglevel) [![Build Status](https://github.com/pimterry/loglevel/actions/workflows/ci.yml/badge.svg)](https://github.com/pimterry/loglevel/actions/workflows/ci.yml)
 
 [npm-image]: https://img.shields.io/npm/v/loglevel.svg?style=flat
@@ -18,24 +17,24 @@ Loglevel is a barebones reliable everyday logging library. It does not do fancy 
 
 ### Simple
 
-* Log things at a given level (trace/debug/info/warn/error) to the `console` object (as seen in all modern browsers & node.js).
-* Filter logging by level (all the above or 'silent'), so you can disable all but error logging in production, and then run `log.setLevel("trace")` in your console to turn it all back on for a furious debugging session.
-* Single file, no dependencies, weighs in at 1.4 KB minified and gzipped.
+- Log things at a given level (trace/debug/info/warn/error) to the `console` object (as seen in all modern browsers & node.js).
+- Filter logging by level (all the above or 'silent'), so you can disable all but error logging in production, and then run `log.setLevel("trace")` in your console to turn it all back on for a furious debugging session.
+- Single file, no dependencies, weighs in at 1.4 KB minified and gzipped.
 
 ### Effective
 
-* Log methods gracefully fall back to simpler console logging methods if more specific ones aren't available: so calls to `log.debug()` go to `console.debug()` if possible, or `console.log()` if not.
-* Logging calls still succeed even if there's no `console` object at all, so your site doesn't break when people visit with old browsers that don't support the `console` object (here's looking at you, IE) and similar.
-* This then comes together giving a consistent reliable API that works in every JavaScript environment with a console available, and never breaks anything anywhere else.
+- Log methods gracefully fall back to simpler console logging methods if more specific ones aren't available: so calls to `log.debug()` go to `console.debug()` if possible, or `console.log()` if not.
+- Logging calls still succeed even if there's no `console` object at all, so your site doesn't break when people visit with old browsers that don't support the `console` object (here's looking at you, IE) and similar.
+- This then comes together giving a consistent reliable API that works in every JavaScript environment with a console available, and never breaks anything anywhere else.
 
 ### Convenient
 
-* Log output keeps line numbers: most JS logging frameworks call `console.log` methods through wrapper functions, clobbering your stacktrace and making the extra info many browsers provide useless. We'll have none of that thanks.
-* It works with all the standard JavaScript loading systems out of the box (CommonJS, AMD, or just as a global).
-* Logging is filtered to "warn" level by default, to keep your live site clean in normal usage (or you can trivially re-enable everything with an initial `log.enableAll()` call).
-* Magically handles situations where console logging is not initially available (IE8/9), and automatically enables logging as soon as it does become available (when developer console is opened).
-* TypeScript type definitions included, so no need for extra `@types` packages.
-* Extensible, to add other log redirection, filtering, or formatting functionality, while keeping all the above (except you will clobber your stacktrace, see [“Plugins”](#plugins) below).
+- Log output keeps line numbers: most JS logging frameworks call `console.log` methods through wrapper functions, clobbering your stacktrace and making the extra info many browsers provide useless. We'll have none of that thanks.
+- It works with all the standard JavaScript loading systems out of the box (CommonJS, AMD, or just as a global).
+- Logging is filtered to "warn" level by default, to keep your live site clean in normal usage (or you can trivially re-enable everything with an initial `log.enableAll()` call).
+- Magically handles situations where console logging is not initially available (IE8/9), and automatically enables logging as soon as it does become available (when developer console is opened).
+- TypeScript type definitions included, so no need for extra `@types` packages.
+- Extensible, to add other log redirection, filtering, or formatting functionality, while keeping all the above (except you will clobber your stacktrace, see [“Plugins”](#plugins) below).
 
 ## Downloading loglevel
 
@@ -58,15 +57,15 @@ loglevel supports AMD (e.g. RequireJS), CommonJS (e.g. Node.js) and direct usage
 ### CommonsJS (e.g. Node)
 
 ```javascript
-var log = require('loglevel');
+const log = require("loglevel");
 log.warn("unreasonably simple");
 ```
 
 ### AMD (e.g. RequireJS)
 
 ```javascript
-define(['loglevel'], function(log) {
-   log.warn("dangerously convenient");
+define(["loglevel"], function (log) {
+  log.warn("dangerously convenient");
 });
 ```
 
@@ -75,7 +74,7 @@ define(['loglevel'], function(log) {
 ```html
 <script src="loglevel.min.js"></script>
 <script>
-log.warn("too easy");
+  log.warn("too easy");
 </script>
 ```
 
@@ -86,14 +85,14 @@ loglevel is written as a UMD module, with a single object exported. Unfortunatel
 For most tools, using the default import is the most convenient and flexible option:
 
 ```javascript
-import log from 'loglevel';
+import log from "loglevel";
 log.warn("module-tastic");
 ```
 
 For some tools though, it might better to wildcard import the whole object:
 
 ```javascript
-import * as log from 'loglevel';
+import * as log from "loglevel";
 log.warn("module-tastic");
 ```
 
@@ -108,9 +107,9 @@ For example:
 ```html
 <script src="loglevel.min.js"></script>
 <script>
-var logging = log.noConflict();
+  const logging = log.noConflict();
 
-logging.warn("still pretty easy");
+  logging.warn("still pretty easy");
 </script>
 ```
 
@@ -120,12 +119,12 @@ loglevel includes its own type definitions, assuming you're using a modern modul
 
 If you really want to use LogLevel as a global however, but from TypeScript, you'll need to declare it as such first. To do that:
 
-* Create a `loglevel.d.ts` file
-* Ensure that file is included in your build (e.g. add it to `include` in your tsconfig, pass it on the command line, or use `///<reference path="./loglevel.d.ts" />`)
-* In that file, add:
+- Create a `loglevel.d.ts` file
+- Ensure that file is included in your build (e.g. add it to `include` in your tsconfig, pass it on the command line, or use `///<reference path="./loglevel.d.ts" />`)
+- In that file, add:
 
   ```typescript
-  import * as log from 'loglevel';
+  import * as log from "loglevel";
   export as namespace log;
   export = log;
   ```
@@ -140,11 +139,11 @@ The loglevel API is extremely minimal. All methods are available on the root log
 
 5 actual logging methods, ordered and available as:
 
-* `log.trace(msg)`
-* `log.debug(msg)`
-* `log.info(msg)`
-* `log.warn(msg)`
-* `log.error(msg)`
+- `log.trace(msg)`
+- `log.debug(msg)`
+- `log.info(msg)`
+- `log.warn(msg)`
+- `log.error(msg)`
 
 `log.log(msg)` is also available, as an alias for `log.debug(msg)`, to improve compatibility with `console`, and make migration easier.
 
@@ -160,9 +159,9 @@ This disables all logging below the given level, so that after a `log.setLevel("
 
 This can take either a log level name or `'silent'` (which disables everything) in one of a few forms:
 
-* As a log level from the internal levels list, e.g. `log.levels.SILENT` ← _for type safety_
-* As a string, like `'error'` (case-insensitive) ← _for a reasonable practical balance_
-* As a numeric index from `0` (trace) to `5` (silent) ← _deliciously terse, and more easily programmable (...although, why?)_
+- As a log level from the internal levels list, e.g. `log.levels.SILENT` ← _for type safety_
+- As a string, like `'error'` (case-insensitive) ← _for a reasonable practical balance_
+- As a numeric index from `0` (trace) to `5` (silent) ← _deliciously terse, and more easily programmable (...although, why?)_
 
 Where possible, the log level will be persisted. LocalStorage will be used if available, falling back to cookies if not. If neither is available in the current environment (e.g. in Node), or if you pass `false` as the optional 'persist' second argument, persistence will be skipped.
 
@@ -190,7 +189,7 @@ It's very unlikely you'll need to use this for normal application logging; it's 
 
 ```javascript
 if (log.getLevel() <= log.levels.DEBUG) {
-  var logData = runExpensiveDataGeneration();
+  const logData = runExpensiveDataGeneration();
   log.debug(logData);
 }
 ```
@@ -214,21 +213,21 @@ Example usage _(using CommonJS modules, but you could do the same with any modul
 
 ```javascript
 // In module-one.js:
-var log = require("loglevel").getLogger("module-one");
+const log = require("loglevel").getLogger("module-one");
 function doSomethingAmazing() {
   log.debug("Amazing message from module one.");
 }
 
 // In module-two.js:
-var log = require("loglevel").getLogger("module-two");
+const log = require("loglevel").getLogger("module-two");
 function doSomethingSpecial() {
   log.debug("Special message from module two.");
 }
 
 // In your main application module:
-var log = require("loglevel");
-var moduleOne = require("module-one");
-var moduleTwo = require("module-two");
+const log = require("loglevel");
+const moduleOne = require("module-one");
+const moduleTwo = require("module-two");
 log.getLogger("module-two").setLevel("TRACE");
 
 moduleOne.doSomethingAmazing();
@@ -245,17 +244,17 @@ Likewise, loggers inherit the root logger’s `methodFactory`. After creation, e
 
 #### Hierarchical Loggers `log.getLogger(parentLoggerName).getLogger(childLoggerName)`
 
-This gets you a new logger object which inherits the parent logger's log level, being named `parentLogger.childLogger`.  That allows using `setLevel` on the parent logger and having that apply to the child logger.  Suppose each class has it's own logger in the form `app` with child `ui`, `controller`, `model`, `util` etc followed by the class name.  Now, you might set the `app` to `debug`, but you don't care about the util logging, so you set `app.util` to `warn`.  That is two different levels to set, and might apply to a large number of classes.  You might also decide you don't care about `app.model.NoisyClass`, so you can set that one to warn, but still leave the other model ones active.  Or conversely, set the `app.model` to `warn` and then a model class you do care `app.model.ImportantClass` to debug.  
+This gets you a new logger object which inherits the parent logger's log level, being named `parentLogger.childLogger`. That allows using `setLevel` on the parent logger and having that apply to the child logger. Suppose each class has it's own logger in the form `app` with child `ui`, `controller`, `model`, `util` etc followed by the class name. Now, you might set the `app` to `debug`, but you don't care about the util logging, so you set `app.util` to `warn`. That is two different levels to set, and might apply to a large number of classes. You might also decide you don't care about `app.model.NoisyClass`, so you can set that one to warn, but still leave the other model ones active. Or conversely, set the `app.model` to `warn` and then a model class you do care `app.model.ImportantClass` to debug.
 
 Example usage _(using CommonJS modules, but you could do the same with any module system):_
 
 ```javascript
 // In module-one.js:
-var loglevel = require("loglevel");
+const loglevel = require("loglevel");
 loglevel.setLevel("error");
-var logApp = .getLogger("app");
-var logUI = logApp.getLogger("ui");
-var logUIClass1 = logUI.getLogger("class1");
+const logApp = .getLogger("app");
+const logUI = logApp.getLogger("ui");
+const logUIClass1 = logUI.getLogger("class1");
 
 logApp.setLevel("debug");
 // Turn off utility logging
@@ -296,23 +295,23 @@ This is mostly useful for plugin development. When you call `log.setLevel()` or 
 It is also useful if you change the level of the root logger and want it to affect child loggers that you’ve already created (and have not called `someChildLogger.setLevel()` or `someChildLogger.setDefaultLevel()` on). For example:
 
 ```js
-var childLogger1 = log.getLogger("child1");
-childLogger1.getLevel();  // WARN (inherited from the root logger)
+const childLogger1 = log.getLogger("child1");
+childLogger1.getLevel(); // WARN (inherited from the root logger)
 
-var childLogger2 = log.getLogger("child2");
+const childLogger2 = log.getLogger("child2");
 childLogger2.setDefaultLevel("TRACE");
-childLogger2.getLevel();  // TRACE
+childLogger2.getLevel(); // TRACE
 
 log.setLevel("ERROR");
 
 // At this point, the child loggers have not changed:
-childLogger1.getLevel();  // WARN
-childLogger2.getLevel();  // TRACE
+childLogger1.getLevel(); // WARN
+childLogger2.getLevel(); // TRACE
 
 // To update them:
 log.rebuild();
-childLogger1.getLevel();  // ERROR (still inheriting from root logger)
-childLogger2.getLevel();  // TRACE (no longer inheriting because `.setDefaultLevel() was called`)
+childLogger1.getLevel(); // ERROR (still inheriting from root logger)
+childLogger2.getLevel(); // TRACE (no longer inheriting because `.setDefaultLevel() was called`)
 ```
 
 ## Plugins
@@ -338,18 +337,18 @@ There's clearly enough enthusiasm for this even at that cost that loglevel now i
 For example, a plugin to prefix all log messages with "Newsflash: " would look like:
 
 ```javascript
-var originalFactory = log.methodFactory;
+const originalFactory = log.methodFactory;
 log.methodFactory = function (methodName, logLevel, loggerName) {
-    var rawMethod = originalFactory(methodName, logLevel, loggerName);
+  const rawMethod = originalFactory(methodName, logLevel, loggerName);
 
-    return function (message) {
-        rawMethod("Newsflash: " + message);
-    };
+  return function (message) {
+    rawMethod("Newsflash: " + message);
+  };
 };
 log.rebuild(); // Be sure to call the rebuild method in order to apply plugin.
 ```
 
-*(The above supports only a single string `log.warn("...")` argument for clarity, but it's easy to extend to a [fuller variadic version](http://jsbin.com/xehoye/edit?html,console).)*
+_(The above supports only a single string `log.warn("...")` argument for clarity, but it's easy to extend to a [fuller variadic version](http://jsbin.com/xehoye/edit?html,console).)_
 
 If you develop and release a plugin, please get in contact! I'd be happy to reference it here for future users. Some consistency is helpful; naming your plugin 'loglevel-PLUGINNAME' (e.g. loglevel-newsflash) is preferred, as is giving it the 'loglevel-plugin' keyword in your `package.json`.
 
@@ -365,12 +364,12 @@ _Also, please don't manually edit files in the `dist/` subdirectory as they are 
 
 To do a release of loglevel:
 
-* Update the version number in `package.json` and `bower.json`.
-* Run `npm run dist` to build a distributable version in `dist/`.
-* Update the release history in this file (below).
-* Commit the built code, tagging it with the version number and a brief message about the release.
-* Push to Github.
-* Run `npm publish .` to publish to NPM.
+- Update the version number in `package.json` and `bower.json`.
+- Run `npm run dist` to build a distributable version in `dist/`.
+- Update the release history in this file (below).
+- Commit the built code, tagging it with the version number and a brief message about the release.
+- Push to Github.
+- Run `npm publish .` to publish to NPM.
 
 ## Release History
 
@@ -439,6 +438,7 @@ v1.9.1 - Fix a bug introduced in 1.9.0 that broke `setLevel()` in some ESM-focus
 v1.9.2 - Remove unnecessarily extra test & CI files from deployed package
 
 v2.0.0 **(In development)**
+
 - Removed support for Internet Explorer v10 and older.
 - Calling `debug(msg)` shows up as an actual “debug” level message in browser consoles (in v1, it showed up as “log” or “info” depending on your browser).
 - The `log()` method is now equivalent to `info()` instead of `debug()`.
