@@ -137,12 +137,7 @@ module.exports = function (grunt) {
     // in `grunt-contrib-jasmine`. If that package is updated, this should also
     // be updated to match.
     grunt.registerTask('jasmine_node', 'Run Jasmine in Node.js', function() {
-        var done = this.async();
-
         var jasmine = new Jasmine({ projectBaseDir: __dirname });
-        jasmine.onComplete(function(success) {
-            done(success);
-        });
 
         jasmine.execute(this.options().specs);
     });
