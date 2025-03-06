@@ -12,7 +12,7 @@
     "use strict";
 
     // Slightly dubious tricks to cut down minimized file size
-    var noop = function() {};
+    const noop = function() {};
     var undefinedType = "undefined";
 
     var logMethods = [

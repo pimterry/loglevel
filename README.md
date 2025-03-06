@@ -252,7 +252,7 @@ Example usage _(using CommonJS modules, but you could do the same with any modul
 // In module-one.js:
 const loglevel = require("loglevel");
 loglevel.setLevel("error");
-const logApp = .getLogger("app");
+const logApp = loglevel.getLogger("app");
 const logUI = logApp.getLogger("ui");
 const logUIClass1 = logUI.getLogger("class1");
 
@@ -263,7 +263,7 @@ logApp.getLogger("util").setLevel("warn");
 const utility = {
   callMethod: () => {
     logApp.getLogger("util").debug("Verbose utility logging");
-  }
+  },
 };
 
 function doSomethingAmazing() {

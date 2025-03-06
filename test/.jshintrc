@@ -2,6 +2,7 @@
     "curly": true,
     "globalstrict": true,
     "eqeqeq": true,
+    "esversion": "6",
     "immed": true,
     "latedef": true,
     "newcap": true,

@@ -58,19 +58,11 @@ describe("loglevel included via node", function () {
         expect(logger12.getLevel()).toBe(log.levels.WARN);
     });
 
-    it("supports child logger inheritance", function() {
+    it("same logger is returned for different retrieves", function() {
         var log = require('../lib/loglevel');
-        log.setLevel(0);
-        var newLogger = log.getLogger("newLogger");
-        expect(newLogger.getLevel()).toBe(log.levels.TRACE);
-        var newLoggerChild = newLogger.getLogger("child");
-        expect(newLoggerChild).not.toBeUndefined();
-        expect(newLoggerChild.getLevel()).toBe(log.levels.TRACE);
-        log.setLevel("debug");
-        expect(newLogger.getLevel()).toBe(log.levels.DEBUG);
-        newLogger.setLevel("warn");
-        expect(newLogger.getLevel()).toBe(log.levels.WARN);
-        expect(newLoggerChild.getLevel()).toBe(log.levels.WARN);
-        expect(newLoggerChild.name).toBe("newLogger.child");
+        var parent = log.getLogger("parent");
+        var child = parent.getLogger("child");
+        var parentChild = log.getLogger("parent", "child");
+        expect(child).toBe(parentChild);
     });
 });

@@ -46,7 +46,7 @@
     "grunt-contrib-connect": "^3.0.0",
     "grunt-contrib-jasmine": "^4.0.0",
     "grunt-contrib-jshint": "^3.2.0",
-    "grunt-contrib-uglify": "^3.4.0",
+    "grunt-contrib-uglify": "^5.2.1",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-open": "~0.2.3",
     "grunt-preprocess": "^5.1.0",
