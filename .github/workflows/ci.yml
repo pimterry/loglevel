@@ -1,12 +1,10 @@
 name: Continuous Integration
 
 on:
-  pull_request: {}
-  push:
-    branches:
-      - main
+  - pull_request
+  - push
   # Allow manual runs if needed.
-  workflow_dispatch: {}
+  - workflow_dispatch
 
 jobs:
   lint:
@@ -70,7 +68,7 @@ jobs:
         run: npm run test-node
 
   browser-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v4
