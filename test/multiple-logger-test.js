@@ -101,11 +101,12 @@ define(['test/test-helpers'], function(testHelpers) {
             });
 
             it("loggers are created with the same methodFactory as the default logger", function(log) {
-                log.methodFactory = function(methodName, level) {
+                log.methodFactory = function(_methodName, _level) {
                   return function() {};
                 };
 
                 var newLogger = log.getLogger("newLogger");
+
                 expect(newLogger.methodFactory).toEqual(log.methodFactory);
             });
 

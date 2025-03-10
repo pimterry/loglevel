@@ -23,7 +23,6 @@
         "error"
     ];
 
-    var _loggersByName = {};
     var defaultLogger = null;
 
     // Build the best logging method possible for this env
@@ -98,11 +97,11 @@
          * browser storage.
          */
         const storageKey =
-            "loglevel:" + parent
-                ? this.categories
-                      .map((category) => category.toString())
-                      .join(".")
-                : "default";
+            parent ?
+                'loglevel:' + this.categories
+                    .map((category) => category.toString())
+                    .join(".") :
+                    "loglevel";
 
         /**
          * The loggers that are contained within this logger.
@@ -215,15 +214,6 @@
         self.methodFactory = factory || defaultMethodFactory;
 
         self.getLevel = function () {
-            console.error(
-                "Getting level",
-                self.name,
-                userLevel,
-                defaultLevel,
-                inheritedLevel,
-                parent?.getLevel(),
-                parent?.name || "default"
-            );
             if (userLevel !== null) {
                 return userLevel;
             }
@@ -247,7 +237,10 @@
                     .find((logger) => logger.name === category);
                 newCategories.push(category);
                 if (!childLogger) {
-                    childLogger = new Logger(category, logger.factory, logger);
+                    if( typeof category !== 'symbol' && typeof category !== 'string' ) {
+                        throw new Error('Category names must be a symbol or string, but is a '+typeof category);
+                    }
+                    childLogger = new Logger(category, self.methodFactory, logger);
                     loggers.push(childLogger);
                 }
                 return childLogger;
@@ -291,9 +284,11 @@
         };
 
         self.rebuild = function () {
-            console.error("rebuild", self.name || "default", loggers.length);
             inheritedLevel = null;
             const result = replaceLoggingMethods.call(self);
+            if( self.methodFactory && self.methodFactory===(factory || defaultMethodFactory)) {
+                self.methodFactory = parent && parent.methodFactory || factory || defaultMethodFactory;
+            }
 
             for (const child of loggers) {
                 child.rebuild();
