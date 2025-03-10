@@ -1,7 +1,7 @@
 {
   "name": "loglevel",
   "description": "Minimal lightweight logging for JavaScript, adding reliable log level methods to any available console.log methods",
-  "version": "1.9.2",
+  "version": "2.0.0-alpha1",
   "homepage": "https://github.com/pimterry/loglevel",
   "author": {
     "name": "Tim Perry",
@@ -28,8 +28,8 @@
   "scripts": {
     "lint": "grunt jshint",
     "test": "grunt test && npm run test-types",
-    "test-browser": "grunt test-browser",
-    "test-node": "grunt test-node",
+    "test-browser": "grunt test-browser --",
+    "test-node": "grunt test-node --",
     "test-types": "tsc --noEmit ./test/type-test.ts && ts-node ./test/type-test.ts",
     "dist": "grunt dist",
     "dist-build": "grunt dist-build",

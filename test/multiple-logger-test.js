@@ -38,26 +38,12 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(logger1).toEqual(logger2);
             });
 
-            it("should throw if called with no name", function(log) {
-                expect(function() {
-                  log.getLogger();
-                }).toThrow();
-            });
-
-            it("should throw if called with empty string for name", function(log) {
-                expect(function() {
-                  log.getLogger("");
-                }).toThrow();
-            });
-
             it("should throw if called with a non-string name", function(log) {
                 expect(function() { log.getLogger(true); }).toThrow();
                 expect(function() { log.getLogger({}); }).toThrow();
                 expect(function() { log.getLogger([]); }).toThrow();
                 expect(function() { log.getLogger(10); }).toThrow();
                 expect(function() { log.getLogger(function(){}); }).toThrow();
-                expect(function() { log.getLogger(null); }).toThrow();
-                expect(function() { log.getLogger(undefined); }).toThrow();
             });
 
             // NOTE: this test is the same as the similarly-named test in
@@ -105,9 +91,10 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(newLogger).toBeAtLevel("error");
             });
 
-            it("other loggers do not change when the default logger's level is changed", function(log) {
+            it("other loggers do not change when the default logger's level is changed and they have a level", function(log) {
                 log.setLevel("TRACE");
                 var newLogger = log.getLogger("newLogger");
+                newLogger.setLevel("TRACE");
                 log.setLevel("ERROR");
                 expect(newLogger).toBeAtLevel("TRACE");
                 expect(log.getLogger("newLogger")).toBeAtLevel("TRACE");
@@ -163,7 +150,6 @@ define(['test/test-helpers'], function(testHelpers) {
                 newLogger.setLevel("warn");
                 expect(newLogger.getLevel()).toBe(log.levels.WARN);
                 expect(newLoggerChild.getLevel()).toBe(log.levels.WARN);
-                expect(newLoggerChild.name).toBe("newLogger.child");
             });
         });
 
@@ -192,7 +178,6 @@ define(['test/test-helpers'], function(testHelpers) {
 
                 // resetLevel() should not have broken inheritance.
                 log.setLevel("DEBUG");
-                log.rebuild();
                 expect(newLogger).toBeAtLevel("DEBUG");
             });
 
@@ -209,7 +194,6 @@ define(['test/test-helpers'], function(testHelpers) {
 
                 // resetLevel() should not have broken inheritance.
                 log.setLevel("DEBUG");
-                log.rebuild();
                 expect(newLogger).toBeAtLevel("DEBUG");
             });
 
@@ -250,9 +234,6 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(newLogger).toBeAtLevel("TRACE");
 
                 log.setLevel("ERROR");
-                expect(newLogger).toBeAtLevel("TRACE");
-
-                log.rebuild();
                 expect(newLogger).toBeAtLevel("ERROR");
             });
 

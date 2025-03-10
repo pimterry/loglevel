@@ -44,6 +44,7 @@ define(['test/test-helpers'], function(testHelpers) {
             });
 
             it("saved level is not modified", function (log) {
+                expect(log).toBeAtLevel("trace");
                 log.setDefaultLevel("debug");
                 expect(log).toBeAtLevel("trace");
             });

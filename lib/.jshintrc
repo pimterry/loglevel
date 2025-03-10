@@ -1,21 +1,21 @@
 {
-    "curly": false,
-    "eqeqeq": true,
-    "esversion": "6",
-    "immed": true,
-    "latedef": true,
-    "newcap": true,
-    "noarg": true,
-    "sub": true,
-    "undef": true,
-    "boss": true,
-    "eqnull": true,
-    "notypeof": true,
-    "globals": {
-        "console": false,
-        "exports": false,
-        "define": false,
-        "module": false,
-        "window": false
+  "curly": false,
+  "eqeqeq": true,
+  "esversion": "6",
+  "immed": true,
+  "latedef": true,
+  "newcap": true,
+  "noarg": true,
+  "sub": true,
+  "undef": true,
+  "boss": true,
+  "eqnull": true,
+  "notypeof": true,
+  "globals": {
+    "console": false,
+    "exports": false,
+    "define": false,
+    "module": false,
+    "window": false
     }
 }

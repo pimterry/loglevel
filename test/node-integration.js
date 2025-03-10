@@ -47,18 +47,27 @@ describe("loglevel included via node", function () {
     // Supports getting child nodes
     it("supports child logger inheritance", function() {
         var log = require('../lib/loglevel');
+        console.error("*********** Starting supports child logger");
         var logger1 = log.getLogger('one');
-        log.setLevel("info");
+        console.error("**** Got logger1", logger1.categories, logger1.name, logger1.getLevel());
+        log.setLevel("debug");
+        console.log("getting root level after reset", log.getLevel());
+        console.error("getting logger one level", logger1.getLevel());
+        expect(logger1.getLevel()).toBe(log.levels.DEBUG);
+        logger1.setLevel("info");
+        console.error("Just set", logger1.name, "to level INFO");
         expect(logger1.getLevel()).toBe(log.levels.INFO);
+
         var logger12 = logger1.getLogger('two');
         expect(logger12.getLevel()).toBe(log.levels.INFO);
-        log.setLevel("warn");
 
+        logger1.resetLevel();
+        log.setLevel("warn");
         expect(log.getLevel()).toBe(log.levels.WARN);
         expect(logger12.getLevel()).toBe(log.levels.WARN);
     });
 
-    it("same logger is returned for different retrieves", function() {
+    it("same logger is returned for combined and separate retrieves", function() {
         var log = require('../lib/loglevel');
         var parent = log.getLogger("parent");
         var child = parent.getLogger("child");
