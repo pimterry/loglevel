@@ -96,12 +96,13 @@
          * The storage key is used for storing persisted levels in the
          * browser storage.
          */
+        const hasSymbol = this.categories.find(it => typeof it === 'symbol');
         const storageKey =
-            parent ?
+            hasSymbol ? null : (parent ?
                 'loglevel:' + this.categories
                     .map((category) => category.toString())
                     .join(".") :
-                    "loglevel";
+                    "loglevel");
 
         /**
          * The loggers that are contained within this logger.
@@ -262,7 +263,7 @@
 
         self.setDefaultLevel = function (level) {
             defaultLevel = normalizeLevel(level);
-            if (!getPersistedLevel()) {
+            if (getPersistedLevel()===undefined) {
                 self.setLevel(level, false);
             } else {
                 self.rebuild();
@@ -298,8 +299,8 @@
 
         // Initialize all the internal levels.
         inheritedLevel = null;
-        var initialLevel = getPersistedLevel();
-        if (initialLevel != null) {
+        const initialLevel = getPersistedLevel();
+        if (initialLevel !== undefined) {
             userLevel = normalizeLevel(initialLevel);
         }
         replaceLoggingMethods.call(self);

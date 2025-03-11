@@ -86,17 +86,26 @@ For most tools, using the default import is the most convenient and flexible opt
 
 ```javascript
 import log from "loglevel";
-log.warn("module-tastic");
+log.warn("module-static");
 ```
 
 For some tools though, it might better to wildcard import the whole object:
 
 ```javascript
 import * as log from "loglevel";
-log.warn("module-tastic");
+log.warn("module-static");
 ```
 
 There's no major difference, unless you're using TypeScript & building a loglevel plugin (in that case, see <https://github.com/pimterry/loglevel/issues/149>). In general though, just use whichever suits your environment, and everything should work out fine.
+
+### Non minified code
+
+The non-minified code can be imported in module based systems using:
+
+```javascript
+import log from "loglevel/nomin";
+log.warn("module-not-minified");
+```
 
 ### With noConflict()
 
