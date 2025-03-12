@@ -1,7 +1,6 @@
 "use strict";
 
 define(['test/test-helpers'], function(testHelpers) {
-    var describeIf = testHelpers.describeIf;
     var it = testHelpers.itWithFreshLog;
 
     var originalConsole = window.console;
@@ -26,8 +25,6 @@ define(['test/test-helpers'], function(testHelpers) {
 
             it("returns loggers without `noConflict()`", function(log) {
                 var newLogger = log.getLogger("newLogger");
-                // Now expect getLogger to be defined for the child
-                // expect(newLogger.getLogger).toBeUndefined();
                 expect(newLogger.noConflict).toBeUndefined();
             });
 
