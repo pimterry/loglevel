@@ -2,6 +2,7 @@
   "curly": true,
   "globalstrict": true,
   "eqeqeq": true,
+  "es3": true,
   "immed": true,
   "latedef": true,
   "newcap": true,
@@ -10,7 +11,6 @@
   "undef": true,
   "boss": true,
   "eqnull": true,
-  "es3": true,
   "globals": {
     "window": true,
     "console": true,
@@ -30,5 +30,5 @@
     "waitsFor": false,
     "runs": false,
     "Symbol": false
-  }
+    }
 }

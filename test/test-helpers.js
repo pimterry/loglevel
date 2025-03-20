@@ -28,6 +28,9 @@ define(function () {
     self.toBeAtLevel = function toBeAtLevel() {
         return {
             compare: function (log, level) {
+                if( !log.levels ) {
+                    throw new Error("Can't read levels from "+log);
+                }
                 var expectedWorkingCalls = log.levels.SILENT - log.levels[level.toUpperCase()];
                 var realLogMethod = window.console.log;
                 var priorCalls = realLogMethod.calls.count();
@@ -157,6 +160,9 @@ define(function () {
         }
         if (self.isLocalStorageAvailable()) {
             self.setLocalStorageStoredLevel(level, name);
+        }
+        if( !self.isCookieStorageAvailable() && !self.isLocalStorageAvailable()) {
+            throw new Error('No storage available');
         }
     };
 

@@ -44,4 +44,29 @@ describe("loglevel included via node", function () {
         expect(logger1).not.toEqual(logger2);
         expect(logger2.getLevel()).toEqual(defaultLevel);
     });
+    // Supports getting child nodes
+    it("supports child logger inheritance", function() {
+        var log = require('../lib/loglevel');
+        var logger1 = log.getLogger('one');
+        log.setLevel("debug");
+        expect(logger1.getLevel()).toBe(log.levels.DEBUG);
+        logger1.setLevel("info");
+        expect(logger1.getLevel()).toBe(log.levels.INFO);
+
+        var logger12 = logger1.getLogger('two');
+        expect(logger12.getLevel()).toBe(log.levels.INFO);
+
+        logger1.resetLevel();
+        log.setLevel("warn");
+        expect(log.getLevel()).toBe(log.levels.WARN);
+        expect(logger12.getLevel()).toBe(log.levels.WARN);
+    });
+
+    it("same logger is returned for combined and separate retrieves", function() {
+        var log = require('../lib/loglevel');
+        var parent = log.getLogger("parent");
+        var child = parent.getLogger("child");
+        var parentChild = log.getLogger("parent", "child");
+        expect(child).toBe(parentChild);
+    });
 });

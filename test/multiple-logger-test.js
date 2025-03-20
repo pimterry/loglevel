@@ -1,7 +1,6 @@
 "use strict";
 
 define(['test/test-helpers'], function(testHelpers) {
-    var describeIf = testHelpers.describeIf;
     var it = testHelpers.itWithFreshLog;
 
     var originalConsole = window.console;
@@ -24,9 +23,8 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(newLogger.methodFactory).toBeDefined();
             });
 
-            it("returns loggers without `getLogger()` and `noConflict()`", function(log) {
+            it("returns loggers without `noConflict()`", function(log) {
                 var newLogger = log.getLogger("newLogger");
-                expect(newLogger.getLogger).toBeUndefined();
                 expect(newLogger.noConflict).toBeUndefined();
             });
 
@@ -37,26 +35,12 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(logger1).toEqual(logger2);
             });
 
-            it("should throw if called with no name", function(log) {
-                expect(function() {
-                  log.getLogger();
-                }).toThrow();
-            });
-
-            it("should throw if called with empty string for name", function(log) {
-                expect(function() {
-                  log.getLogger("");
-                }).toThrow();
-            });
-
             it("should throw if called with a non-string name", function(log) {
                 expect(function() { log.getLogger(true); }).toThrow();
                 expect(function() { log.getLogger({}); }).toThrow();
                 expect(function() { log.getLogger([]); }).toThrow();
                 expect(function() { log.getLogger(10); }).toThrow();
                 expect(function() { log.getLogger(function(){}); }).toThrow();
-                expect(function() { log.getLogger(null); }).toThrow();
-                expect(function() { log.getLogger(undefined); }).toThrow();
             });
 
             // NOTE: this test is the same as the similarly-named test in
@@ -104,20 +88,22 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(newLogger).toBeAtLevel("error");
             });
 
-            it("other loggers do not change when the default logger's level is changed", function(log) {
+            it("other loggers do not change when the default logger's level is changed and they have a level", function(log) {
                 log.setLevel("TRACE");
                 var newLogger = log.getLogger("newLogger");
+                newLogger.setLevel("TRACE");
                 log.setLevel("ERROR");
                 expect(newLogger).toBeAtLevel("TRACE");
                 expect(log.getLogger("newLogger")).toBeAtLevel("TRACE");
             });
 
             it("loggers are created with the same methodFactory as the default logger", function(log) {
-                log.methodFactory = function(methodName, level) {
+                log.methodFactory = function(_methodName, _level) {
                   return function() {};
                 };
 
                 var newLogger = log.getLogger("newLogger");
+
                 expect(newLogger.methodFactory).toEqual(log.methodFactory);
             });
 
@@ -149,6 +135,20 @@ define(['test/test-helpers'], function(testHelpers) {
               var newLogger = log.getLogger("newLogger");
               expect(newLogger).toBeAtLevel("trace");
             });
+
+            it("child loggers inherit parent", function(log) {
+                log.setLevel(0);
+                var newLogger = log.getLogger("newLogger");
+                expect(newLogger.getLevel()).toBe(log.levels.TRACE);
+                var newLoggerChild = newLogger.getLogger("child");
+                expect(newLoggerChild).not.toBeUndefined();
+                expect(newLoggerChild.getLevel()).toBe(log.levels.TRACE);
+                log.setLevel("debug");
+                expect(newLogger.getLevel()).toBe(log.levels.DEBUG);
+                newLogger.setLevel("warn");
+                expect(newLogger.getLevel()).toBe(log.levels.WARN);
+                expect(newLoggerChild.getLevel()).toBe(log.levels.WARN);
+            });
         });
 
         describe("logger.resetLevel()", function() {
@@ -176,7 +176,6 @@ define(['test/test-helpers'], function(testHelpers) {
 
                 // resetLevel() should not have broken inheritance.
                 log.setLevel("DEBUG");
-                log.rebuild();
                 expect(newLogger).toBeAtLevel("DEBUG");
             });
 
@@ -193,7 +192,6 @@ define(['test/test-helpers'], function(testHelpers) {
 
                 // resetLevel() should not have broken inheritance.
                 log.setLevel("DEBUG");
-                log.rebuild();
                 expect(newLogger).toBeAtLevel("DEBUG");
             });
 
@@ -228,19 +226,16 @@ define(['test/test-helpers'], function(testHelpers) {
                 window.console = originalConsole;
             });
 
-            it("rebuilds existing child loggers", function(log) {
+            it("rebuilds existing child loggers", function (log) {
                 log.setLevel("TRACE");
                 var newLogger = log.getLogger("newLogger");
                 expect(newLogger).toBeAtLevel("TRACE");
 
                 log.setLevel("ERROR");
-                expect(newLogger).toBeAtLevel("TRACE");
-
-                log.rebuild();
                 expect(newLogger).toBeAtLevel("ERROR");
             });
 
-            it("should not change a child's persisted level", function(log) {
+            it("should not change a child's persisted level", function (log) {
                 testHelpers.setStoredLevel("ERROR", "newLogger");
 
                 log.setLevel("TRACE");
@@ -251,7 +246,7 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(newLogger).toBeAtLevel("ERROR");
             });
 
-            it("should not change a child's level set with `setLevel()`", function(log) {
+            it("should not change a child's level set with `setLevel()`", function (log) {
                 log.setLevel("TRACE");
                 var newLogger = log.getLogger("newLogger");
                 expect(newLogger).toBeAtLevel("TRACE");
@@ -261,7 +256,7 @@ define(['test/test-helpers'], function(testHelpers) {
                 expect(newLogger).toBeAtLevel("DEBUG");
             });
 
-            it("should not change a child's level set with `setDefaultLevel()`", function(log) {
+            it("should not change a child's level set with `setDefaultLevel()`", function (log) {
                 log.setLevel("TRACE");
                 var newLogger = log.getLogger("newLogger");
                 expect(newLogger).toBeAtLevel("TRACE");

@@ -12,6 +12,10 @@ lib-cov
 *.pid
 *.gz
 *.tgz
+*.code-workspace
+package-lock.json
+bun.lock
+.vscode/
 
 pids
 logs
