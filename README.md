@@ -86,14 +86,14 @@ For most tools, using the default import is the most convenient and flexible opt
 
 ```javascript
 import log from "loglevel";
-log.warn("module-static");
+log.warn("module-tastic");
 ```
 
 For some tools though, it might better to wildcard import the whole object:
 
 ```javascript
 import * as log from "loglevel";
-log.warn("module-static");
+log.warn("module-tastic");
 ```
 
 There's no major difference, unless you're using TypeScript & building a loglevel plugin (in that case, see <https://github.com/pimterry/loglevel/issues/149>). In general though, just use whichever suits your environment, and everything should work out fine.
@@ -291,9 +291,9 @@ Like the root logger, other loggers can have their logging level saved. If a log
 
 Likewise, loggers inherit the root logger’s `methodFactory`. After creation, each logger can have its `methodFactory` independently set. See the _plugins_ section below for more about `methodFactory`.
 
-#### `log.getLoggers()`
+#### `log.getChildLoggers()`
 
-This will return the dictionary of all loggers created with `getLogger()`, keyed by their names.
+This will return the dictionary of all direct child loggers of log created with `getLogger()`, keyed by their names.   To see all child loggers everywhere, you will need to do a recursive search on the child loggers.
 
 #### `log.rebuild()`
 
