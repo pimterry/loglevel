@@ -20,8 +20,17 @@
     "url": "https://tidelift.com/funding/github/npm/loglevel"
   },
   "license": "MIT",
-  "main": "lib/loglevel.js",
+  "main": "dist/loglevel.js",
+  "module": "dist/loglevel.esm.js",
   "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./dist/loglevel.esm.js",
+      "require": "./dist/loglevel.js",
+      "default": "./dist/loglevel.js"
+    }
+  },
   "engines": {
     "node": ">= 0.6.0"
   },
@@ -30,9 +39,9 @@
     "test": "grunt test && npm run test-types",
     "test-browser": "grunt test-browser --",
     "test-node": "grunt test-node --",
-    "test-types": "tsc --noEmit ./test/type-test.ts && ts-node ./test/type-test.ts",
-    "dist": "grunt dist",
-    "dist-build": "grunt dist-build",
+    "test-types": "tsc --noEmit ./test/type-test.ts && ts-node --compilerOptions \"{\\\"module\\\":\\\"CommonJS\\\"}\" ./test/type-test.ts",
+    "build": "rollup -c && node scripts/fix-umd-wrapper.mjs",
+    "dist": "npm run build && grunt test",
     "watch": "grunt watch"
   },
   "dependencies": {},
@@ -52,7 +61,11 @@
     "grunt-preprocess": "^5.1.0",
     "jasmine": "^2.4.1",
     "ts-node": "^10.9.2",
-    "typescript": "^3.5.1"
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.34.6",
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.3"
   },
   "keywords": [
     "log",

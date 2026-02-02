@@ -2,12 +2,14 @@
   "curly": false,
   "eqeqeq": true,
   "esversion": "6",
-  "immed": true,
+  "immed": false,
   "latedef": true,
   "newcap": true,
   "noarg": true,
   "sub": true,
   "undef": true,
+  "expr": true,
+  "laxbreak": true,
   "boss": true,
   "eqnull": true,
   "notypeof": true,
@@ -16,6 +18,8 @@
     "exports": false,
     "define": false,
     "module": false,
-    "window": false
+    "window": false,
+    "globalThis": false,
+    "self": false
     }
 }
