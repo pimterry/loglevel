@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2024",
+    "module": "ESNext",
+    "lib": ["ES2024", "DOM"],
+    "declaration": false,
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "skipLibCheck": true,
+    "removeComments": false,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*.ts"]
+}
+

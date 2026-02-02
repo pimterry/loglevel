@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "ESNext",
+    "lib": ["ES5", "DOM"],
+    "declaration": false,
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "skipLibCheck": true,
+    "removeComments": false,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*.ts"]
+}
+
