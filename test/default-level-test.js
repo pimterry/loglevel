@@ -61,6 +61,44 @@ define(['test/test-helpers'], function(testHelpers) {
             });
         });
 
+        describe("If the level is invalid or empty", function() {
+            it("an invalid level keeps the default level and warns", function(log) {
+                log.setDefaultLevel("info");
+                log.setDefaultLevel("verbose");
+                // check the console first: toBeAtLevel calls the log methods
+                expect(window.console.log).toHaveBeenCalledWith(
+                    jasmine.stringMatching(/invalid level: verbose/));
+                expect(log).toBeAtLevel("info");
+            });
+
+            it("an empty level keeps the default level and does not warn", function(log) {
+                log.setDefaultLevel("info");
+                log.setDefaultLevel(undefined);
+                log.setDefaultLevel(null);
+                log.setDefaultLevel("");
+                expect(window.console.log).not.toHaveBeenCalled();
+                expect(log).toBeAtLevel("info");
+            });
+
+            it("setLevel still throws for an invalid level", function(log) {
+                expect(function() { log.setLevel("verbose"); }).toThrow();
+            });
+        });
+
+        describe("log.parseLevel()", function() {
+            it("returns the number of a valid level", function(log) {
+                expect(log.parseLevel("DEBUG")).toBe(1);
+                expect(log.parseLevel("warn")).toBe(3);
+                expect(log.parseLevel(4)).toBe(4);
+            });
+
+            it("returns undefined for an invalid level", function(log) {
+                expect(log.parseLevel("verbose")).toBeUndefined();
+                expect(log.parseLevel(9)).toBeUndefined();
+                expect(log.parseLevel(undefined)).toBeUndefined();
+            });
+        });
+
         describe("log.resetLevel() resets the log", function() {
             it("to warn if no explicit default is set", function(log) {
                 log.setLevel("debug");

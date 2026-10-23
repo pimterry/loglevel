@@ -163,9 +163,21 @@ declare namespace log {
          * The level argument takes is the same values that you might pass to setLevel(). Levels set using
          * setDefaultLevel() never persist to subsequent page loads.
          *
+         * An empty level (undefined, null or "") does not change the default level. An invalid level does not throw:
+         * it logs a warning, and the default level does not change. So a level from configuration or from the
+         * environment, like setDefaultLevel(process.env.LOG_LEVEL), cannot stop the program.
+         *
          * @param level as a string, like 'error' (case-insensitive) or as a number from 0 to 5 (or as log.levels. values)
          */
-        setDefaultLevel(level: LogLevelDesc): void;
+        setDefaultLevel(level: LogLevelDesc | string | null | undefined): void;
+
+        /**
+         * Returns the numeric level (0 to 5) of a level name (case-insensitive) or level number, or undefined when
+         * the value is not a valid level. For example: log.setLevel(log.parseLevel(input) ?? "warn").
+         *
+         * @param level a level name, like 'error', or a number from 0 to 5
+         */
+        parseLevel(level: unknown): LogLevelNumbers | undefined;
 
         /**
          * This resets the current log level to the default level (or `warn` if no explicit default was set) and clears

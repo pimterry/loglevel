@@ -172,6 +172,16 @@ This sets the current log level only if one has not been persisted and can’t b
 
 The `level` argument takes the same values that you might pass to `setLevel()`. Levels set using `setDefaultLevel()` never persist to subsequent page loads.
 
+A default level often comes from configuration or from the environment, so `setDefaultLevel()` does not throw for a bad value. An empty level (`undefined`, `null` or `""`) does not change the default level. An invalid level logs a warning, and the default level does not change. For example, `log.setDefaultLevel(process.env.LOG_LEVEL)` is safe when `LOG_LEVEL` is not set, or is set to a level name of another logging library.
+
+#### `log.parseLevel(level)`
+
+This returns the numeric level (0 to 5) of a level name (case-insensitive) or a level number, or `undefined` when the value is not a valid level. It does not change the level. Use it to check a level before you call `setLevel()`, which throws for an invalid level:
+
+```javascript
+log.setLevel(log.parseLevel(userInput) ?? "warn");
+```
+
 #### `log.resetLevel()`
 
 This resets the current log level to the logger's default level (if no explicit default was set, then it resets it to the root logger's level, or to `WARN`) and clears the persisted level if one was previously persisted.
